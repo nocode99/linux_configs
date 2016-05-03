@@ -6,6 +6,16 @@ export PATH="$PATH:/usr/local/go/bin"
 export AWS_PRIVATE_KEY="~/.ssh/ansible"
 export EDITOR='/usr/bin/vim'
 
+# KUBERNETES
+export K8S_VERSION=$(curl -sS https://storage.googleapis.com/kubernetes-release/release/stable.txt)
+export KUBE_AWS_ZONE=us-east-1d
+export NUM_MINIONS=2
+export MINION_SIZE=m3.medium
+export MASTER_SIZE=m3.medium
+export AWS_S3_REGION=us-east-1
+export AWS_S3_BUCKET=kip-kubernetes-artifacts
+export KUBERNETES_PROVIDER=aws
+
 export TF_VAR_dir_ansible='/home/bkim/src/KeplerGroup/kepler-ansible'
 export TF_VAR_private_key='/home/bkim/.ssh/ansible'
 
