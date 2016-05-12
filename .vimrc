@@ -1,13 +1,15 @@
 " vim:fdm=marker
-" Initial Global Settings ------------ {{{
+" Initial Globavl Settings ------------ {{{
 set nocompatible
 " Highlight search
 set hlsearch
 " }}}
-" Line 80 Bar ----------------- {{{
+" Line 80 Column and cursor highlighting ----------------- {{{
+set cursorline
+
 if (exists('+colorcolumn'))
-   set colorcolumn=80
-   highlight ColorColumn ctermbg=9
+  let &colorcolumn="80,".join(range(80,500),",")
+  highlight ColorColumn ctermbg=9
 endif
 " }}}
 " Plugs ----------------- {{{
