@@ -73,7 +73,9 @@ function git_branch {
 PS1_DIR="\[$BOLD\]\[$COLOR_BLUE\]\u@\h \[$BOLD\]\[$COLOR_PURPLE\][\w] "
 PS1_GIT="\[\$(git_color)\]\[$BOLD\]\$(git_branch)\[$BOLD\]\[$COLOR_RESET\]"
 PS1_END="\[$BOLD\]$ \[$COLOR_RESET\]"
-PS1="${PS1_DIR}${PS1_GIT}${PS1_END}"
+PS1="${PS1_DIR}${PS1_GIT}\
+
+${PS1_END}"
 
 #export LESS="--RAW-CONTROL-CHARS"
 #[[ -f ~/.LESS_TERMCAP ]] && . ~/.LESS_TERMCAP
