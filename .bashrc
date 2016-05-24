@@ -19,6 +19,7 @@ export KUBERNETES_PROVIDER=aws
 export TF_VAR_dir_ansible='/home/bkim/src/KeplerGroup/kepler-ansible'
 export TF_VAR_private_key='/home/bkim/.ssh/ansible'
 
+alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
 
