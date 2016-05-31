@@ -31,6 +31,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'hashivim/vim-terraform'
 Plug 'jiangmiao/auto-pairs'
 Plug 'vim-scripts/groovy.vim'
+Plug 'junegunn/rainbow_parentheses.vim'
 call plug#end()
 
 " }}}
@@ -72,6 +73,16 @@ augroup allfiles_trailingspace
     autocmd!
     autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
     autocmd FileType markdown let b:noStripWhitespace=1
+augroup END
+" }}}
+" Configure Rainbow ------------- {{{
+let g:rainbow#max_level = 16
+let g:rainbow#pairs = [['{', '}'], ['(', ')'], ['[', ']']]
+augroup rainbow_settings
+  " Section to turn on rainbow parentheses
+  autocmd!
+  autocmd BufEnter,BufRead * :RainbowParentheses
+  autocmd BufEnter,BufRead *.html,*.css :RainbowParentheses!
 augroup END
 " }}}
 " Syntax coloring ---------------- {{{
