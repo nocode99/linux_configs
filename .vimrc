@@ -6,6 +6,7 @@ set hlsearch
 " }}}
 " Line 80 Column and cursor highlighting ----------------- {{{
 set cursorline
+set cursorcolumn
 
 if (exists('+colorcolumn'))
   let &colorcolumn="80,".join(range(80,500),",")
