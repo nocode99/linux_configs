@@ -23,6 +23,7 @@ alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
 
+alias ovpn='sudo openvpn --config ~/bkim.conf'
 alias apv='ansible-playbook --ask-vault-pass'
 alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
