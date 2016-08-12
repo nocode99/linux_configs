@@ -1,5 +1,5 @@
 " vim:fdm=marker
-" Initial Globavl Settings ------------ {{{
+" Initial Global Settings ------------ {{{
 set nocompatible
 " Highlight search
 set hlsearch
@@ -8,37 +8,51 @@ set hlsearch
 set cursorline
 set cursorcolumn
 
-if (exists('+colorcolumn'))
-  let &colorcolumn="80,".join(range(80,500),",")
-  highlight ColorColumn ctermbg=9
-endif
+ if (exists('+colorcolumn'))
+   let &colorcolumn="80,".join(range(80,500),",")
+   highlight ColorColumn ctermbg=9
+ endif
 " }}}
+
 " Plugs ----------------- {{{
 call plug#begin('~/.vim/plugged')
 
-" Requirement to use Vundle as vim plugin manager
+" ***** Functional
 Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-eunuch'
+" Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
+" ****** THEMES
+Plug 'NLKNguyen/papercolor-theme'
+" Plug 'tomasr/molokai'
+" Plug 'morhetz/gruvbox'
+
+" ***** Syntax Highlighters
 Plug 'hdima/python-syntax'
+Plug 'fatih/vim-go'
+Plug 'pangloss/vim-javascript'
 Plug 'elzr/vim-json'
-Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug 'docker/docker' , {'rtp': '/contrib/syntax/vim/'}
 Plug 'hashivim/vim-vagrant'
-Plug 'pearofducks/ansible-vim'
-Plug 'bronson/vim-trailing-whitespace'
-Plug 'tomasr/molokai'
-Plug 'tpope/vim-eunuch'
 Plug 'hashivim/vim-terraform'
+Plug 'pearofducks/ansible-vim'
+
+" ***** AUTO
 Plug 'jiangmiao/auto-pairs'
-Plug 'vim-scripts/groovy.vim'
+Plug 'godlygeek/tabular'
+Plug 'bronson/vim-trailing-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
 call plug#end()
 
 " }}}
-" Plug settings for powerline ----------------- {{{
-set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+" Plug settings for Status Line (powerline, airline) ----------------- {{{
+"set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 set laststatus=2
+let g:airline#extensions#branch#enabled = 1
 " }}}
 " Plug settings for Nerdtree ----------------- {{{
 map F2 for Nerdtree
@@ -86,14 +100,22 @@ augroup rainbow_settings
   autocmd BufEnter,BufRead *.html,*.css :RainbowParentheses!
 augroup END
 " }}}
-" Syntax coloring ---------------- {{{
+" PaperColor colorscheme---------------- {{{
 try
     set t_Co=256 " says terminal has 256 colors
-    let g:molokai_original = 1
-    let g:rehash256 = 1
-    colorscheme molokai
+    set background=dark
+    colorscheme PaperColor
+    let g:airline_theme='papercolor'
 catch
 endtry
+" }}}
+" Molokai colorscheme---------------- {{{
+"try
+"   set t_Co=256 " says terminal has 256 colors
+"   let g:molokai_original = 1
+"   let g:rehash256 = 1
+"catch
+"endtry
 " }}}
 " Indentation settings -------------- {{{
 " For yaml files
