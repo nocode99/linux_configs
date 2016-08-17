@@ -23,6 +23,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-eunuch'
+Plug 'hynek/vim-python-pep8-indent'
 " Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
 " ****** THEMES
@@ -40,6 +41,7 @@ Plug 'docker/docker' , {'rtp': '/contrib/syntax/vim/'}
 Plug 'hashivim/vim-vagrant'
 Plug 'hashivim/vim-terraform'
 Plug 'pearofducks/ansible-vim'
+Plug 'lepture/vim-jinja'
 
 " ***** AUTO
 Plug 'jiangmiao/auto-pairs'
@@ -123,6 +125,8 @@ augroup yaml
     filetype plugin indent on
     autocmd Filetype yaml setlocal indentkeys-=<:>
 augroup END
+
+au BufNewFile, BufRead *.j2 set ft=jinja
 
 augroup jenkinsfile
     autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
