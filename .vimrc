@@ -23,6 +23,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-surround'
 Plug 'hynek/vim-python-pep8-indent'
 " Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
