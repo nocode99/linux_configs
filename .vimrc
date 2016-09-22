@@ -25,10 +25,13 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
 Plug 'hynek/vim-python-pep8-indent'
+Plug 'majutsushi/tagbar'
+Plug 't9md/vim-choosewin'
 " Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 
 " ****** THEMES
-Plug 'NLKNguyen/papercolor-theme'
+Plug 'flazz/vim-colorschemes'
+" Plug 'NLKNguyen/papercolor-theme'
 " Plug 'tomasr/molokai'
 " Plug 'morhetz/gruvbox'
 
@@ -56,6 +59,20 @@ call plug#end()
 "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 set laststatus=2
 let g:airline#extensions#branch#enabled = 1
+" }}}
+" Choosewin Settings {{{
+nmap - <Plug>(choosewin)
+" }}}
+" Plug Settings for TagBar {{{
+nmap <F8> :TagbarToggle<CR>
+" }}}
+let g:tagbar_type_ansible = {
+    \ 'ctagstype' : 'ansible',
+    \ 'kinds' : [
+        \ 't:tasks'
+    \ ],
+    \ 'sort' : 0
+\ }
 " }}}
 " Plug settings for Nerdtree ----------------- {{{
 map F2 for Nerdtree
