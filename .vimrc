@@ -65,14 +65,25 @@ nmap - <Plug>(choosewin)
 " }}}
 " Plug Settings for TagBar {{{
 nmap <F8> :TagbarToggle<CR>
-" }}}
 let g:tagbar_type_ansible = {
     \ 'ctagstype' : 'ansible',
     \ 'kinds' : [
-        \ 't:tasks'
+    \ 't:tasks'
     \ ],
     \ 'sort' : 0
 \ }
+
+let g:tagbar_type_terraform = {
+    \ 'ctagstype' : 'terraform',
+    \ 'kinds' : [
+    \ 'r:resources',
+    \ 'm:modules',
+    \ 'o:outputs',
+    \ 'v:variables',
+    \ 'f:tfvars'
+    \ ],
+    \ 'sort' : 0
+    \ }
 " }}}
 " Plug settings for Nerdtree ----------------- {{{
 map F2 for Nerdtree
