@@ -4,6 +4,69 @@ set nocompatible
 " Highlight search
 set hlsearch
 " }}}
+" Set Number {{{
+function! ToggleRelativeNumber()
+  if &rnu
+    set norelativenumber
+  else
+    set relativenumber
+  endif
+endfunction
+
+function! RNUInsertEnter()
+  if &rnu
+    let b:line_number_state = 'rnu'
+    set norelativenumber
+  else
+    let b:line_number_state = 'nornu'
+  endif
+endfunction
+
+function! RNUInsertLeave()
+  if b:line_number_state == 'rnu'
+    set relativenumber
+  else
+    set norelativenumber
+  endif
+endfunction
+
+function! RNUBufEnter()
+  if exists('b:line_number_state')
+    if b:line_number_state == 'rnu'
+      set relativenumber
+    else
+      set norelativenumber
+    endif
+  else
+    set relativenumber
+    let b:line_number_state = 'rnu'
+  endif
+endfunction
+
+function! RNUBufLeave()
+  if &rnu
+    let b:line_number_state = 'rnu'
+  else
+    let b:line_number_state = 'nornu'
+  endif
+  set norelativenumber
+endfunction
+
+" Set mappings for relative numbers
+
+" Toggle relative number status
+nnoremap <silent><leader>r :call ToggleRelativeNumber()<CR>
+augroup rnu_nu
+  autocmd!
+  " Don't have relative numbers during insert mode
+  autocmd InsertEnter * :call RNUInsertEnter()
+  autocmd InsertLeave * :call RNUInsertLeave()
+  " Set and unset relative numbers when buffer is active
+  autocmd BufNew,BufEnter * :call RNUBufEnter()
+  autocmd BufLeave * :call RNUBufLeave()
+  autocmd BufNewFile,BufRead,BufEnter * set number
+augroup end
+" }}}
 " Line 80 Column and cursor highlighting ----------------- {{{
 set cursorline
 set cursorcolumn
@@ -13,7 +76,6 @@ set cursorcolumn
    highlight ColorColumn ctermbg=9
  endif
 " }}}
-
 " Plugs ----------------- {{{
 call plug#begin('~/.vim/plugged')
 
