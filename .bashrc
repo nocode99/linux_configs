@@ -2,6 +2,10 @@ if [ -f ~/.bash/sensitive ] ; then
     source ~/.bash/sensitive
 fi
 
+if [ -f /etc/bash.bashrc ] ; then
+    source /etc/bash.bashrc
+fi
+
 # Add timestamp to history
 export HISTTIMEFORMAT="%Y/%m/%d %H:%M:%S "
 # ignore duplicates
