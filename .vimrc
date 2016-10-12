@@ -151,6 +151,7 @@ let g:tagbar_type_terraform = {
 map F2 for Nerdtree
 map <F2> :NERDTreeToggle<CR>
 " }}}
+
 " CTRL-SHIFT-V remap {{{
 if &term =~ "xterm.*"
     let &t_ti = &t_ti . "\e[?2004h"
@@ -211,16 +212,10 @@ endtry
 "endtry
 " }}}
 " Indentation settings -------------- {{{
-" For yaml files
-augroup yaml
-    filetype plugin indent on
-    autocmd Filetype yaml setlocal indentkeys-=<:>
-augroup END
-
-au BufNewFile, BufRead *.j2 set ft=jinja
-
-augroup jenkinsfile
-    autocmd BufRead,BufNewFile Jenkinsfile set filetype=groovy
+" Ansible indent
+augroup yaml_autocmds
+    autocmd BufNewFile,BufRead *.yaml set filetype=ansible
+    autocmd BufNewFile,BufRead *.yml set filetype=ansible
 augroup END
 
 " Highlights files past 120 colums in python
@@ -230,13 +225,6 @@ augroup vimrc_autocmds
     autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
     autocmd FileType python match Excess /\%120v.*/
     autocmd FileType python set nowrap
-augroup END
-
-augroup indentation_sr
-    autocmd!
-    autocmd BufRead,BufNewFile * setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
-    autocmd Filetype * setlocal expandtab shiftwidth=4 softtabstop=4 tabstop=8
-    autocmd Filetype dot setlocal autoindent cindent
 augroup END
 
 augroup indentation_dot
