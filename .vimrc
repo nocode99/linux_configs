@@ -212,6 +212,13 @@ endtry
 "endtry
 " }}}
 " Indentation settings -------------- {{{
+" Global Indents
+augroup indentation_global
+  autocmd!
+  autocmd Filetype * setlocal expandtab sw=2 sts=4 ts=8
+  autocmd Filetype python,c setlocal sw=4 sts=4 ts=8
+augroup END
+
 " Ansible indent
 augroup yaml_autocmds
     autocmd BufNewFile,BufRead *.yaml set filetype=ansible
