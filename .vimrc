@@ -3,6 +3,8 @@
 set nocompatible
 " Highlight search
 set hlsearch
+" Set split below
+set splitbelow
 " }}}
 " Set Number {{{
 function! ToggleRelativeNumber()
@@ -67,12 +69,12 @@ augroup rnu_nu
   autocmd BufNewFile,BufRead,BufEnter * set number
 augroup end
 " }}}
-" Line 80 Column and cursor highlighting ----------------- {{{
+" Line 100 Column and cursor highlighting ----------------- {{{
 set cursorline
 set cursorcolumn
 
  if (exists('+colorcolumn'))
-   let &colorcolumn="80,".join(range(80,500),",")
+   let &colorcolumn="100,".join(range(100,500),",")
    highlight ColorColumn ctermbg=9
  endif
 " }}}
