@@ -28,7 +28,7 @@ alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
 
 alias ll='ls -alh --color=auto --group-directories-first'
-alias src='cd ~/src/KeplerGroup'
+alias kip='cd ~/src/KeplerGroup'
 alias ovpn='sudo openvpn --config ~/openvpn/old/bkim.conf'
 alias kvpn='sudo openvpn --config ~/openvpn/new/bkim.conf'
 alias apv='ansible-playbook --ask-vault-pass'
