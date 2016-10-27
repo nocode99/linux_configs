@@ -109,6 +109,7 @@ Plug 'docker/docker' , {'rtp': '/contrib/syntax/vim/'}
 Plug 'hashivim/vim-vagrant'
 Plug 'hashivim/vim-terraform'
 Plug 'pearofducks/ansible-vim'
+Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'lepture/vim-jinja'
 
 " ***** AUTO
