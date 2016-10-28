@@ -91,7 +91,7 @@ Plug 'tpope/vim-surround'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'majutsushi/tagbar'
 Plug 't9md/vim-choosewin'
-" Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plug 'jamshedVesuna/vim-markdown-preview'
 
 " ****** THEMES
 Plug 'flazz/vim-colorschemes'
