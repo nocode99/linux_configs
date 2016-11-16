@@ -1,16 +1,12 @@
 --langdef=ansible
---langmap=ansible:.yml
---regex-ansible=/^\s*- name:(.*)/\1/t,task/
-
+--langmap=ansible:.yml.yaml
+--regex-ansible=/^[ \t]*-[ \t]*name:[ \t]*(.+)/\1/t,tasks/
+--regex-ansible=/^[ \t]*-[ \t]*hosts:[ \t]*(.+)/\1/h,hosts/
 
 --recurse
 --exclude=.git
 --exclude=.terraform
 --regex-make=/^([^# \t]*):/\1/t,target/
---langdef=ansible
---langmap=ansible:.yml.yaml
---regex-ansible=/^[ \t]*-[ \t]*name:[ \t]*(.+)/\1/t,tasks/
---regex-ansible=/^[ \t]*-[ \t]*hosts:[ \t]*(.+)/\1/h,hosts/
 --langdef=terraform
 --langmap=terraform:.tf.tfvars
 --regex-terraform=/^resource "(.+)" "(.+)"/\1 \2/r,resources/
