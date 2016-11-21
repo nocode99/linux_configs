@@ -17,6 +17,7 @@ shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
 export PATH="$PATH:/usr/local/go/bin"
+export GOPATH=$HOME/src/go
 export AWS_PRIVATE_KEY="~/.ssh/ansible"
 export EDITOR='/usr/bin/vim'
 

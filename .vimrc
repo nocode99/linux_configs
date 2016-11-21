@@ -154,7 +154,9 @@ let g:tagbar_type_terraform = {
 map F2 for Nerdtree
 map <F2> :NERDTreeToggle<CR>
 " }}}
-
+" vim-go settings ------------------ {{{
+let g:go_template_autocreate = 0
+" }}}
 " CTRL-SHIFT-V remap {{{
 if &term =~ "xterm.*"
     let &t_ti = &t_ti . "\e[?2004h"
