@@ -230,6 +230,11 @@ augroup yaml_autocmds
     autocmd BufNewFile,BufRead *.yml set filetype=ansible
 augroup END
 
+"golang indentation
+augroup golang_autocmds
+    autocmd BufNewFile,BufRead *.go :setlocal ts=8 sts=0 sw=8 noexpandtab
+augroup END
+
 " Highlights files past 120 colums in python
 augroup vimrc_autocmds
     autocmd!
