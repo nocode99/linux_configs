@@ -7,7 +7,7 @@ if [ -f /etc/bash.bashrc ] ; then
 fi
 
 alias tmux='tmux -2'
-[[ $TERM != "screen" ]] && (exec tmux new -s BK || echo "")
+[[ $TERM != "screen" ]] && (exec tmux -2 new -s BK || echo "")
 alias tmux='tmux -2'
 
 # Add timestamp to history
