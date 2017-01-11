@@ -6,6 +6,8 @@ if [ -f /etc/bash.bashrc ] ; then
     source /etc/bash.bashrc
 fi
 
+bind TAB:menu-complete
+
 alias tmux='tmux -2'
 [[ $TERM != "screen" ]] && (exec tmux -2 new -s BK || echo "")
 alias tmux='tmux -2'
