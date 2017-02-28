@@ -6,6 +6,10 @@ if [ -f /etc/bash.bashrc ] ; then
     source /etc/bash.bashrc
 fi
 
+if [ ! -d /tmp/.swp ]; then
+    mkdir -p /tmp/.swp
+fi
+
 bind TAB:menu-complete
 
 alias tmux='tmux -2'
