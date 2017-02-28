@@ -5,6 +5,8 @@ set nocompatible
 set hlsearch
 " Set split below
 set splitbelow
+" Set swap file dir. .bashrc will always create directory if it doesn't exist
+set dir=/tmp/.swp
 " }}}
 " Set Number {{{
 function! ToggleRelativeNumber()
