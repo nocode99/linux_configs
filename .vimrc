@@ -5,8 +5,8 @@ set nocompatible
 set hlsearch
 " Set split below
 set splitbelow
-" Set swap file dir. .bashrc will always create directory if it doesn't exist
-set dir=/tmp/.swp
+" remove swap file
+set noswapfile
 " }}}
 " Set Number {{{
 function! ToggleRelativeNumber()
@@ -211,14 +211,6 @@ try
     let g:airline_theme='papercolor'
 catch
 endtry
-" }}}
-" Molokai colorscheme---------------- {{{
-"try
-"   set t_Co=256 " says terminal has 256 colors
-"   let g:molokai_original = 1
-"   let g:rehash256 = 1
-"catch
-"endtry
 " }}}
 " Indentation settings -------------- {{{
 " Global Indents
