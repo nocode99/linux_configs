@@ -33,6 +33,7 @@ export EDITOR='/usr/bin/vim'
 
 export TF_VAR_dir_ansible='/home/bkim/src/KeplerGroup/kepler-ansible'
 export TF_VAR_private_key='/home/bkim/.ssh/ansible'
+export ANSIBLE_COW_SELECTION='tux'
 
 alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
