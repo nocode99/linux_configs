@@ -11,6 +11,7 @@ if [ ! -d /tmp/.swp ]; then
 fi
 
 bind TAB:menu-complete
+bind '"\e[Z": menu-complete-backward'
 
 alias tmux='tmux -2'
 [[ $TERM != "screen" ]] && (exec tmux -2 new -s BK || echo "")
