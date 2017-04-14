@@ -52,6 +52,7 @@ alias apv='ansible-playbook --ask-vault-pass'
 alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
               do sh -c "echo $dir && cd $dir/../ && git status" ; done'
+alias va='. ./venv/bin/activate'
 
 #######################################################################
 # Set command to include git branch in my prompt
