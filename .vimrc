@@ -7,6 +7,8 @@ set hlsearch
 set splitbelow
 " remove swap file
 set noswapfile
+" Set paste toggle
+set pastetoggle=<C-_>
 " }}}
 " Set Number {{{
 function! ToggleRelativeNumber()
@@ -88,6 +90,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
 Plug 'hynek/vim-python-pep8-indent'
@@ -159,22 +162,6 @@ map <F2> :NERDTreeToggle<CR>
 " }}}
 " vim-go settings ------------------ {{{
 let g:go_template_autocreate = 0
-" }}}
-" CTRL-SHIFT-V remap {{{
-if &term =~ "xterm.*"
-    let &t_ti = &t_ti . "\e[?2004h"
-    let &t_te = "\e[?2004l" . &t_te
-    function XTermPasteBegin(ret)
-        set pastetoggle=<Esc>[201~
-        set paste
-        return a:ret
-    endfunction
-    map <expr> <Esc>[200~ XTermPasteBegin("i")
-    imap <expr> <Esc>[200~ XTermPasteBegin("")
-    vmap <expr> <Esc>[200~ XTermPasteBegin("c")
-    cmap <Esc>[200~ <nop>
-    cmap <Esc>[201~ <nop>
-endif
 " }}}
 " Trailing whitespace ------------- {{{
 function! <SID>StripTrailingWhitespaces()
