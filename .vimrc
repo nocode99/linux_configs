@@ -117,6 +117,7 @@ Plug 'hashivim/vim-vaultproject'
 Plug 'pearofducks/ansible-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'lepture/vim-jinja'
+Plug 'google/vim-searchindex'
 
 " ***** AUTO
 Plug 'jiangmiao/auto-pairs'
