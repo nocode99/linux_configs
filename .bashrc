@@ -49,6 +49,19 @@ export EDITOR='/usr/bin/vim'
 
 export ANSIBLE_COW_SELECTION='tux'
 
+# Easier directory navigation for going up a directory tree
+alias 'a'='cd - &> /dev/null'
+alias .='cd ..'
+alias ..='cd ../..'
+alias ...='cd ../../..'
+alias ....='cd ../../../..'
+alias .....='cd ../../../../..'
+alias ......='cd ../../../../../..'
+alias .......='cd ../../../../../../..'
+alias ........='cd ../../../../../../../..'
+alias .........='cd ../../../../../../../../..'
+alias ..........='cd ../../../../../../../../../..'
+
 alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
@@ -65,6 +78,11 @@ alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
               do sh -c "echo $dir && cd $dir/../ && git status" ; done'
 alias va='. ./venv/bin/activate'
+
+# Colored cat
+function cats() {
+  pygmentize -g $1
+}
 
 #######################################################################
 # Set command to include git branch in my prompt
