@@ -49,7 +49,7 @@ export EDITOR='/usr/bin/vim'
 
 export ANSIBLE_COW_SELECTION='tux'
 
- Easier directory navigation for going up a directory tree
+# Easier directory navigation for going up a directory tree
 alias 'a'='cd - &> /dev/null'
 alias ..='cd ../..'
 alias ...='cd ../../..'
