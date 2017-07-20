@@ -6,6 +6,10 @@ if [ -f /etc/bash.bashrc ] ; then
     source /etc/bash.bashrc
 fi
 
+if [ -f ~/.tmuxinator.bash ] ; then
+    source ~/.tmuxinator.bash
+fi
+
 # Check to see if Linux or Mac
 BASE_OS="$(uname)"
 case $BASE_OS in
@@ -30,10 +34,7 @@ bind TAB:menu-complete
 bind '"\e[Z": menu-complete-backward'
 
 alias tmux='tmux -2'
-alias ta='tmux a'
-if command -v tmux>/dev/null; then
-  [[ $TERM != "screen" ]] && (exec tmux -2 new -s BK || echo "")
-fi
+export TERM=screen-256color
 
 ################################################################################
 # ENV VARS
