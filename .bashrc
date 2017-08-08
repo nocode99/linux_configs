@@ -24,7 +24,7 @@ esac
 if [ $OS == 'linux' ]; then
     fortune | cowsay -f calvin | lolcat
 elif [ $OS == 'darwin' ] ; then
-    echo "I'm on a Mac"
+    :
 fi
 
 ################################################################################
