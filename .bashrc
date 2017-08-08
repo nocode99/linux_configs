@@ -23,8 +23,11 @@ esac
 
 if [ $OS == 'linux' ]; then
     fortune | cowsay -f calvin | lolcat
+    alias ll='ls -alh --color=auto --group-directories-first'
+    GIT_MSG="working directory clean"
 elif [ $OS == 'darwin' ] ; then
-    :
+    alias ll='ls -alhG'
+    GIT_MSG="working tree clean"
 fi
 
 ################################################################################
@@ -75,7 +78,6 @@ alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
 
-alias ll='ls -alh --color=auto --group-directories-first'
 alias grep='grep --color=auto'
 alias kip='cd ~/src/KeplerGroup'
 alias kvpn='sudo openvpn \
@@ -111,11 +113,6 @@ function git_color {
   local git_status="$(git status 2> /dev/null)"
   local branch="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
   local git_commit="$(git --no-pager diff --stat origin/${branch} 2>/dev/null)"
-  if [[ $OS == "darwin" ]]; then
-    GIT_MSG="working tree clean"
-  else
-    GIT_MSG="working directory clean"
-  fi
   if [[ ! $git_status =~ $GIT_MSG ]]; then
     echo -e $COLOR_RED
   elif [[ $git_status =~ "Your branch is ahead of" ]]; then
