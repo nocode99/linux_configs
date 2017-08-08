@@ -242,5 +242,5 @@ augroup END
 " MACOSX SETTINGS {{{
 if has('macunix')
   set backspace=indent,eol,start
-fi
+endif
 " }}}
