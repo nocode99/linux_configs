@@ -239,3 +239,8 @@ augroup TabsNotSpaces
     autocmd BufRead,BufNewFile *GNUmakefile,*makefile,*Makefile :setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
 augroup END
 " }}}
+" MACOSX SETTINGS {{{
+if has('macunix')
+  set backspace=indent,eol,start
+fi
+" }}}
