@@ -84,12 +84,13 @@ alias kvpn='sudo openvpn \
     --config ~/openvpn/new/bkim.conf \
     --up /etc/openvpn/update-resolv-conf \
     --script-security 2'
-alias apv='ansible-playbook --ask-vault-pass'
 alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
               do sh -c "echo $dir && cd $dir/../ && git status" ; done'
 alias va='. ./venv/bin/activate'
 alias vauth='unset VAULT_TOKEN && vault auth -method=github'
+alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
+alias smux='mux start infra'
 
 # Colored cat
 function cats() {
