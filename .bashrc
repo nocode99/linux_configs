@@ -98,6 +98,25 @@ function cats() {
 }
 
 #######################################################################
+# Functions to Activate Virtualenv automatically
+#######################################################################
+
+# Checks if venv directory exists and activates
+activate_venv() {
+    if [ -d venv ]; then
+      deactivate > /dev/null 2>&1
+      source ./venv/bin/activate
+    fi
+}
+
+# CD into dir and run activate_venv function
+cd_venv() {
+    cd "$@" && activate_venv
+}
+
+alias cd="cd_venv"
+
+#######################################################################
 # Set command to include git branch in my prompt
 #######################################################################
 COLOR_RED="\033[0;31m"
