@@ -91,6 +91,7 @@ alias va='. ./venv/bin/activate'
 alias vauth='unset VAULT_TOKEN && vault auth -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
 alias smux='mux start infra'
+alias tfenv='sudo tfswitch'
 
 # Colored cat
 function cats() {
