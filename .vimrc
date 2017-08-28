@@ -195,7 +195,7 @@ try
     set t_Co=256 " says terminal has 256 colors
     let g:gruvbox_contrast_dark='hard'
     set background=dark
-    colorscheme PaperColor
+    colorscheme pencil
     let g:airline_theme='papercolor'
 catch
 endtry
