@@ -77,11 +77,11 @@ augroup end
 set cursorline
 set cursorcolumn
 
- if (exists('+colorcolumn'))
-   let &colorcolumn="100,".join(range(100,500),",")
-   highlight ColorColumn ctermbg=9
- endif
-" }}}
+"if (exists('+colorcolumn'))
+"  let &colorcolumn="100,".join(range(100,500),",")
+"  highlight ColorColumn ctermbg=0
+"endif
+"}}}
 " Plugs ----------------- {{{
 call plug#begin('~/.vim/plugged')
 
