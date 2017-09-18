@@ -98,6 +98,10 @@ function cats() {
   pygmentize -g $1
 }
 
+function klone() {
+  git clone https://github.com/KeplerGroup/$1 ~/src/KeplerGroup/$1
+}
+
 #######################################################################
 # Functions to Activate Virtualenv automatically
 #######################################################################
