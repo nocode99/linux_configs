@@ -102,24 +102,42 @@ function klone() {
   git clone https://github.com/KeplerGroup/$1 ~/src/KeplerGroup/$1
 }
 
+function vread() {
+  vault read -field $1 secret/administration/rds/$2
+}
+
+function vsql() {
+  VPATH=$1
+  USERNAME=$(vread username $VPATH)
+  PASSWORD=$(vread password $VPATH)
+  HOST=$(vread host $VPATH)
+  PORT=$(vread port $VPATH)
+  PROTOCOL=$(vread protocol $VPATH)
+  if [ $PROTOCOL == 'postgresql' ]; then
+    psql -h $HOST -U $USERNAME -p $PORT -W
+  elif [ $PROTOCOL == 'mysql' ]; then
+    mysql -u $USERNAME -h $HOST -P $PORT -p
+  fi
+}
+
 #######################################################################
 # Functions to Activate Virtualenv automatically
 #######################################################################
 
 # Checks if venv directory exists and activates
-activate_venv() {
-    if [ -d venv ]; then
-      deactivate > /dev/null 2>&1
-      source ./venv/bin/activate
-    fi
-}
-
-# CD into dir and run activate_venv function
-cd_venv() {
-    cd "$@" && activate_venv
-}
-
-alias cd="cd_venv"
+#activate_venv() {
+#    if [ -d venv ]; then
+#      deactivate > /dev/null 2>&1
+#      source ./venv/bin/activate
+#    fi
+#}
+#
+## CD into dir and run activate_venv function
+#cd_venv() {
+#    cd "$@" && activate_venv
+#}
+#
+#alias cd="cd_venv"
 
 #######################################################################
 # Set command to include git branch in my prompt
