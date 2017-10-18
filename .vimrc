@@ -112,7 +112,7 @@ Plug 'elzr/vim-json'
 Plug 'plasticboy/vim-markdown'
 Plug 'docker/docker' , {'rtp': '/contrib/syntax/vim/'}
 Plug 'hashivim/vim-vagrant'
-Plug 'hashivim/vim-terraform'
+Plug 'nocode99/vim-terraform'
 Plug 'hashivim/vim-vaultproject'
 Plug 'pearofducks/ansible-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
@@ -236,11 +236,16 @@ augroup END
 augroup TabsNotSpaces
     autocmd!
     autocmd BufRead,BufNewFile *.otl :setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
-    autocmd BufRead,BufNewFile *GNUmakefile,*makefile,*Makefile :setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
+    autocmd BufRead,BufNewFile *GNUmakefile,*makefile,*Makefile :setlocal ts=4 sts=0 sw=4 noexpandtab
 augroup END
 " }}}
 " MACOSX SETTINGS {{{
 if has('macunix')
   set backspace=indent,eol,start
 endif
+" }}}
+" Terraform Syntax {{{
+let g:terraform_align=1
+" Use spacebar to fold/unfold resources
+let g:terraform_remap_spacebar=1
 " }}}
