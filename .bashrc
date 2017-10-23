@@ -88,6 +88,7 @@ alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
               do sh -c "echo $dir && cd $dir/../ && git status" ; done'
 alias va='. ./venv/bin/activate'
+alias venv='python3 -m venv venv'
 alias vauth='unset VAULT_TOKEN && vault auth -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
 alias smux='mux start infra'
