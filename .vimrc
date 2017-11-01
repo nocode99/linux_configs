@@ -97,6 +97,7 @@ Plug 'hynek/vim-python-pep8-indent'
 Plug 'majutsushi/tagbar'
 Plug 't9md/vim-choosewin'
 Plug 'jamshedVesuna/vim-markdown-preview'
+Plug 'tpope/vim-commentary'
 
 " ****** THEMES
 Plug 'flazz/vim-colorschemes'
@@ -199,6 +200,9 @@ try
     let g:airline_theme='papercolor'
 catch
 endtry
+" }}}
+" vim-commentary settings {{{
+autocmd FileType * setlocal commentstring=#\ %s
 " }}}
 " Indentation settings -------------- {{{
 " Global Indents
