@@ -248,6 +248,10 @@ if has('macunix')
   set backspace=indent,eol,start
 endif
 " }}}
+" Key Remappings {{{
+nnoremap T gT
+nnoremap t gt
+" }}}
 " Terraform Syntax {{{
 let g:terraform_align=1
 " Use spacebar to fold/unfold resources
