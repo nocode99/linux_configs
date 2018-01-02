@@ -77,10 +77,12 @@ augroup end
 set cursorline
 set cursorcolumn
 
-"if (exists('+colorcolumn'))
-"  let &colorcolumn="100,".join(range(100,500),",")
-"  highlight ColorColumn ctermbg=0
-"endif
+if exists('+colorcolumn')
+  set colorcolumn=80
+"  highlight ColorColumn ctermbg=245 guibg=lightgrey
+"  let &colorcolumn="80,".join(range(80,500),",")
+"  highlight ColorColumn ctermbg=13
+endif
 "}}}
 " Plugs ----------------- {{{
 call plug#begin('~/.vim/plugged')
@@ -221,15 +223,6 @@ augroup END
 "golang indentation
 augroup golang_autocmds
     autocmd BufNewFile,BufRead *.go :setlocal ts=8 sts=0 sw=8 noexpandtab
-augroup END
-
-" Highlights files past 120 colums in python
-augroup vimrc_autocmds
-    autocmd!
-    " highlight characters past column 120
-    autocmd FileType python highlight Excess ctermbg=DarkGrey guibg=Black
-    autocmd FileType python match Excess /\%120v.*/
-    autocmd FileType python set nowrap
 augroup END
 
 augroup indentation_dot
