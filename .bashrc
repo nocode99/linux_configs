@@ -101,7 +101,7 @@ function klone() {
 }
 
 function avadmin() {
-  aws-vault exec kepler --no-session -- $1 $2 $3 $4 $5 $6 $7
+  aws-vault exec kepler --no-session -- $1 $2 $3 $4 $5 $6 $7 $8 $9
 }
 
 function awspw() {
