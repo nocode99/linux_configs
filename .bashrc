@@ -100,10 +100,15 @@ function klone() {
   git clone https://github.com/KeplerGroup/$1 ~/src/KeplerGroup/$1
 }
 
+function avadmin() {
+  aws-vault exec kepler --no-session -- $1 $2 $3 $4 $5 $6 $7
+}
+
 function awspw() {
   if [ -f $(which apg) ]; then
     local PASSWORD=$(apg -n 1 -m 16 -x 20 -M SCLN)
-    aws iam update-login-profile \
+    aws-vault exec kepler --no-session -- \
+      aws iam update-login-profile \
       --user-name $1 \
       --password $PASSWORD \
       --password-reset-required
