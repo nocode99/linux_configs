@@ -85,6 +85,7 @@ alias kip='cd ~/src/KeplerGroup'
 alias kvpn='sudo openvpn \
     --config ~/openvpn/bkim.conf \
     --up /etc/openvpn/update-resolv-conf \
+    --down /etc/openvpn/update-resolv-conf \
     --script-security 2'
 alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
