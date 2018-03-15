@@ -109,7 +109,8 @@ Plug 'jamshedVesuna/vim-markdown-preview'
 Plug 'tpope/vim-commentary'
 
 " ****** THEMES
-Plug 'flazz/vim-colorschemes'
+Plug 'NLKNguyen/papercolor-theme'
+" Plug 'flazz/vim-colorschemes'
 " Plug 'NLKNguyen/papercolor-theme'
 " Plug 'tomasr/molokai'
 " Plug 'morhetz/gruvbox'
@@ -118,16 +119,18 @@ Plug 'flazz/vim-colorschemes'
 Plug 'hdima/python-syntax'
 Plug 'fatih/vim-go'
 Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
 Plug 'elzr/vim-json'
 Plug 'plasticboy/vim-markdown'
 Plug 'docker/docker' , {'rtp': '/contrib/syntax/vim/'}
 Plug 'hashivim/vim-vagrant'
-Plug 'nocode99/vim-terraform'
+Plug 'hashivim/vim-terraform'
 Plug 'hashivim/vim-vaultproject'
 Plug 'pearofducks/ansible-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'lepture/vim-jinja'
 Plug 'google/vim-searchindex'
+Plug 'rust-lang/rust.vim'
 
 " ***** AUTO
 Plug 'jiangmiao/auto-pairs'
@@ -206,10 +209,24 @@ try
     set background=dark
     colorscheme PaperColor
     " Set background to black
-    highlight Normal ctermbg=NONE
+    "highlight Normal ctermbg=NONE
     let g:airline_theme='papercolor'
 catch
 endtry
+let g:PaperColor_Theme_Options = {
+  \   'language': {
+  \     'python': {
+  \       'highlight_builtins' : 1
+  \     },
+  \     'cpp': {
+  \       'highlight_standard_library': 1
+  \     },
+  \     'c': {
+  \       'highlight_builtins' : 1
+  \     }
+  \   }
+  \ }
+
 " }}}
 " vim-commentary settings {{{
 autocmd FileType * setlocal commentstring=#\ %s
@@ -257,4 +274,23 @@ nnoremap t gt
 let g:terraform_align=1
 " Use spacebar to fold/unfold resources
 let g:terraform_remap_spacebar=1
+" }}}
+" javascript Syntax {{{
+augroup javascript_complete
+  autocmd!
+  autocmd FileType javascript nnoremap <buffer> <C-]> :TernDef<CR>
+augroup END
+" Javascript:
+let g:javascript_plugin_flow = 1
+
+" Javascript: Highlight this keyword in object / function definitions
+augroup javascript_syntax
+  autocmd!
+  autocmd FileType javascript syn keyword jsBooleanTrue this
+  autocmd FileType javascript.jsx syn keyword jsBooleanTrue this
+augroup end
+
+
+" JSX: for .js files in addition to .jsx
+ let g:jsx_ext_required = 0
 " }}}
