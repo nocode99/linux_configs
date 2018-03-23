@@ -107,6 +107,7 @@ Plug 'majutsushi/tagbar'
 Plug 't9md/vim-choosewin'
 Plug 'jamshedVesuna/vim-markdown-preview'
 Plug 'tpope/vim-commentary'
+Plug 'davidhalter/jedi-vim'
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
@@ -148,6 +149,11 @@ let g:airline#extensions#branch#enabled = 1
 " Choosewin Settings {{{
 nmap - <Plug>(choosewin)
 " }}}
+" Key Remappings {{{
+" Tab navigation like Firefox.
+nnoremap <C-S-tab> :tabprevious<CR>
+nnoremap <C-tab>   :tabnext<CR>"
+" }}}
 " Plug Settings for TagBar {{{
 nmap <F8> :TagbarToggle<CR>
 let g:tagbar_type_ansible = {
@@ -173,6 +179,52 @@ let g:tagbar_type_terraform = {
 " Plug settings for Nerdtree ----------------- {{{
 map F2 for Nerdtree
 map <F2> :NERDTreeToggle<CR>
+let g:NERDTreeMapOpenInTab = '<C-t>'
+let g:NERDTreeMapOpenInTabSilent = ''
+let g:NERDTreeMapOpenSplit = '<C-s>'
+let g:NERDTreeMapOpenVSplit = '<C-v>'
+let g:NERDTreeShowLineNumbers = 1
+let g:NERDTreeCaseSensitiveSort = 0
+let g:NERDTreeWinPos = 'left'
+let g:NERDTreeWinSize = 31
+let g:NERDTreeAutoDeleteBuffer = 1
+let g:NERDTreeSortOrder = ['*', '\/$']
+let g:NERDTreeIgnore=[
+      \'venv$[[dir]]',
+      \'__pycache__$[[dir]]',
+      \'.egg-info$[[dir]]',
+      \'node_modules$[[dir]]',
+      \'elm-stuff$[[dir]]',
+      \'\.aux$[[file]]',
+      \'\.toc$[[file]]',
+      \'\.pdf$[[file]]',
+      \'\.out$[[file]]',
+      \'\.o$[[file]]',
+      \]
+
+function! NERDTreeToggleCustom()
+    if exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1
+      " if NERDTree is open in window in current tab...
+      exec 'NERDTreeClose'
+    else
+      exec 'NERDTree %'
+    endif
+endfunction
+
+function! s:CloseIfOnlyControlWinLeft()
+  if winnr("$") != 1
+    return
+  endif
+  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+        \ || &buftype == 'quickfix'
+    q
+  endif
+endfunction
+
+augroup CloseIfOnlyControlWinLeft
+  au!
+  au BufEnter * call s:CloseIfOnlyControlWinLeft()
+augroup END
 " }}}
 " vim-go settings ------------------ {{{
 let g:go_template_autocreate = 0
@@ -275,6 +327,20 @@ let g:terraform_align=1
 " Use spacebar to fold/unfold resources
 let g:terraform_remap_spacebar=1
 " }}}
+" python Syntax {{{
+
+" Python: highlighting
+let g:python_highlight_space_errors = 0
+let g:python_highlight_all = 1
+
+" Highlight self and cls keyword in class definitions
+augroup python_syntax
+  autocmd!
+  autocmd FileType python syn keyword pythonBuiltinObj self
+  autocmd FileType python syn keyword pythonBuiltinObj cls
+augroup end
+
+" }}}
 " javascript Syntax {{{
 augroup javascript_complete
   autocmd!
@@ -293,4 +359,8 @@ augroup end
 
 " JSX: for .js files in addition to .jsx
  let g:jsx_ext_required = 0
+" }}}
+" jedi-vim recognize venv {{{
+let g:virtual_auto_activate = 1
+nmap - <Plug>(choosewin)
 " }}}
