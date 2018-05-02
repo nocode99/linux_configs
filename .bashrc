@@ -52,7 +52,7 @@ export HISTSIZE=3000
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-export PATH="$PATH:/usr/local/bin:/usr/local/go/bin:~/src/go/bin"
+export PATH="$PATH:/usr/local/bin:/usr/local/go/bin:~/src/go/bin:~/bin"
 if [ -d ~/.pyenv ]; then
   export PATH="$PATH:~/.pyenv/bin"
   eval "$(pyenv init -)"
@@ -64,12 +64,14 @@ export AWS_PRIVATE_KEY="~/.ssh/ansible"
 export EDITOR='/usr/bin/vim'
 
 export ANSIBLE_COW_SELECTION='tux'
+export AWS_VAULT_BACKEND=kwallet
 
 ################################################################################
 # ALIAS'
 ################################################################################
 # Easier directory navigation for going up a directory tree
-alias 'a'='cd - &> /dev/null'
+alias a='cd - &> /dev/null'
+alias .='cd ../'
 alias ..='cd ../..'
 alias ...='cd ../../..'
 alias ....='cd ../../../..'
@@ -84,6 +86,7 @@ alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
 
+alias vim='nvim'
 alias grep='grep --color=auto'
 alias kip='cd ~/src/KeplerGroup'
 alias kvpn='sudo openvpn \
@@ -98,15 +101,24 @@ alias va='. ./venv/bin/activate'
 alias venv='python3 -m venv venv'
 alias vauth='unset VAULT_TOKEN && vault login -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
+alias ava='aws-vault exec kepler -t 8h --'
 alias smux='mux start infra'
 alias tfenv='sudo tfswitch'
 
 function klone() {
-  git clone https://github.com/KeplerGroup/$1 ~/src/KeplerGroup/$1
+  if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
+    git clone https://github.com/KeplerGroup/$1 ~/src/KeplerGroup/$1
+  else
+    echo "Repo is already kloned!"
+  fi
 }
 
 function avadmin() {
   aws-vault exec kepler --no-session -- $1 $2 $3 $4 $5 $6 $7 $8 $9
+}
+
+function resnet() {
+  sudo systemctl restart NetworkManager
 }
 
 function awspw() {
@@ -122,6 +134,19 @@ function awspw() {
     echo "please install apg"
   fi
 }
+
+# Function to get local machine IP
+function myip() {
+    local _ip _myip _line _nl=$'\n'
+    while IFS=$': \t' read -a _line ;do
+        [ -z "${_line%inet}" ] &&
+           _ip=${_line[${#_line[1]}>4?1:2]} &&
+           [ "${_ip#127.0.0.1}" ] && _myip=$_ip
+      done< <(LANG=C /sbin/ifconfig)
+    printf ${1+-v} $1 "%s${_nl:0:$[${#1}>0?0:1]}" $_myip
+}
+
+export MYIP=$(myip)
 
 #######################################################################
 # Set command to include git branch in my prompt
@@ -177,4 +202,4 @@ ${PS1_END}"
 #[[ -f ~/.LESS_TERMCAP ]] && . ~/.LESS_TERMCAP
 
 # Disables CTRL+S/CTRL+Q in Terminal
-ssty -ixon
+stty -ixon
