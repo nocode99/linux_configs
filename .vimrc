@@ -9,69 +9,12 @@ set splitbelow
 set noswapfile
 " Set paste toggle
 set pastetoggle=<C-_>
-" }}}
-" Set Number {{{
-function! ToggleRelativeNumber()
-  if &rnu
-    set norelativenumber
-  else
-    set relativenumber
-  endif
-endfunction
+" set mapleader
+let mapleader = ","
+" let maplocalleader = "\\"
 
-function! RNUInsertEnter()
-  if &rnu
-    let b:line_number_state = 'rnu'
-    set norelativenumber
-  else
-    let b:line_number_state = 'nornu'
-  endif
-endfunction
-
-function! RNUInsertLeave()
-  if b:line_number_state == 'rnu'
-    set relativenumber
-  else
-    set norelativenumber
-  endif
-endfunction
-
-function! RNUBufEnter()
-  if exists('b:line_number_state')
-    if b:line_number_state == 'rnu'
-      set relativenumber
-    else
-      set norelativenumber
-    endif
-  else
-    set relativenumber
-    let b:line_number_state = 'rnu'
-  endif
-endfunction
-
-function! RNUBufLeave()
-  if &rnu
-    let b:line_number_state = 'rnu'
-  else
-    let b:line_number_state = 'nornu'
-  endif
-  set norelativenumber
-endfunction
-
-" Set mappings for relative numbers
-
-" Toggle relative number status
-nnoremap <silent><leader>r :call ToggleRelativeNumber()<CR>
-augroup rnu_nu
-  autocmd!
-  " Don't have relative numbers during insert mode
-  autocmd InsertEnter * :call RNUInsertEnter()
-  autocmd InsertLeave * :call RNUInsertLeave()
-  " Set and unset relative numbers when buffer is active
-  autocmd BufNew,BufEnter * :call RNUBufEnter()
-  autocmd BufLeave * :call RNUBufLeave()
-  autocmd BufNewFile,BufRead,BufEnter * set number
-augroup end
+" Set line numbers
+set number
 " }}}
 " Line 100 Column and cursor highlighting ----------------- {{{
 set cursorline
@@ -86,9 +29,16 @@ endif
 "}}}
 " Plugs ----------------- {{{
 
+" Autoinstall vim-plug for vim and neovim
 if empty(glob('~/.vim/autoload/plug.vim'))
   silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+if empty(glob('~/.local/share/nvim/site/autoload/plug.vim'))
+  silent !curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
@@ -108,11 +58,13 @@ Plug 't9md/vim-choosewin'
 Plug 'jamshedVesuna/vim-markdown-preview'
 Plug 'tpope/vim-commentary'
 Plug 'davidhalter/jedi-vim'
+Plug 'tyru/open-browser.vim'
+Plug 'weirongxu/plantuml-previewer.vim'
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
 " Plug 'flazz/vim-colorschemes'
-" Plug 'NLKNguyen/papercolor-theme'
 " Plug 'tomasr/molokai'
 " Plug 'morhetz/gruvbox'
 
@@ -132,12 +84,15 @@ Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'lepture/vim-jinja'
 Plug 'google/vim-searchindex'
 Plug 'rust-lang/rust.vim'
+Plug 'aklt/plantuml-syntax'
+Plug 'vim-syntastic/syntastic'
 
 " ***** AUTO
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'juliosueiras/vim-terraform-completion'
 call plug#end()
 
 " }}}
@@ -147,7 +102,7 @@ set laststatus=2
 let g:airline#extensions#branch#enabled = 1
 " }}}
 " Choosewin Settings {{{
-nmap - <Plug>(choosewin)
+nmap \ <Plug>(choosewin)
 " }}}
 " Key Remappings {{{
 " Tab navigation like Firefox.
@@ -155,7 +110,17 @@ nnoremap <C-S-tab> :tabprevious<CR>
 nnoremap <C-tab>   :tabnext<CR>"
 " }}}
 " Plug Settings for TagBar {{{
-nmap <F8> :TagbarToggle<CR>
+nnoremap <silent> <space>l :TagbarToggle <CR>
+
+let g:tagbar_map_showproto = '`'
+let g:tagbar_show_linenumbers = -1
+let g:tagbar_autofocus = 1
+let g:tagbar_indent = 1
+let g:tagbar_sort = 0  " order by order in sort file
+let g:tagbar_case_insensitive = 1
+let g:tagbar_width = 37
+let g:tagbar_silent = 1
+let g:tagbar_foldlevel = 0
 let g:tagbar_type_ansible = {
     \ 'ctagstype' : 'ansible',
     \ 'kinds' : [
@@ -191,6 +156,7 @@ let g:NERDTreeAutoDeleteBuffer = 1
 let g:NERDTreeSortOrder = ['*', '\/$']
 let g:NERDTreeIgnore=[
       \'venv$[[dir]]',
+      \'.terraform$[[dir]]',
       \'__pycache__$[[dir]]',
       \'.egg-info$[[dir]]',
       \'node_modules$[[dir]]',
@@ -262,7 +228,7 @@ try
     colorscheme PaperColor
     " Set background to black
     "highlight Normal ctermbg=NONE
-    let g:airline_theme='papercolor'
+    let g:airline_theme = 'papercolor
 catch
 endtry
 let g:PaperColor_Theme_Options = {
@@ -282,6 +248,9 @@ let g:PaperColor_Theme_Options = {
 " }}}
 " vim-commentary settings {{{
 autocmd FileType * setlocal commentstring=#\ %s
+autocmd FileType vim setlocal commentstring=\"\ %s
+autocmd FileType terraform setlocal commentstring=#%s
+autocmd FileType plantuml setlocal commentstring='%s
 " }}}
 " Indentation settings -------------- {{{
 " Global Indents
@@ -293,8 +262,8 @@ augroup END
 
 " Ansible indent
 augroup yaml_autocmds
-    autocmd BufNewFile,BufRead *.yaml set filetype=ansible
-    autocmd BufNewFile,BufRead *.yml set filetype=ansible
+    autocmd BufNewFile,BufRead *.yaml set filetype=yaml.ansible
+    autocmd BufNewFile,BufRead *.yml set filetype=yaml.ansible
 augroup END
 
 "golang indentation
@@ -322,10 +291,19 @@ endif
 nnoremap T gT
 nnoremap t gt
 " }}}
-" Terraform Syntax {{{
-let g:terraform_align=1
-" Use spacebar to fold/unfold resources
-let g:terraform_remap_spacebar=1
+" ansible Syntax {{{
+let g:ansible_unindent_after_newline = 1
+
+let g:ansible_attribute_highlight = "ob"
+
+let g:ansible_extra_keywords_highlight = 1
+" }}}
+" terraform Syntax {{{
+let g:terraform_align = 1
+
+let g:terraform_fold_sections = 1
+
+let g:terraform_remap_spacebar = 1
 " }}}
 " python Syntax {{{
 
@@ -360,7 +338,75 @@ augroup end
 " JSX: for .js files in addition to .jsx
  let g:jsx_ext_required = 0
 " }}}
-" jedi-vim recognize venv {{{
+" autocomplete settings {{{
+
+"A comma separated list of options for Insert mode completion
+"   menuone  Use the popup menu also when there is only one match.
+"            Useful when there is additional information about the
+"            match, e.g., what file it comes from.
+
+"   longest  Only insert the longest common text of the matches.  If
+"            the menu is displayed you can use CTRL-L to add more
+"            characters.  Whether case is ignored depends on the kind
+"            of completion.  For buffer text the 'ignorecase' option is
+"            used.
+
+"   preview  Show extra information about the currently selected
+"            completion in the preview window.  Only works in
+"            combination with 'menu' or 'menuone'.
+" courtesy of pappasam
+set completeopt=menuone,longest,preview
+
+" Omnicompletion:
+" <C-@> is signal sent by terminal when pressing <C-Space>
+" Need to include <C-Space> as well for neovim sometimes
+inoremap <C-@> <C-x><C-o>
+inoremap <C-space> <C-x><C-o>
+
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#goto_command = "<C-]>"
+let g:jedi#documentation_command = "<leader>sd"
+let g:jedi#usages_command = "<leader>su"
+let g:jedi#rename_command = "<leader>sr"
+
+
+augroup vimscript_complete
+  autocmd!
+  autocmd FileType vim nnoremap <buffer> <C-]> yiw:help <C-r>"<CR>
+  autocmd FileType vim inoremap <buffer> <C-@> <C-x><C-v>
+  autocmd FileType vim inoremap <buffer> <C-space> <C-x><C-v>
+augroup END
+
 let g:virtual_auto_activate = 1
-nmap - <Plug>(choosewin)
+
+" Syntatistic Config
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+" (Optional)Remove Info(Preview) window
+set completeopt-=preview
+
+" (Optional)Hide Info(Preview) window after completions
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+" (Optional) Enable terraform plan to be include in filter
+let g:syntastic_terraform_tffilter_plan = 1
+
+" (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
+let g:terraform_completion_keys = 1
+
+" (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
+" let g:terraform_registry_module_completion = 0
+
+" Terraform
+augroup terraform_complete
+  autocmd FileType terraform setlocal omnifunc=terraformcomplete#Complete
+augroup END
 " }}}
