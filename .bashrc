@@ -97,11 +97,11 @@ alias kvpn='sudo openvpn \
 alias ap='ansible-playbook'
 alias gitall='find . -name '.git' -type d | while read dir ; \
               do sh -c "echo $dir && cd $dir/../ && git status" ; done'
-alias va='. ./venv/bin/activate'
+alias va='source ./venv/bin/activate'
 alias venv='python3 -m venv venv'
 alias vauth='unset VAULT_TOKEN && vault login -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
-alias ava='aws-vault exec kepler -t 8h --'
+alias ava='aws-vault exec --no-session --assume-role-ttl 12h --debug admin'
 alias smux='mux start infra'
 alias tfenv='sudo tfswitch'
 
