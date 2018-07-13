@@ -52,14 +52,33 @@ export HISTSIZE=3000
 shopt -s histappend
 export PROMPT_COMMAND="history -a; history -c; history -r; $PROMPT_COMMAND"
 
-export PATH="$PATH:/usr/local/bin:/usr/local/go/bin:~/src/go/bin:~/bin"
+# nodenv
+NODENV_ROOT="$HOME/.nodenv"
+if [[ -d "$NODENV_ROOT" ]];
+then
+  export NODENV_ROOT
+  # Make sure it's not already in path
+  if [[ ":$PATH:" != *":$NODENV_ROOT/bin:"* ]]
+  then
+    # If $PATH exists, then add $NODENV_ROOT to $PATH with : at the end;
+    # otherwise NODENV_ROOT is the $PATH
+    PATH="${PATH:+"$PATH:"}$NODENV_ROOT/bin"
+    eval "$(nodenv init -)"
+  fi
+fi
+
+export GOPATH=$HOME/src/go
+GOBIN_ROOT=$GOPATH/bin
+
+TFENV_ROOT="$HOME/.tfenv/bin"
+
+export PATH="$PATH:/usr/local/bin:/usr/local/go/bin:~/bin:$GOBIN_ROOT:$TFENV_ROOT"
 if [ -d ~/.pyenv ]; then
   export PATH="$PATH:~/.pyenv/bin"
   eval "$(pyenv init -)"
   eval "$(pyenv virtualenv-init -)"
 fi
 
-export GOPATH=$HOME/src/go
 export AWS_PRIVATE_KEY="~/.ssh/ansible"
 export EDITOR='/usr/bin/vim'
 
@@ -103,7 +122,26 @@ alias vauth='unset VAULT_TOKEN && vault login -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
 alias ava='aws-vault exec --no-session --assume-role-ttl 12h --debug admin'
 alias smux='mux start infra'
-alias tfenv='sudo tfswitch'
+
+# Git shortcuts
+alias pull='git pull --no-edit'
+
+# Docker Shortcuts ---{{{
+alias di='docker images'
+
+function dsp() {
+  docker system prune -f
+  docker images
+}
+
+function drun() {
+  if [[ $2 == 'bash' ]]; then
+    docker run --rm -it $1 /bin/bash
+  else
+    docker run --rm -it $1 /bin/sh
+  fi
+}
+# }}}
 
 function klone() {
   if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
