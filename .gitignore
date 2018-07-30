@@ -9,4 +9,6 @@
 !README.md
 !.ctags
 !.tmux.conf
+!.tmux.conf.local
 !.alacritty.yml
+!.zshrc
