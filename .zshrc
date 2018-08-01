@@ -1,101 +1,3 @@
-# Disables CTRL+S/CTRL+Q in Terminal
-stty -ixon
-
-if [[ -f ~/.bash/sensitive ]] ; then
-    source ~/.bash/sensitive
-fi
-
-# Check to see if Linux or Mac
-BASE_OS="$(uname)"
-case $BASE_OS in
-  'Linux')
-    OS='linux'
-    ;;
-  'Darwin')
-    OS='darwin'
-    ;;
-esac
-
-if [[ $OS == 'linux' ]]; then
-    # fortune | cowsay -f calvin | lolcat
-    fortune | lolcat
-    alias ll='ls -alh --color=auto --group-directories-first'
-elif [[ $OS == 'darwin' ]] ; then
-    alias ll='ls -alhG'
-fi
-
-################################################################################
-# EXPORT / ALIAS
-###############################################################################
-export EDITOR='/usr/bin/nvim'
-export TERM=screen-256color
-
-###############################################################################
-
-# system
-# Easier directory navigation for going up a directory tree
-# alias a='cd - &> /dev/null'
-
-alias mkdir='mkdir -p'
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -select clipboard -o'
-alias vim='nvim'
-alias grep='grep --color=auto'
-alias di='docker images'
-
-alias kip='cd ~/src/KeplerGroup'
-alias kvpn='sudo openvpn \
-    --config ~/openvpn/bkim.conf \
-    --up /etc/openvpn/update-resolv-conf \
-    --down /etc/openvpn/update-resolv-conf \
-    --script-security 2'
-alias ap='ansible-playbook'
-
-# python
-alias va='source ./venv/bin/activate'
-alias venv='python3 -m venv venv'
-
-# vault
-alias vauth='unset VAULT_TOKEN && vault login -method=github'
-alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
-alias ava='aws-vault exec --no-session --assume-role-ttl 12h --debug admin'
-alias smux='mux start infra'
-
-################################################################################
-# FUNCTIONS
-################################################################################
-
-# docker
-function dsp() {
-  docker system prune -f
-  docker images
-}
-
-function drun() {
-  if [[ $2 == 'bash' ]]; then
-    docker run --rm -it $1 /bin/bash
-  else
-    docker run --rm -it $1 /bin/sh
-  fi
-}
-
-function klone() {
-  if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
-    git clone https://github.com/KeplerGroup/$1 ~/src/KeplerGroup/$1
-  else
-    echo "Repo is already kloned!"
-  fi
-}
-
-
-################################################################################
-# TMUX SETTINGS
-################################################################################
-# bind TAB:menu-complete
-# bind '"\e[Z": menu-complete-backward'
-
-# alias tmux='tmux -2'
-
 ################################################################################
 # ZSH SETTINGS
 ################################################################################
@@ -147,7 +49,7 @@ POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
 # POWERLEVEL9K_CUSTOM_BATTERY_STATUS="prompt_zsh_battery_level"
 # POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context os_icon custom_internet_signal custom_battery_status_joined ssh root_indicator dir dir_writable vcs)
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context ssh root_indicator dir dir_writable vcs status)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context ssh root_indicator dir dir_writable vcs status)
 
 # POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time  status  time)
 HIST_STAMPS="mm/dd/yyyy"
@@ -207,3 +109,107 @@ source $ZSH/oh-my-zsh.sh
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
+
+################################################################################
+# CUSTOM SETTINGS
+################################################################################
+
+# Disables CTRL+S/CTRL+Q in Terminal
+stty -ixon
+
+################################################################################
+# FUNCTIONS
+################################################################################
+
+# docker
+function dsp() {
+  docker system prune -f
+  docker images
+}
+
+function drun() {
+  if [[ $2 == 'bash' ]]; then
+    docker run --rm -it $1 /bin/bash
+  else
+    docker run --rm -it $1 /bin/sh
+  fi
+}
+
+function klone() {
+  if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
+    git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
+  else
+    echo "Repo is already kloned!"
+  fi
+}
+
+function include() {
+  if [[ -f $1 ]]; then
+    source $1
+  fi
+}
+
+
+include ~/.bash/sensitive
+include $(which aws_zsh_completer.sh)
+
+# Check to see if Linux or Mac
+BASE_OS="$(uname)"
+case $BASE_OS in
+  'Linux')
+    OS='linux'
+    ;;
+  'Darwin')
+    OS='darwin'
+    ;;
+esac
+
+if [[ $OS == 'linux' ]]; then
+    # fortune | cowsay -f calvin | lolcat
+    fortune | lolcat
+    alias ll='ls -alh --color=auto --group-directories-first'
+elif [[ $OS == 'darwin' ]] ; then
+    alias ll='ls -alhG'
+fi
+
+################################################################################
+# EXPORT / ALIAS
+###############################################################################
+export EDITOR='/usr/bin/nvim'
+export TERM=screen-256color
+export ANSIBLE_COW_SELECTION='tux'
+
+###############################################################################
+
+# system
+# Easier directory navigation for going up a directory tree
+# alias a='cd - &> /dev/null'
+
+alias mkdir='mkdir -p'
+alias pbcopy='xclip -selection clipboard'
+alias pbpaste='xclip -select clipboard -o'
+alias vim='nvim'
+alias grep='grep --color=auto'
+alias di='docker images'
+
+alias kip='cd ~/src/KeplerGroup'
+alias kvpn='sudo openvpn --config ~/openvpn/openvpn.conf'
+alias zo='source ~/.zshrc'
+alias ap='ansible-playbook'
+
+# python
+alias va='source ./venv/bin/activate'
+alias venv='python3 -m venv venv'
+
+# vault
+alias vauth='unset VAULT_TOKEN && vault login -method=github'
+alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
+alias ava='aws-vault exec --no-session --assume-role-ttl 12h --debug admin'
+alias smux='mux start infra'
+
+TFENV_ROOT="$HOME/.tfenv/bin"
+CARGO_ROOT="$HOME/.cargo/bin"
+LOCAL_ROOT="$HOME/.local/bin"
+
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT
+typeset -aU path
