@@ -16,16 +16,27 @@ env:
 
 # Window dimensions in character columns and lines
 # (changes require restart)
-window.dimensions:
-  columns: 80
-  lines: 24
 
-# Adds this many blank pixels of padding around the window
-# Units are physical pixels; this is not DPI aware.
-# (change requires restart)
-window.padding:
-  x: 2
-  y: 2
+window:
+  # Window dimensions in character columns and lines
+  # Falls back to size specified by window manager if set to 0x0.
+  # (changes require restart)
+  dimensions:
+    columns: 140
+    lines: 40
+
+  # Adds this many blank pixels of padding around the window
+  # Units are physical pixels; this is not DPI aware.
+  # (change requires restart)
+  padding:
+    x: 2
+    y: 2
+
+  # Window decorations
+  # Setting this to false will result in window without borders and title bar.
+  decorations: false
+
+dynamic_title: false
 
 # The FreeType rasterizer needs to know the device DPI for best results
 # (changes require restart)
