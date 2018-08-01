@@ -196,6 +196,9 @@ augroup END
 " vim-go settings ------------------ {{{
 let g:go_template_autocreate = 0
 " }}}
+" vim-commentary ------------------ {{{
+autocmd Filetype terraform setlocal commentstring=#\ %s
+" }}}
 " Trailing whitespace ------------- {{{
 function! <SID>StripTrailingWhitespaces()
     if exists('b:noStripWhitespace')
