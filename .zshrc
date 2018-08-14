@@ -211,6 +211,16 @@ alias smux='mux start infra'
 TFENV_ROOT="$HOME/.tfenv/bin"
 CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
+GOENV_ROOT="$HOME/.goenv"
+GOENV_BIN="$GOENV_ROOT/bin"
+GO_ROOT="$HOME/go"
+GO_BIN="$GO_ROOT/bin"
 
-PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN
+
+# Goenv autocompletion
+if [[ -f $GOENV_BIN/goenv ]]; then
+  eval "$(goenv init -)"
+fi
+
 typeset -aU path
