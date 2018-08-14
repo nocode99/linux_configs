@@ -61,6 +61,7 @@ Plug 'tpope/vim-commentary'
 Plug 'davidhalter/jedi-vim'
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
+Plug 'vim-scripts/groovyindent-unix' " groovy indentation
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
@@ -87,6 +88,7 @@ Plug 'google/vim-searchindex'
 Plug 'rust-lang/rust.vim'
 Plug 'aklt/plantuml-syntax'
 Plug 'vim-syntastic/syntastic'
+Plug 'martinda/Jenkinsfile-vim-syntax'  "Jenkinsfile
 
 " ***** AUTO
 Plug 'jiangmiao/auto-pairs'
@@ -449,10 +451,10 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
 
 " (Optional)Remove Info(Preview) window
 set completeopt-=preview
