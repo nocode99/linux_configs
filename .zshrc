@@ -1,14 +1,56 @@
 ################################################################################
-# ZSH SETTINGS
+# FUNCTIONS
 ################################################################################
 
-# Path to your oh-my-zsh installation.
-export ZSH="/home/bkim/.oh-my-zsh"
+# docker
+function dsp() {
+  docker system prune -f
+  docker images
+}
 
-# Set name of the theme to load. Optionally, if you set this to "random"
-# it'll load a random theme each time that oh-my-zsh is loaded.
-# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-# ZSH_THEME="robbyrussell"
+function drun() {
+  if [[ $2 == 'bash' ]]; then
+    docker run --rm -it $1 /bin/bash
+  else
+    docker run --rm -it $1 /bin/sh
+  fi
+}
+
+function klone() {
+  if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
+    git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
+  else
+    echo "Repo is already kloned!"
+  fi
+}
+
+function include() {
+  if [[ -f $1 ]]; then
+    source $1
+  fi
+}
+
+################################################################################
+# ZGEN SETTINGS
+################################################################################
+include ~/.zgen/zgen.zsh
+
+if ! zgen saved; then
+  zgen oh-my-zsh
+  zgen oh-my-zsh plugins/git
+  zgen oh-my-zsh plugins/aws
+  zgen oh-my-zsh plugins/pyenv
+  zgen oh-my-zsh plugins/terraform
+  zgen load bhilburn/powerlevel9k powerlevel9k
+  zgen save
+fi
+
+
+
+################################################################################
+# ZSH THEME
+################################################################################
+
 ZSH_THEME="powerlevel9k/powerlevel9k"
 
 
@@ -47,11 +89,7 @@ POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
 POWERLEVEL9K_VCS_COMMIT_ICON="\uf417"
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-# POWERLEVEL9K_CUSTOM_BATTERY_STATUS="prompt_zsh_battery_level"
-# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context os_icon custom_internet_signal custom_battery_status_joined ssh root_indicator dir dir_writable vcs)
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context ssh root_indicator dir dir_writable vcs status)
-
-# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(command_execution_time  status  time)
 HIST_STAMPS="mm/dd/yyyy"
 DISABLE_UPDATE_PROMPT=true
 # Uncomment the following line to use case-sensitive completion.
@@ -96,16 +134,11 @@ DISABLE_UPDATE_PROMPT=true
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  pyenv
-)
+# plugins=(
+#   git
+#   pyenv
+# )
 
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -117,41 +150,9 @@ export LANG=en_US.UTF-8
 # Disables CTRL+S/CTRL+Q in Terminal
 stty -ixon
 
-################################################################################
-# FUNCTIONS
-################################################################################
-
-# docker
-function dsp() {
-  docker system prune -f
-  docker images
-}
-
-function drun() {
-  if [[ $2 == 'bash' ]]; then
-    docker run --rm -it $1 /bin/bash
-  else
-    docker run --rm -it $1 /bin/sh
-  fi
-}
-
-function klone() {
-  if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
-    git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
-  else
-    echo "Repo is already kloned!"
-  fi
-}
-
-function include() {
-  if [[ -f $1 ]]; then
-    source $1
-  fi
-}
-
-
 include ~/.bash/sensitive
 include $(which aws_zsh_completer.sh)
+include ~/.bin/tmuxinator.zsh
 
 # Check to see if Linux or Mac
 BASE_OS="$(uname)"
