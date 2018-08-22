@@ -150,7 +150,7 @@ export LANG=en_US.UTF-8
 # Disables CTRL+S/CTRL+Q in Terminal
 stty -ixon
 
-include ~/.bash/sensitive
+include ~/.sensitive/zsh
 include $(which aws_zsh_completer.sh)
 include ~/.bin/tmuxinator.zsh
 
@@ -168,7 +168,8 @@ esac
 if [[ $OS == 'linux' ]]; then
     # fortune | cowsay -f calvin | lolcat
     fortune | lolcat
-    alias ll='ls -alh --color=auto --group-directories-first'
+    # alias ll='ls -alh --color=auto --group-directories-first'
+    alias ll='exa -alh --group-directories-first --color-scale'
 elif [[ $OS == 'darwin' ]] ; then
     alias ll='ls -alhG'
 fi
@@ -208,6 +209,7 @@ alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
 alias ava='aws-vault exec --no-session --assume-role-ttl 12h --debug admin'
 alias smux='mux start infra'
 
+NODENV_PATH="$HOME/.nodenv/bin"
 TFENV_ROOT="$HOME/.tfenv/bin"
 CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
@@ -216,11 +218,31 @@ GOENV_BIN="$GOENV_ROOT/bin"
 GO_ROOT="$HOME/go"
 GO_BIN="$GO_ROOT/bin"
 
-PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH
 
 # Goenv autocompletion
 if [[ -f $GOENV_BIN/goenv ]]; then
   eval "$(goenv init -)"
+fi
+
+# nodenv init
+if [[ -f $NODENV_PATH/nodenv ]]; then
+  eval "$(nodenv init -)"
+fi
+
+
+# gcloud autocompletion
+PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
+
+if [[ -d "$PATH_GCLOUD_AUTO" ]]; then
+  fpath=($PATH_GCLOUD_AUTO $fpath)
+  autoload -U compinit compdef
+  compinit
+fi
+
+# kubectl autocomplete
+if [ $commands[kubectl] ]; then
+  source <(kubectl completion zsh)
 fi
 
 typeset -aU path
