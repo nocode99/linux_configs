@@ -16,6 +16,11 @@ let mapleader = ","
 
 " Set line numbers
 set number
+
+" redraw/refresh window on focus
+augroup redraw_on_refocus
+  au FocusGained * :redraw!
+augroup END
 " }}}
 " Line 100 Column and cursor highlighting ----------------- {{{
 set cursorline
@@ -96,6 +101,7 @@ Plug 'godlygeek/tabular'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'juliosueiras/vim-terraform-completion'
+Plug 'Shougo/deoplete.nvim', {'do': ':UpdateRemotePlugins'}
 call plug#end()
 
 " }}}
@@ -103,6 +109,12 @@ call plug#end()
 "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 set laststatus=2
 let g:airline#extensions#branch#enabled = 1
+
+" Enable the list of buffers
+let g:airline#extensions#tabline#enabled = 1
+
+" Show just the filename
+let g:airline#extensions#tabline#fnamemod = ':t'
 " }}}
 " Choosewin Settings {{{
 nmap \ <Plug>(choosewin)
@@ -227,7 +239,26 @@ augroup rainbow_settings
   autocmd BufEnter,BufRead *.html,*.css :RainbowParentheses!
 augroup END
 " }}}
-" Colorscheme---------------- {{{
+" PaperColor settings---------------- {{{
+let g:PaperColor_Theme_Options = {}
+let g:PaperColor_Theme_Options['theme'] = {
+      \     'default': {
+      \       'allow_bold': 1,
+      \       'allow_italic': 1
+      \     }
+      \ }
+let g:PaperColor_Theme_Options = {
+      \     'python': {
+      \       'highlight_builtins' : 1
+      \     },
+      \     'cpp': {
+      \       'highlight_standard_library': 1
+      \     },
+      \     'c': {
+      \       'highlight_builtins' : 1
+      \     }
+      \   }
+
 try
     set t_Co=256 " says terminal has 256 colors
     set background=dark
@@ -237,19 +268,6 @@ try
     let g:airline_theme = 'papercolor
 catch
 endtry
-let g:PaperColor_Theme_Options = {
-  \   'language': {
-  \     'python': {
-  \       'highlight_builtins' : 1
-  \     },
-  \     'cpp': {
-  \       'highlight_standard_library': 1
-  \     },
-  \     'c': {
-  \       'highlight_builtins' : 1
-  \     }
-  \   }
-  \ }
 
 " }}}
 " vim-go settings {{{
@@ -354,6 +372,12 @@ if has('macunix')
   set backspace=indent,eol,start
 endif
 " }}}
+" deoplete {{{
+let g:deoplete#enable_at_startup = 1
+
+" deoplete tab-complete
+inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+" }}}
 " Key Remappings {{{
 nnoremap T gT
 nnoremap t gt
@@ -371,6 +395,8 @@ let g:terraform_align = 1
 let g:terraform_fold_sections = 1
 
 let g:terraform_remap_spacebar = 1
+
+let g:terraform_fmt_on_save = 1
 " }}}
 " python Syntax {{{
 
@@ -444,17 +470,20 @@ augroup vimscript_complete
   autocmd FileType vim inoremap <buffer> <C-space> <C-x><C-v>
 augroup END
 
-let g:virtual_auto_activate = 1
+" let g:virtual_auto_activate = 1
 
-" Syntatistic Config
+" Syntatistic Config for terraform autocomplete
+" REQUIREMENTS:
+" apt install ruby-dev
+" gem install json neovim
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
 
 " (Optional)Remove Info(Preview) window
 set completeopt-=preview
@@ -476,4 +505,10 @@ let g:terraform_completion_keys = 1
 augroup terraform_complete
   autocmd FileType terraform setlocal omnifunc=terraformcomplete#Complete
 augroup END
+
+" terraform deoplete settings
+let g:deoplete#omni_patterns = {}
+let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
+let g:deoplete#enable_at_startup = 1
+call deoplete#initialize()
 " }}}
