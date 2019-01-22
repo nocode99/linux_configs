@@ -16,12 +16,35 @@ function drun() {
   fi
 }
 
+function dsh() {
+  docker run --rm -it \
+    $(docker images --format "{{.ID}}" | head -n1) /bin/sh
+}
+
+function dbash() {
+  docker run --rm -it \
+    $(docker images --format "{{.ID}}" | head -n1) /bin/bash
+}
+
 function klone() {
   if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
     git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
   else
     echo "Repo is already kloned!"
   fi
+}
+
+function dato() {
+  PAYLOAD=$(jq -n \
+    --arg user "$1" \
+    --arg email "$2" \
+    '{adhoc: true, username: $user, recipient: $email}')
+  echo $PAYLOAD
+  aws lambda invoke \
+    --function-name kip-credential-rotater \
+    --log-type Tail \
+    --payload $PAYLOAD \
+    /tmp/lambda.txt
 }
 
 function include() {
@@ -170,6 +193,7 @@ if [[ $OS == 'linux' ]]; then
     fortune | lolcat
     # alias ll='ls -alh --color=auto --group-directories-first'
     alias ll='exa -alh --group-directories-first --color-scale'
+    alias l='exa -alh --group-directories-first --color-scale'
 elif [[ $OS == 'darwin' ]] ; then
     alias ll='ls -alhG'
 fi
@@ -218,7 +242,7 @@ GOENV_BIN="$GOENV_ROOT/bin"
 GO_ROOT="$HOME/go"
 GO_BIN="$GO_ROOT/bin"
 
-PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN
 
 # Goenv autocompletion
 if [[ -f $GOENV_BIN/goenv ]]; then
