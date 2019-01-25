@@ -1,0 +1,8 @@
+# /home/bkim/.config/tmuxinator/infra.yml
+
+name: knot
+root: ~/src/knotel/mono
+
+windows:
+  - KNOT:
+  - VAGRANT: vagrant up && vagrant ssh -- -t 'tmux new -s knot'
