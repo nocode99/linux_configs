@@ -229,8 +229,7 @@ alias venv='python3 -m venv venv'
 # vault
 alias vauth='unset VAULT_TOKEN && vault login -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
-alias ava='aws-vault exec --no-session --assume-role-ttl 12h --debug admin'
-alias smux='mux start infra'
+alias smux='mux start kepler'
 
 NODENV_PATH="$HOME/.nodenv/bin"
 TFENV_ROOT="$HOME/.tfenv/bin"
