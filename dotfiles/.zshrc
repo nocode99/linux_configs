@@ -174,7 +174,6 @@ export LANG=en_US.UTF-8
 stty -ixon
 
 include ~/.sensitive/zsh
-include $(which aws_zsh_completer.sh)
 include ~/.bin/tmuxinator.zsh
 
 # Check to see if Linux or Mac

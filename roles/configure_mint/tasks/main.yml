@@ -1,0 +1,163 @@
+- name: "system: make dirs"
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items: "{{ USER_DIRECTORIES }}"
+
+- include: apt.yml
+
+################################################################################
+# miscellaneous
+################################################################################
+
+- name: "pip: setup symlink"
+  become: yes
+  file:
+    src: /usr/bin/pip3
+    dest: /usr/bin/pip
+    state: link
+
+- name: download rustup
+  get_url:
+    url: https://sh.rustup.rs
+    dest: /tmp/rustup.rs
+    mode: 0755
+  tags: ['rust']
+
+- name: install rustup
+  shell: sh /tmp/rustup.rs
+  tags: ['rust']
+
+- name: install rust packages
+  shell: "cargo install {{ item }}"
+  with_items:
+    - --git https://github.com/jwilm/alacritty.git
+    - fd-find
+    - ripgrep
+    - bat
+    - exa
+  tags: ['rust']
+
+- name: "stow: setup dotfiles"
+  command: stow -t ~ .
+  args:
+    chdir: ~/src/linux_configs
+
+- name: "neovim: setup symlink"
+  file:
+    src: ~/src/linux_configs/.vimrc
+    dest: ~/.config/nvim/init.vim
+    state: link
+
+- name: "zsh: configure zgen"
+  git:
+    repo: git@github.com:tarjoilija/zgen.git
+    dest: ~/.zgen
+
+- name: "pip: install for system"
+  pip:
+    name: ['setuptools', 'neovim', 'pynvim', 'awscli']
+    state: latest
+    extra_args: --user
+
+- name: "gem: install for system"
+  become: yes
+  gem:
+    name: "{{ item }}"
+    user_install: no
+    include_doc: yes
+    state: latest
+  with_items:
+    - neovim
+    - json
+    - terraform
+    - lolcat
+    - tmuxinator
+
+################################################################################
+# additional docker configurations
+################################################################################
+
+- name: "docker: mark docker"
+  become: yes
+  command: apt-mark hold docker-ce
+  tags: ['docker']
+
+- name: "docker: add my user to docker group"
+  become: yes
+  user:
+    append: yes
+    user: "{{ ansible_user_id }}"
+    groups: docker
+
+################################################################################
+# plantuml
+################################################################################
+
+- name: "plantuml: download plantuml.jar"
+  get_url:
+    url: http://sourceforge.net/projects/plantuml/files/plantuml.jar/download
+    dest: ~/java/plantuml.jar
+
+- name: "plantuml: copy plantuml binary"
+  copy:
+    src: plantuml
+    dest: ~/bin/plantuml
+    mode: 0755
+
+################################################################################
+# slack
+################################################################################
+
+- name: "slack: download"
+  get_url:
+    url: https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.7-amd64.deb
+    dest: /tmp/slack-desktop.deb
+  tags: ['slack']
+
+- name: "slack: install"
+  become: yes
+  apt:
+    deb: /tmp/slack-desktop.deb
+  tags: ['slack']
+
+################################################################################
+# configure alacritty as default terminal
+################################################################################
+
+- name: "system: mv default terminal"
+  become: yes
+  command: mv /usr/bin/gnome-terminal /usr/bin/gnome-terminal.backup
+
+- name: "system: set alacritty as default"
+  become: yes
+  file:
+    src: ~/.cargo/bin/alacritty
+    dest: /usr/bin/gnome-terminal
+    state: link
+
+################################################################################
+# configure tmux
+################################################################################
+
+- name: "tmux: install oh-my-tmux"
+  git:
+    repo: https://github.com/gpakosz/.tmux.git
+    dest: ~/src/.tmux
+  tags: ['tmux']
+
+- name: "tmux: set symlink"
+  file:
+    src: ~/src/.tmux/.tmux.conf
+    dest: ~/.tmux.conf
+  tags: ['tmux']
+
+- name: copy tmuxinator templates
+  copy:
+    src: "{{ TMUXINATOR_FILES }}"
+    dest: ~/.config/tmuxinator/{{ TMUXINATOR_FILES}}
+
+
+- include: env_managers.yml
+
+- include: autocompleters.yml

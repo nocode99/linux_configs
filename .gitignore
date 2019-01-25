@@ -1,14 +1,1 @@
-# ignore everything
-*
-
-# but not theses
-!img/bash_git.png
-!.bashrc
-!.gitignore
-!.vimrc
-!README.md
-!.ctags
-!.tmux.conf
-!.tmux.conf.local
-!.alacritty.yml
-!.zshrc
+venv/
