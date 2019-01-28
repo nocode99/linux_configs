@@ -270,3 +270,7 @@ if [ $commands[kubectl] ]; then
 fi
 
 typeset -aU path
+
+if [[ -f /usr/bin/direnv ]]; then
+  eval "$(direnv hook zsh)"
+fi
