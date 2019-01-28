@@ -1,0 +1,46 @@
+- name: install pyenv
+  git:
+    repo: https://github.com/yyuu/pyenv.git
+    dest: ~/.pyenv
+
+- name: install nodenv
+  git:
+    repo: https://github.com/nodenv/nodenv.git
+    dest: ~/.nodenv
+
+- name: Compiling nodenv source
+  command: src/configure && make -C src
+  args:
+    chdir: ~/.nodenv
+
+- name: install node-build
+  git:
+    repo: https://github.com/nodenv/node-build.git
+    dest: ~/.nodenv/plugins/node-build
+
+- name: install nodenv-package rehash
+  git:
+    repo: https://github.com/nodenv/nodenv-package-rehash.git
+    dest: ~/.nodenv/plugins/nodenv-package-rehash
+
+- name: install nodenv-update plugin
+  git:
+    repo: https://github.com/nodenv/nodenv-update.git
+    dest: ~/.nodenv/plugins/nodenv-update
+
+- name: install goenv
+  git:
+    repo: https://github.com/syndbg/goenv.git
+    dest: ~/.goenv
+
+- name: install tfenv
+  git:
+    repo: https://github.com/kamatama41/tfenv.git
+    dest: ~/.tfenv
+
+- name: tfenv symlink
+  file:
+    src: ~/.tfenv/bin/*
+    dest: ~/.local/bin
+    force: yes
+    state: link

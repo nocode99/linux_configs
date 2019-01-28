@@ -1,0 +1,43 @@
+DOCKER_VERSION: 18.06.1~ce~3-0~ubuntu
+
+APT_PROGRAMS:
+  - cmake
+  - cowsay
+  - ctags
+  - docker-ce={{ DOCKER_VERSION }}
+  - fonts-hack-ttf
+  - fortunes
+  - graphviz
+  - htop
+  - jq
+  - libbz2-dev
+  - libncurses5
+  - libncurses5-dev
+  - neovim
+  - nodejs
+  - npm
+  - openresolv
+  - openvpn-systemd-resolved
+  - python3-pip
+  - ruby-dev
+  - snapd
+  - texlive-full
+  - tk-dev
+  - tmux
+  - tree
+  - xclip
+  - xsel
+
+USER_DIRECTORIES:
+  - ~/.config/nvim
+  - ~/.config/tmuxinator
+  - ~/.local/share/nvim/site/autoload
+  - ~/bin
+  - ~/java
+  - ~/.sensitive
+  - ~/autocompleters
+
+TMUXINATOR_FILES:
+  - kepler.yml
+  - knot.yml
+  - cidny.yml

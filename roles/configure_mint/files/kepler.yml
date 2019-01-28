@@ -1,0 +1,15 @@
+# /home/bkim/.config/tmuxinator/infra.yml
+
+name: infra
+root: ~/
+
+windows:
+  - VPN: kvpn
+  - TERRAFORM:
+      root: ~/src/KeplerGroup/kepler-terraform
+  - TF-MODULES:
+      root: ~/src/KeplerGroup/kepler-terraform-modules
+  - ANSIBLE:
+      root: ~/src/KeplerGroup/kepler-ansible
+  - PACKER:
+      root: ~/src/KeplerGroup/kepler-packer
