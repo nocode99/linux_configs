@@ -1,17 +1,9 @@
 # Configuration for Alacritty, the GPU enhanced terminal emulator
 
-
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty it self.
 env:
-  # TERM env customization.
-  #
-  # If this property is not set, alacritty will set it to xterm-256color.
-  #
-  # Note that some xterm terminfo databases don't declare support for italics.
-  # You can verify this by checking for the presence of `smso` and `sitm` in
-  # `infocmp xterm-256color`.
   TERM: xterm-256color
 
 # Window dimensions in character columns and lines
@@ -36,6 +28,10 @@ window:
   # Setting this to false will result in window without borders and title bar.
   decorations: full
 
+scrolling:
+  history: 10000
+  auto_scroll: false
+
 dynamic_title: false
 
 # The FreeType rasterizer needs to know the device DPI for best results
@@ -52,25 +48,18 @@ draw_bold_text_with_bright_colors: true
 
 # Font configuration (changes require restart)
 font:
-  # The normal (roman) font face to use.
   normal:
     family: Hack # should be "Menlo" or something on macOS.
-    # Style can be specified to pick a specific face.
     style: Regular
 
-  # The bold font face
   bold:
     family: Hack # should be "Menlo" or something on macOS.
-    # Style can be specified to pick a specific face.
     style: Bold
 
-  # The italic font face
   italic:
     family: Hack # should be "Menlo" or something on macOS.
-    # Style can be specified to pick a specific face.
     style: Italic
 
-  # Point size of the font
   size: 12.0
 
   # Offset is the extra space around each character. offset.y can be thought of
@@ -270,6 +259,9 @@ mouse:
 
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+
+# Live config reload
+live_config_reload: true
 
 # Shell
 #
