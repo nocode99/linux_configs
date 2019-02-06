@@ -174,7 +174,7 @@ export LANG=en_US.UTF-8
 stty -ixon
 
 include ~/.sensitive/zsh
-include ~/.bin/tmuxinator.zsh
+include ~/autocompleters/tmuxinator.zsh
 
 # Check to see if Linux or Mac
 BASE_OS="$(uname)"
