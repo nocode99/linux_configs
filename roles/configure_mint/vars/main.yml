@@ -1,4 +1,6 @@
 DOCKER_VERSION: 18.06.1~ce~3-0~ubuntu
+VAGRANT_VERSION: 2.2.3
+VAGRANT_DOWNLOAD_URL: https://releases.hashicorp.com/vagrant/{{ VAGRANT_VERSION }}/vagrant_{{ VAGRANT_VERSION }}_x86_64.deb
 
 APT_PROGRAMS:
   - cmake
@@ -25,6 +27,7 @@ APT_PROGRAMS:
   - tk-dev
   - tmux
   - tree
+  - virtualbox-5.2
   - xclip
   - xsel
 
