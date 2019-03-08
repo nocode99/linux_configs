@@ -96,6 +96,7 @@ Plug 'vim-syntastic/syntastic'
 Plug 'martinda/Jenkinsfile-vim-syntax'  "Jenkinsfile
 
 " ***** AUTO
+Plug 'pappasam/vim-filetype-formatter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 Plug 'bronson/vim-trailing-whitespace'
@@ -517,4 +518,10 @@ let g:deoplete#omni_patterns = {}
 let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
 let g:deoplete#enable_at_startup = 1
 call deoplete#initialize()
+
+" vim-filetype-formatter settings
+let g:vim_filetype_formatter_commands = {
+      \ 'python': 'black -q -',
+      \ 'rust': 'rustfmt'
+      \}
 " }}}
