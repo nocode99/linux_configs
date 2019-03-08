@@ -33,3 +33,15 @@
     codename: bionic
     state: present
   tags: ['apt']
+
+- name: "APT: add vagrant public key"
+  become: yes
+  apt_key:
+    url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
+    state: present
+
+- -name: "APT: add vagrant to repo"
+   become: yes
+   apt_repository:
+    repo: "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bionic contrib"
+    state: present

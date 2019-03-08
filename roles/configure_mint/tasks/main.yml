@@ -75,6 +75,21 @@
     - tmuxinator
 
 ################################################################################
+# install vagrant
+################################################################################
+- name: "vagrant: download"
+  get_url:
+    uri: "{{ VAGRANT_DOWNLOAD_URL }}"
+    dest: /tmp/vagrant.deb
+  tags: ['vagrant']
+
+- name: "vagrant: install"
+  become: yes
+  apt:
+    deb: /tmp/vagrant.deb
+  tags: ['vagrant']
+
+################################################################################
 # additional docker configurations
 ################################################################################
 
