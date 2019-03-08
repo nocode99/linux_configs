@@ -70,10 +70,6 @@ Plug 'vim-scripts/groovyindent-unix' " groovy indentation
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
-Plug 'challenger-deep-theme/vim', { 'as': 'challenger-deep' }
-" Plug 'flazz/vim-colorschemes'
-" Plug 'tomasr/molokai'
-" Plug 'morhetz/gruvbox'
 
 " ***** Syntax Highlighters
 Plug 'hdima/python-syntax'
