@@ -49,10 +49,10 @@
     dest: ~/.config/nvim/init.vim
     state: link
 
-- name: "zsh: configure zgen"
+- name: "zsh: configure zplug"
   git:
-    repo: git@github.com:tarjoilija/zgen.git
-    dest: ~/.zgen
+    repo: https://github.com/zplug/zplug
+    dest: ~/.zplug
 
 - name: "pip: install for system"
   pip:

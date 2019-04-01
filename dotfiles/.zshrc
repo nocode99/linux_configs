@@ -52,34 +52,77 @@ function include() {
     source $1
   fi
 }
-
+#
 ################################################################################
-# ZGEN SETTINGS
+# ZPLUG SETTINGS
 ################################################################################
-include ~/.zgen/zgen.zsh
 
-if ! zgen saved; then
-  zgen oh-my-zsh
-  zgen oh-my-zsh plugins/git
-  zgen oh-my-zsh plugins/aws
-  zgen oh-my-zsh plugins/pyenv
-  zgen oh-my-zsh plugins/terraform
-  zgen load bhilburn/powerlevel9k powerlevel9k
-  zgen save
+if [ -f ~/.zplug/init.zsh ]; then
+  source ~/.zplug/init.zsh
+
+  zplug "paulirish/git-open", as:plugin
+  zplug "greymd/docker-zsh-completion", as:plugin
+  zplug "zsh-users/zsh-completions", as:plugin
+  zplug "zsh-users/zsh-syntax-highlighting", as:plugin
+  zplug "nobeans/zsh-sdkman", as:plugin
+  zplug "junegunn/fzf-bin", \
+    from:gh-r, \
+    as:command, \
+    rename-to:fzf
+  zplug "mdumitru/git-aliases", as:plugin
+
+  zplug "romkatv/powerlevel10k", use:powerlevel10k.zsh-theme
+
+  # Install plugins if there are plugins that have not been installed
+  if ! zplug check --verbose; then
+      printf "Install? [y/N]: "
+      if read -q; then
+          echo; zplug install
+      fi
+  fi
+
+  # Then, source plugins and add commands to $PATH
+  zplug load
+else
+  echo "zplug not installed"
 fi
 
+################################################################################
+# SET OPTIONS
+################################################################################
+setopt AUTO_LIST
+setopt LIST_AMBIGUOUS
+setopt LIST_BEEP
 
+# completions
+setopt COMPLETE_ALIASES
+
+# automatically CD without typing cd
+setopt AUTOCD
+
+# Dealing with history
+setopt HIST_IGNORE_SPACE
+setopt APPENDHISTORY
+setopt SHAREHISTORY
+setopt INCAPPENDHISTORY
+HIST_STAMPS="mm/dd/yyyy"
+
+#######################################################################
+# Unset options
+#######################################################################
+
+# do not automatically complete
+unsetopt MENU_COMPLETE
+
+# do not automatically remove the slash
+unsetopt AUTO_REMOVE_SLASH
 
 ################################################################################
-# ZSH THEME
+# POWERLEVEL10k THEME
 ################################################################################
-
-ZSH_THEME="powerlevel9k/powerlevel9k"
-
-
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-# POWERLEVEL9K_RPROMPT_ON_NEWLINE=true
+POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
 POWERLEVEL9K_DISABLE_RPROMPT=true
 POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
 POWERLEVEL9K_SHORTEN_STRATEGY="truncate_beginning"
@@ -113,58 +156,48 @@ POWERLEVEL9K_VCS_COMMIT_ICON="\uf417"
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
 POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
 POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context ssh root_indicator dir dir_writable vcs status)
-HIST_STAMPS="mm/dd/yyyy"
-DISABLE_UPDATE_PROMPT=true
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=7
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-# plugins=(
-#   git
-#   pyenv
-# )
-
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
+
+################################################################################
+# ZShell Auto Completion
+################################################################################
+
+autoload -U compinit && compinit
+autoload -U +X bashcompinit && bashcompinit
+zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
+
+# CURRENT STATE: does not select any sort of searching
+# searching was too annoying and I didn't really use it
+# If you want it back, use "search-backward" as an option
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+
+# Fuzzy completion
+zstyle ':completion:*' matcher-list '' \
+  'm:{a-z\-A-Z}={A-Z\_a-z}' \
+  'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-A-Z}={A-Z\_a-z}' \
+  'r:|?=** m:{a-z\-A-Z}={A-Z\_a-z}'
+fpath=(/usr/local/share/zsh-completions $fpath)
+zmodload -i zsh/complist
+
+# Manual libraries
+
+# vault, by Hashicorp
+_vault_complete() {
+  local word completions
+  word="$1"
+  completions="$(vault --cmplt "${word}")"
+  reply=( "${(ps:\n:)completions}" )
+}
+compctl -f -K _vault_complete vault
+
+# stack
+# eval "$(stack --bash-completion-script stack)"
+
+# Add autocompletion path
+fpath+=~/.zfunc
 
 ################################################################################
 # CUSTOM SETTINGS
@@ -175,6 +208,7 @@ stty -ixon
 
 include ~/.sensitive/zsh
 include ~/autocompleters/tmuxinator.zsh
+include /usr/local/bin/aws_zsh_completer.sh
 
 # Check to see if Linux or Mac
 BASE_OS="$(uname)"
@@ -204,12 +238,6 @@ export EDITOR='/usr/bin/nvim'
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 
-###############################################################################
-
-# system
-# Easier directory navigation for going up a directory tree
-# alias a='cd - &> /dev/null'
-
 alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
@@ -231,6 +259,10 @@ alias vauth='unset VAULT_TOKEN && vault login -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
 alias smux='mux start kepler'
 
+################################################################################
+# PATHS
+###############################################################################
+
 NODENV_PATH="$HOME/.nodenv/bin"
 TFENV_ROOT="$HOME/.tfenv/bin"
 CARGO_ROOT="$HOME/.cargo/bin"
@@ -239,8 +271,14 @@ GOENV_ROOT="$HOME/.goenv"
 GOENV_BIN="$GOENV_ROOT/bin"
 GO_ROOT="$HOME/go"
 GO_BIN="$GO_ROOT/bin"
+POETRY_ROOT="$HOME/.poetry/bin"
+KNOT_ROOT="$HOME/src/knotel/mono/knot/bin"
 
-PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN:$POETRY_ROOT:$KNOT_ROOT
+
+################################################################################
+# APP_ENV CONFIGURATIONS
+###############################################################################
 
 # Goenv autocompletion
 if [[ -f $GOENV_BIN/goenv ]]; then
