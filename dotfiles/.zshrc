@@ -107,6 +107,16 @@ setopt SHAREHISTORY
 setopt INCAPPENDHISTORY
 HIST_STAMPS="mm/dd/yyyy"
 
+# History: How many lines of history to keep in memory
+export HISTSIZE=5000
+
+# History: ignore leading space, where to save history to disk
+export HISTCONTROL=ignorespace
+export HISTFILE=~/.zsh_history
+
+# History: Number of history entries to save to disk
+export SAVEHIST=5000
+
 #######################################################################
 # Unset options
 #######################################################################
@@ -116,6 +126,26 @@ unsetopt MENU_COMPLETE
 
 # do not automatically remove the slash
 unsetopt AUTO_REMOVE_SLASH
+
+#######################################################################
+# fzf SETTINGS
+#######################################################################
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find
+# command for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+
 
 ################################################################################
 # POWERLEVEL10k THEME

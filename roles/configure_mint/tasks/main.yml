@@ -54,6 +54,15 @@
     repo: https://github.com/zplug/zplug
     dest: ~/.zplug
 
+- name: "zsh: configure fzf"
+  git:
+    repo: https://github.com/junegunn/fzf
+    dest: ~/.fzf
+    depth: 1
+
+- name: "fzf: configure plugin"
+  command: ~/.fzf/install --no-bash --no-fish --all --completion --key-bindings
+
 - name: "pip: install for system"
   pip:
     name: ['setuptools', 'neovim', 'pynvim', 'awscli']
