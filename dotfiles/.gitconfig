@@ -3,3 +3,4 @@
   email = nocode99@gmail.com
 [core]
 	pager = cat
+	mergeoptions = --no-edit
