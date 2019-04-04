@@ -118,6 +118,14 @@ export HISTFILE=~/.zsh_history
 export SAVEHIST=5000
 
 #######################################################################
+# keybindings
+#######################################################################
+# emacs .... shudders
+bindkey -e
+# bindkey "^A" vi-beginning-of-line
+# bindkey "^E" vi-end-of-line
+
+#######################################################################
 # Unset options
 #######################################################################
 
@@ -267,6 +275,11 @@ fi
 export EDITOR='/usr/bin/nvim'
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
+
+alias .='cd ..'
+alias ..='cd ../..'
+alias ...='cd ../../..'
+alias ....='cd ../../../..'
 
 alias mkdir='mkdir -p'
 alias pbcopy='xclip -selection clipboard'
