@@ -3,6 +3,11 @@
     repo: https://github.com/yyuu/pyenv.git
     dest: ~/.pyenv
 
+- name: install pyenv-update
+  git:
+    repo: https://github.com/pyenv/pyenv-update.git
+    dest: ~/.pyenv/plugins/pyenv-update
+
 - name: install nodenv
   git:
     repo: https://github.com/nodenv/nodenv.git
