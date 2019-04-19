@@ -320,7 +320,7 @@ GOENV_BIN="$GOENV_ROOT/bin"
 GO_ROOT="$HOME/go"
 GO_BIN="$GO_ROOT/bin"
 POETRY_ROOT="$HOME/.poetry/bin"
-KNOT_ROOT="$HOME/src/knotel/mono/knot/bin"
+KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
 PYENV_ROOT="$HOME/.pyenv"
 PYENV_BIN="$PYENV_ROOT/bin"
 
