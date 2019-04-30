@@ -67,6 +67,7 @@ Plug 'davidhalter/jedi-vim'
 Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'vim-scripts/groovyindent-unix' " groovy indentation
+Plug '~/.fzf'
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
@@ -98,6 +99,10 @@ Plug 'godlygeek/tabular'
 Plug 'bronson/vim-trailing-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'juliosueiras/vim-terraform-completion'
+
+" ***** PREVIEWERS
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
+
 if has('nvim')
   Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 else
@@ -369,6 +374,8 @@ augroup TabsNotSpaces
     autocmd BufRead,BufNewFile *.otl :setlocal tabstop=4 softtabstop=0 shiftwidth=4 noexpandtab
     autocmd BufRead,BufNewFile *GNUmakefile,*makefile,*Makefile :setlocal ts=4 sts=0 sw=4 noexpandtab
 augroup END
+
+let g:vim_markdown_folding_disabled=1
 " }}}
 " MACOSX SETTINGS {{{
 if has('macunix')
@@ -520,4 +527,67 @@ let g:vim_filetype_formatter_commands = {
       \ 'python': 'black -q -',
       \ 'rust': 'rustfmt'
       \}
+" }}}
+" Plugin: Markdown-preview.vim {{{
+
+let g:mkdp_auto_start = 0
+let g:mkdp_auto_close = 0
+
+" set to 1, the vim will just refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+" default: 0
+let g:mkdp_refresh_slow = 0
+
+" set to 1, the MarkdownPreview command can be use for all files,
+" by default it just can be use in markdown file
+" default: 0
+let g:mkdp_command_for_global = 0
+
+" a custom vim function name to open preview page
+" this function will receive url as param
+" default is empty
+let g:mkdp_browserfunc = ''
+
+" options for markdown render
+" mkit: markdown-it options for render
+" katex: katex options for math
+" uml: markdown-it-plantuml options
+" maid: mermaid options
+" disable_sync_scroll: if disable sync scroll, default 0
+" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
+"   middle: mean the cursor position alway show at the middle of the preview page
+"   top: mean the vim top viewport alway show at the top of the preview page
+"   relative: mean the cursor position alway show at the relative positon of the preview page
+let g:mkdp_preview_options = {
+      \ 'mkit': {},
+      \ 'katex': {},
+      \ 'uml': {},
+      \ 'maid': {},
+      \ 'disable_sync_scroll': 0,
+      \ 'sync_scroll_type': 'middle'
+      \ }
+
+" }}}
+" Plugin: Preview Compiled Stuff in Viewer {{{
+
+function! _Preview()
+  if &filetype ==? 'rst'
+    exec 'terminal restview %'
+    exec "normal \<C-O>"
+  elseif &filetype ==? 'markdown'
+    " from markdown-preview.vim
+    exec 'MarkdownPreview'
+  elseif &filetype ==? 'dot'
+    " from wmgraphviz.vim
+    exec 'GraphvizInteractive'
+  elseif &filetype ==? 'plantuml'
+    " from plantuml-previewer.vim
+    exec 'PlantumlOpen'
+  else
+    echo 'Preview not supported for this filetype'
+  endif
+endfunction
+command! Preview call _Preview()
+
 " }}}

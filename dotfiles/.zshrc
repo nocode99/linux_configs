@@ -122,6 +122,8 @@ export SAVEHIST=5000
 #######################################################################
 # emacs .... shudders
 bindkey -e
+bindkey "^[[1;5C" forward-word
+bindkey "^[[1;5D" backward-word
 # bindkey "^A" vi-beginning-of-line
 # bindkey "^E" vi-end-of-line
 
@@ -245,8 +247,12 @@ fpath+=~/.zfunc
 stty -ixon
 
 include ~/.sensitive/zsh
-include ~/autocompleters/tmuxinator.zsh
-include /usr/local/bin/aws_zsh_completer.sh
+
+if [ -d $HOME/autocompleters ]; then
+  for file in $HOME/autocompleters/*sh; do
+    source $file
+  done
+fi
 
 # Check to see if Linux or Mac
 BASE_OS="$(uname)"
