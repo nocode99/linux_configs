@@ -11,6 +11,7 @@ APT_PROGRAMS:
   - fortunes
   - graphviz
   - htop
+  - jid
   - jq
   - libbz2-dev
   - libncurses5

@@ -156,6 +156,11 @@ _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
+# export FZF_COMPLETION_TRIGGER=''
+# export FZF_DEFAULT_OPTS="--bind=ctrl-o:accept --ansi"
+# FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
+# export FZF_DEFAULT_COMMAND
+
 
 ################################################################################
 # POWERLEVEL10k THEME
@@ -321,9 +326,11 @@ GOENV_BIN="$GOENV_ROOT/bin"
 GO_ROOT="$HOME/go"
 GO_BIN="$GO_ROOT/bin"
 POETRY_ROOT="$HOME/.poetry/bin"
-KNOT_ROOT="$HOME/src/knotel/mono/knot/bin"
+KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
+PYENV_ROOT="$HOME/.pyenv"
+PYENV_BIN="$PYENV_ROOT/bin"
 
-PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN:$POETRY_ROOT:$KNOT_ROOT
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN:$POETRY_ROOT:$KNOT_ROOT:$PYENV_BIN
 
 ################################################################################
 # APP_ENV CONFIGURATIONS
@@ -337,6 +344,11 @@ fi
 # nodenv init
 if [[ -f $NODENV_PATH/nodenv ]]; then
   eval "$(nodenv init -)"
+fi
+
+# pyenv init
+if [[ -d ~/.pyenv ]]; then
+  eval "$(pyenv init -)"
 fi
 
 
