@@ -26,6 +26,14 @@ function dbash() {
     $(docker images --format "{{.ID}}" | head -n1) /bin/bash
 }
 
+function drmi() {
+  for img in "$@"
+  do
+    docker image rm \
+      $(docker images --format "{{.Repository}}:{{.Tag}}" | grep $img)
+  done
+}
+
 function klone() {
   if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
     git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
