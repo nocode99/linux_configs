@@ -216,7 +216,6 @@ export LANG=en_US.UTF-8
 # ZShell Auto Completion
 ################################################################################
 
-autoload -Uz compinit
 autoload -U +X bashcompinit && bashcompinit
 zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
 
@@ -364,7 +363,6 @@ PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
 
 if [[ -d "$PATH_GCLOUD_AUTO" ]]; then
   fpath=($PATH_GCLOUD_AUTO $fpath)
-  autoload -U compinit compdef
 fi
 
 # kubectl autocomplete
@@ -382,8 +380,9 @@ if [[ -f /usr/bin/direnv ]]; then
   eval "$(direnv hook zsh)"
 fi
 
-for dump in ~/.zcompdump(N.mh+24); do
-  compinit
-done
-
-compinit -C
+autoload -Uz compinit
+if [[ -n ${ZDOTDIR:-${HOME}}/$ZSH_COMPDUMP(#qN.mh+24) ]]; then
+  compinit -d $ZSH_COMPDUMP;
+else
+  compinit -C;
+fi;
