@@ -31,6 +31,7 @@ function drmi() {
   do
     docker image rm \
       $(docker images --format "{{.Repository}}:{{.Tag}}" | grep $img)
+    echo "rm $img"
   done
 }
 
@@ -56,11 +57,9 @@ function dato() {
 }
 
 function include() {
-  if [[ -f $1 ]]; then
-    source $1
-  fi
+  [[ -f "$1" ]] && source "$1"
 }
-#
+
 ################################################################################
 # ZPLUG SETTINGS
 ################################################################################
@@ -217,7 +216,7 @@ export LANG=en_US.UTF-8
 # ZShell Auto Completion
 ################################################################################
 
-autoload -U compinit && compinit
+autoload -Uz compinit
 autoload -U +X bashcompinit && bashcompinit
 zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
 
@@ -278,15 +277,15 @@ case $BASE_OS in
     ;;
 esac
 
-if [[ $OS == 'linux' ]]; then
-    # fortune | cowsay -f calvin | lolcat
-    fortune | lolcat
-    # alias ll='ls -alh --color=auto --group-directories-first'
-    alias ll='exa -alh --group-directories-first --color-scale'
-    alias l='exa -alh --group-directories-first --color-scale'
-elif [[ $OS == 'darwin' ]] ; then
-    alias ll='ls -alhG'
-fi
+# if [[ $OS == 'linux' ]]; then
+#     # fortune | cowsay -f calvin | lolcat
+#     fortune | lolcat
+#     # alias ll='ls -alh --color=auto --group-directories-first'
+#     alias ll='exa -alh --group-directories-first --color-scale'
+#     alias l='exa -alh --group-directories-first --color-scale'
+# elif [[ $OS == 'darwin' ]] ; then
+#     alias ll='ls -alhG'
+# fi
 
 ################################################################################
 # EXPORT / ALIAS
@@ -345,20 +344,20 @@ PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN:$
 ###############################################################################
 
 # Goenv autocompletion
-if [[ -f $GOENV_BIN/goenv ]]; then
-  eval "$(goenv init -)"
-fi
+goenv() {
+  eval "$(command goenv init -)"
+  goenv "$@"
+}
 
-# nodenv init
-if [[ -f $NODENV_PATH/nodenv ]]; then
-  eval "$(nodenv init -)"
-fi
+nodenv() {
+  eval "$(command nodenv init -)"
+  nodenv "@"
+}
 
-# pyenv init
-if [[ -d ~/.pyenv ]]; then
-  eval "$(pyenv init -)"
-fi
-
+pyenv() {
+  eval "$(command pyenv init -)"
+  pyenv "$@"
+}
 
 # gcloud autocompletion
 PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
@@ -366,12 +365,15 @@ PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
 if [[ -d "$PATH_GCLOUD_AUTO" ]]; then
   fpath=($PATH_GCLOUD_AUTO $fpath)
   autoload -U compinit compdef
-  compinit
 fi
 
 # kubectl autocomplete
 if [ $commands[kubectl] ]; then
-  source <(kubectl completion zsh)
+  kubectl() {
+    unfunction "$0"
+    source <(kubectl completion zsh)
+    $0 "$@"
+  }
 fi
 
 typeset -aU path
@@ -379,3 +381,9 @@ typeset -aU path
 if [[ -f /usr/bin/direnv ]]; then
   eval "$(direnv hook zsh)"
 fi
+
+for dump in ~/.zcompdump(N.mh+24); do
+  compinit
+done
+
+compinit -C
