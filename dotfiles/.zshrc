@@ -276,15 +276,13 @@ case $BASE_OS in
     ;;
 esac
 
-# if [[ $OS == 'linux' ]]; then
-#     # fortune | cowsay -f calvin | lolcat
-#     fortune | lolcat
-#     # alias ll='ls -alh --color=auto --group-directories-first'
-#     alias ll='exa -alh --group-directories-first --color-scale'
-#     alias l='exa -alh --group-directories-first --color-scale'
-# elif [[ $OS == 'darwin' ]] ; then
-#     alias ll='ls -alhG'
-# fi
+if [[ $OS == 'linux' ]]; then
+    # alias ll='ls -alh --color=auto --group-directories-first'
+    alias ll='exa -alh --group-directories-first --color-scale'
+    alias l='exa -alh --group-directories-first --color-scale'
+elif [[ $OS == 'darwin' ]] ; then
+    alias ll='ls -alhG'
+fi
 
 ################################################################################
 # EXPORT / ALIAS
