@@ -281,7 +281,6 @@ case $BASE_OS in
 esac
 
 if [[ $OS == 'linux' ]]; then
-    # fortune | cowsay -f calvin | lolcat
     # alias ll='ls -alh --color=auto --group-directories-first'
     alias ll='exa -alh --group-directories-first --color-scale'
     alias l='exa -alh --group-directories-first --color-scale'
