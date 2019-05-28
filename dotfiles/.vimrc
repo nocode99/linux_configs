@@ -91,6 +91,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'aklt/plantuml-syntax'
 Plug 'vim-syntastic/syntastic'
 Plug 'martinda/Jenkinsfile-vim-syntax'  "Jenkinsfile
+Plug 'nginx/nginx', { 'rtp': 'contrib/vim' }
 
 " ***** AUTO
 Plug 'pappasam/vim-filetype-formatter'
