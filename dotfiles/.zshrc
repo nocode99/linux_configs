@@ -282,8 +282,8 @@ esac
 
 if [[ $OS == 'linux' ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
-    alias ll='exa -alh --group-directories-first --color-scale'
-    alias l='exa -alh --group-directories-first --color-scale'
+    alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
+    alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
 elif [[ $OS == 'darwin' ]] ; then
     alias ll='ls -alhG'
 fi
