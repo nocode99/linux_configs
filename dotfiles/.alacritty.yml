@@ -60,7 +60,7 @@ font:
     family: Hack # should be "Menlo" or something on macOS.
     style: Italic
 
-  size: 12.0
+  size: 11.0
 
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
