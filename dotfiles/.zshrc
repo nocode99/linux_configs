@@ -61,7 +61,7 @@ function include() {
 }
 
 function doit() {
-  apt update && apt upgrade -y && apt autoremove -y
+  sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 }
 
 ################################################################################
@@ -187,7 +187,7 @@ POWERLEVEL9K_RVM_FOREGROUND="249"
 POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
 POWERLEVEL9K_TIME_BACKGROUND="black"
 POWERLEVEL9K_TIME_FOREGROUND="249"
-POWERLEVEL9K_TIME_FORMAT="\UF43A %D{%I:%M  \UF133  %m.%d.%y}"
+POWERLEVEL9K_TIME_FORMAT="%D{%m.%d.%y %I:%M:%S}"
 POWERLEVEL9K_RVM_BACKGROUND="black"
 POWERLEVEL9K_RVM_FOREGROUND="249"
 POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
@@ -203,15 +203,15 @@ POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='blue'
 POWERLEVEL9K_FOLDER_ICON=''
 POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
 POWERLEVEL9K_STATUS_VERBOSE=false
-POWERLEVEL9K_COMMAND_EXECUTION_TIME_THRESHOLD=0
 POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
 POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
 POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
 POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
 POWERLEVEL9K_VCS_COMMIT_ICON="\uf417"
 POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
-POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}\u2570\uf460%f "
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context ssh root_indicator dir dir_writable vcs status)
+POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}$ "
+POWERLEVEL9K_EXPERIMENTAL_TIME_REALTIME=true
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv time context ssh root_indicator dir dir_writable vcs status)
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -265,6 +265,7 @@ include ~/.sensitive/zsh
 
 if [ -d $HOME/autocompleters ]; then
   for file in $HOME/autocompleters/*sh; do
+    echo "sourcing $file"
     source $file
   done
 fi
