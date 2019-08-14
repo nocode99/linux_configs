@@ -265,7 +265,6 @@ include ~/.sensitive/zsh
 
 if [ -d $HOME/autocompleters ]; then
   for file in $HOME/autocompleters/*sh; do
-    echo "sourcing $file"
     source $file
   done
 fi
