@@ -64,6 +64,14 @@ function doit() {
   apt update && apt upgrade -y && apt autoremove -y
 }
 
+function params() {
+  aws ssm get-parameters-by-path \
+    --path / \
+    --recursive \
+    | jq '.Parameters[].Name' -r \
+    | sort
+}
+
 ################################################################################
 # ZPLUG SETTINGS
 ################################################################################
