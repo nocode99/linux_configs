@@ -1,6 +1,6 @@
 [user]
-  name = nocode99
+  name = Byron Kim
   email = nocode99@gmail.com
 [core]
-	pager = cat
-	mergeoptions = --no-edit
+  pager = cat
+  mergeoptions = --no-edit
