@@ -72,6 +72,14 @@ function params() {
     | sort
 }
 
+function cctf() {
+  if [[ $1 != "" ]]; then
+    cookiecutter git@github.com:KeplerGroup/cookiecutter-terraform-$1
+  else
+    echo "need to include argument! ie `cctf s3-bucket`"
+  fi
+}
+
 ################################################################################
 # ZPLUG SETTINGS
 ################################################################################
