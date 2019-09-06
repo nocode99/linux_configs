@@ -321,6 +321,7 @@ alias pbcopy='xclip -selection clipboard'
 alias pbpaste='xclip -select clipboard -o'
 alias vim='nvim'
 alias grep='grep --color=auto'
+alias ms='mux start'
 alias di='docker images'
 
 alias kip='cd ~/src/KeplerGroup'
