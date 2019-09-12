@@ -342,43 +342,28 @@ alias smux='mux start kepler'
 alias myip='curl -sq checkip.amazonaws.com | pbcopy'
 
 ################################################################################
+# ASDF
+###############################################################################
+
+if [[ ! -d $HOME/.asdf ]]; then
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+fi
+
+source $HOME/.asdf/asdf.sh
+source $HOME/.asdf/completions/asdf.bash
+
+################################################################################
 # PATHS
 ###############################################################################
 
-NODENV_PATH="$HOME/.nodenv/bin"
 TFENV_ROOT="$HOME/.tfenv/bin"
 CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
-GOENV_ROOT="$HOME/.goenv"
-GOENV_BIN="$GOENV_ROOT/bin"
-GO_ROOT="$HOME/go"
 GO_BIN="$GO_ROOT/bin"
 POETRY_ROOT="$HOME/.poetry/bin"
 KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
-PYENV_ROOT="$HOME/.pyenv"
-PYENV_BIN="$PYENV_ROOT/bin"
 
-PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GOENV_BIN:$NODENV_PATH:$GO_BIN:$POETRY_ROOT:$KNOT_ROOT:$PYENV_BIN
-
-################################################################################
-# APP_ENV CONFIGURATIONS
-###############################################################################
-
-# Goenv autocompletion
-goenv() {
-  eval "$(command goenv init -)"
-  goenv "$@"
-}
-
-nodenv() {
-  eval "$(command nodenv init -)"
-  nodenv "@"
-}
-
-pyenv() {
-  eval "$(command pyenv init -)"
-  pyenv "$@"
-}
+PATH=$PATH:$KNOT_ROOT:$LOCAL_ROOT:$CARGO_ROOT:$GO_BIN:$POETRY_ROOT
 
 # gcloud autocompletion
 PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
