@@ -26,6 +26,15 @@
     state: present
   tags: ['apt']
 
+- name: "APT: add alacritty repo to apt"
+  become: yes
+  apt_repository:
+    repo: "ppa:mmstick76/alacritty"
+    codename: bionic
+    state: present
+  tags: ['apt']
+
+
 - name: "APT: add neovim repo to apt"
   become: yes
   apt_repository:
@@ -40,8 +49,8 @@
     url: https://www.virtualbox.org/download/oracle_vbox_2016.asc
     state: present
 
-- -name: "APT: add vagrant to repo"
-   become: yes
-   apt_repository:
+- name: "APT: add vagrant to repo"
+  become: yes
+  apt_repository:
     repo: "deb [arch=amd64] http://download.virtualbox.org/virtualbox/debian bionic contrib"
     state: present

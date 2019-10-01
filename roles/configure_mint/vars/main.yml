@@ -6,7 +6,9 @@ APT_PROGRAMS:
   - cmake
   - cowsay
   - ctags
-  - docker-ce={{ DOCKER_VERSION }}
+  - direnv
+#  - docker-ce={{ DOCKER_VERSION }}
+  - dropbox
   - fonts-hack-ttf
   - fortunes
   - graphviz
@@ -14,6 +16,7 @@ APT_PROGRAMS:
   - jid
   - jq
   - libbz2-dev
+  - libclang-dev
   - libfreetype6-dev
   - libfontconfig1-dev
   - libxcb-xfixes0-dev
@@ -25,13 +28,15 @@ APT_PROGRAMS:
   - openresolv
   - openvpn-systemd-resolved
   - python3-pip
+  - python3-gpg
   - ruby-dev
   - snapd
+  - stow
   - texlive-full
   - tk-dev
   - tmux
   - tree
-  - virtualbox-5.2
+  - virtualbox-6.0
   - whois
   - xclip
   - xsel

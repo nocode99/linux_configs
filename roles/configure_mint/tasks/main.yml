@@ -25,30 +25,20 @@
   tags: ['rust']
 
 - name: install rustup
-  shell: sh /tmp/rustup.rs
+  shell: sh /tmp/rustup.rs -y
   tags: ['rust']
 
-- name: install rust packages
-  shell: "cargo install {{ item }}"
-  with_items:
-    - --git https://github.com/jwilm/alacritty.git
-    - fd-find
-    - ripgrep
-    - bat
-    - exa
-  tags: ['rust']
+#- name: "stow: setup dotfiles"
+#  command: stow -t ~ .
+#  args:
+#    chdir: ~/src/linux_configs/dotfiles
 
-- name: "stow: setup dotfiles"
-  command: stow -t ~ .
-  args:
-    chdir: ~/src/linux_configs
-
-- name: "neovim: setup symlink"
-  file:
-    src: ~/src/linux_configs/.vimrc
-    dest: ~/.config/nvim/init.vim
-    state: link
-
+##- name: "neovim: setup symlink"
+##  file:
+##    src: ~/src/linux_configs/.vimrc
+##    dest: ~/.config/nvim/init.vim
+##    state: link
+##
 - name: "zsh: configure zplug"
   git:
     repo: https://github.com/zplug/zplug
@@ -168,20 +158,21 @@
   git:
     repo: https://github.com/gpakosz/.tmux.git
     dest: ~/src/.tmux
-  tags: ['tmux']
+  tags: tmux
 
 - name: "tmux: set symlink"
   file:
     src: ~/src/.tmux/.tmux.conf
     dest: ~/.tmux.conf
-  tags: ['tmux']
+  tags: tmux
 
 - name: copy tmuxinator templates
   copy:
     src: "{{ TMUXINATOR_FILES }}"
     dest: ~/.config/tmuxinator/{{ TMUXINATOR_FILES}}
+  tags: tmux
 
 
-- include: env_managers.yml
+#- include: env_managers.yml
 
-- include: autocompleters.yml
+# - include: autocompleters.yml

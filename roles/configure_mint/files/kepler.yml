@@ -4,7 +4,6 @@ name: infra
 root: ~/
 
 windows:
-  - VPN: kvpn
   - TERRAFORM:
       root: ~/src/KeplerGroup/kepler-terraform
   - TF-MODULES:

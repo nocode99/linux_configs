@@ -361,9 +361,10 @@ CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
 GO_BIN="$GO_ROOT/bin"
 POETRY_ROOT="$HOME/.poetry/bin"
+ASDF_SHIMS="$HOME/.asdf/shims"
 KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
 
-PATH=$PATH:$KNOT_ROOT:$LOCAL_ROOT:$CARGO_ROOT:$GO_BIN:$POETRY_ROOT
+PATH=$PATH:$TFENV_ROOT:$CARGO_ROOT:$LOCAL_ROOT:$GO_BIN:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:
 
 # gcloud autocompletion
 PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
