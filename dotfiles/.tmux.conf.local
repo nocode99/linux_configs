@@ -95,7 +95,7 @@ set-option -g status-fg yellow #yellow
 
 # set window list colors - red for active and cyan for inactive
 set -g window-status-style fg=blue
-set -g window-status-current-style fg=black,bg=red
+set -g window-status-current-style fg=black,bg=green
 
 # Window option navigation using VI (for viewing history)
 set-window-option -g mode-keys vi
