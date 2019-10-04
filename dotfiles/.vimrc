@@ -68,6 +68,9 @@ Plug 'tyru/open-browser.vim'
 Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'vim-scripts/groovyindent-unix' " groovy indentation
 Plug '~/.fzf'
+Plug 'tibabit/vim-templates'
+Plug 'prabirshrestha/async.vim'
+Plug 'prabirshrestha/vim-lsp'
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
@@ -383,11 +386,48 @@ if has('macunix')
   set backspace=indent,eol,start
 endif
 " }}}
-" deoplete {{{
+" Deoplete / LSP {{{
 let g:deoplete#enable_at_startup = 1
 
 " deoplete tab-complete
 inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+" LSP LanguageClient:
+let g:LanguageClient_serverCommands = {
+      \ 'c': ['clangd', '-background-index'],
+      \ 'cpp': ['clangd', '-background-index'],
+      \ 'java': [$HOME . '/java/java-language-server/dist/mac/bin/launcher', '--quiet'],
+      \ 'javascript': ['npx', '--no-install', '-q', 'flow', 'lsp'],
+      \ 'javascript.jsx': ['npx', '--no-install', 'flow', 'lsp'],
+      \ 'python': ['jedi-language-server'],
+      \ 'python.jinja2': ['jedi-language-server'],
+      \ 'r': ['R', '--slave', '-e', 'languageserver::run()'],
+      \ 'ruby': ['solargraph', 'stdio'],
+      \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
+      \ 'terraform': ['terraform-lsp'],
+      \ 'typescript': ['npx', '--no-install', '-q', 'typescript-language-server', '--stdio'],
+      \ }
+let g:LanguageClient_autoStart = v:true
+let g:LanguageClient_hoverPreview = 'auto'
+let g:LanguageClient_diagnosticsEnable = v:false
+let g:LanguageClient_selectionUI = 'quickfix'
+function! CustomLanguageClientConfig()
+  nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
+  nnoremap <buffer> <leader>sd :call LanguageClient#textDocument_hover()<CR>
+  nnoremap <buffer> <leader>sr :call LanguageClient#textDocument_rename()<CR>
+  nnoremap <buffer> <leader>sf :call LanguageClient#textDocument_formatting()<CR>
+  nnoremap <buffer> <leader>su :call LanguageClient#textDocument_references()<CR>
+  nnoremap <buffer> <leader>sa :call LanguageClient#textDocument_codeAction()<CR>
+  nnoremap <buffer> <leader>ss :call LanguageClient#textDocument_documentSymbol()<CR>
+  nnoremap <buffer> <leader>sc :call LanguageClient_contextMenu()<CR>
+  setlocal omnifunc=LanguageClient#complete
+endfunction
+augroup languageclient_on_vim_startup
+  autocmd!
+  execute 'autocmd FileType '
+        \ . join(keys(g:LanguageClient_serverCommands), ',')
+        \ . ' call CustomLanguageClientConfig()'
+augroup END
 " }}}
 " Key Remappings {{{
 nnoremap T gT
@@ -528,6 +568,15 @@ let g:vim_filetype_formatter_commands = {
       \ 'python': 'black -q -',
       \ 'rust': 'rustfmt'
       \}
+
+let g:AutoPairs = {
+      \ '(':')',
+      \ '[':']',
+      \ '{':'}',
+      \ "'":"'",
+      \ '"':'"',
+      \ '`':'`',
+      \ }
 " }}}
 " Plugin: Markdown-preview.vim {{{
 
