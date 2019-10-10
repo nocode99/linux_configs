@@ -312,6 +312,8 @@ fi
 export EDITOR='/usr/bin/nvim'
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
+# customize exa output
+export EXA_COLORS="uu=36:da=34"
 
 alias .='cd ..'
 alias ..='cd ../..'
