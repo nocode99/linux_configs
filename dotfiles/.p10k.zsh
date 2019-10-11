@@ -30,14 +30,24 @@
   # restarting zsh. Edit ~/.p10k.zsh and type `source ~/.p10k.zsh`.
   unset -m 'POWERLEVEL9K_*'
 
-  function my_tf() {
-    local color='%F{129}'
-    if [ -f .terraform-version ]; then
-      echo -n "%{$color%}$(cat .terraform-version)"
-    elif; then
-      echo -n "%{$color%}$(terraform --version | head -n1 | awk '{print $2}')"
-    fi
-  }
+function my_tf() {
+  local color='%F{129}'
+  if [ -f .terraform-version ]; then
+    echo -n "%{$color%}$(cat .terraform-version)"
+  elif; then
+    echo -n "%{$color%}$(terraform --version | head -n1 | awk '{print $2}')"
+  fi
+}
+
+function vpn_status() {
+  local color='%F{196}'
+  vpn_status=$(nmcli -f GENERAL.STATE c show aws)
+  if [[ "$vpn_status" == *"activated"* ]]; then
+    echo -n "%{$color%}VPN"
+  else
+    echo -n ""
+  fi
+}
 
 POWERLEVEL9K_TIME_BACKGROUND="clear"
 POWERLEVEL9K_AWS_BACKGROUND="clear"
@@ -45,11 +55,15 @@ POWERLEVEL9K_DIR_BACKGROUND="clear"
 POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="clear"
 POWERLEVEL9K_CONTEXT_BACKGROUND="clear"
 POWERLEVEL9K_CUSTOM_TF_SIGNAL_BACKGROUND="clear"
+POWERLEVEL9K_CUSTOM_VPN_STATUS_BACKGROUND="clear"
 POWERLEVEL9K_VCS_BACKGROUND="clear"
 POWERLEVEL9K_STATUS_BACKGROUND="clear"
 POWERLEVEL9K_CUSTOM_TF_SIGNAL="my_tf"
 POWERLEVEL9K_CUSTOM_TF_SIGNAL_FOREGROUND="129"
 POWERLEVEL9K_CUSTOM_TF_SIGNAL_ICON="\u2699"
+POWERLEVEL9K_CUSTOM_VPN_STATUS="vpn_status"
+POWERLEVEL9K_CUSTOM_VPN_STATUS_FOREGROUND="196"
+POWERLEVEL9K_CUSTOM_VPN_STATUS_ICON="\uf023"
 
 
 
@@ -59,6 +73,7 @@ POWERLEVEL9K_EXPERIMENTAL_TIME_REALTIME=true
 
   typeset -ga POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
       time
+      custom_vpn_status
       aws
       dir                     # current directory
       context
