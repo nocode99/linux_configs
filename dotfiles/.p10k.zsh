@@ -30,63 +30,52 @@
   # restarting zsh. Edit ~/.p10k.zsh and type `source ~/.p10k.zsh`.
   unset -m 'POWERLEVEL9K_*'
 
-function my_tf() {
-  local color='%F{129}'
-  if [ -f .terraform-version ]; then
-    echo -n "%{$color%}$(cat .terraform-version)"
-  elif; then
-    echo -n "%{$color%}$(terraform --version | head -n1 | awk '{print $2}')"
-  fi
-}
+  ##############################################################################
+  # CUSTOM SETTINGS
+  ##############################################################################
+  function my_tf() {
+    # Returns the version of terraform being used either by .terraform-version
+    # file or global terraform installed.
+    local color='%F{129}'
+    if [ -f .terraform-version ]; then
+      echo -n "%{$color%}$(cat .terraform-version)"
+    elif; then
+      echo -n "%{$color%}$(terraform --version | head -n1 | awk '{print $2}')"
+    fi
+  }
 
-function vpn_status() {
-  local color='%F{196}'
-  vpn_status=$(nmcli -f GENERAL.STATE c show aws)
-  if [[ "$vpn_status" == *"activated"* ]]; then
-    echo -n "%{$color%}VPN"
-  else
-    echo -n ""
-  fi
-}
-
-POWERLEVEL9K_TIME_BACKGROUND="clear"
-POWERLEVEL9K_AWS_BACKGROUND="clear"
-POWERLEVEL9K_DIR_BACKGROUND="clear"
-POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="clear"
-POWERLEVEL9K_CONTEXT_BACKGROUND="clear"
-POWERLEVEL9K_CUSTOM_TF_SIGNAL_BACKGROUND="clear"
-POWERLEVEL9K_CUSTOM_VPN_STATUS_BACKGROUND="clear"
-POWERLEVEL9K_VCS_BACKGROUND="clear"
-POWERLEVEL9K_STATUS_BACKGROUND="clear"
-POWERLEVEL9K_CUSTOM_TF_SIGNAL="my_tf"
-POWERLEVEL9K_CUSTOM_TF_SIGNAL_FOREGROUND="129"
-POWERLEVEL9K_CUSTOM_TF_SIGNAL_ICON="\u2699"
-POWERLEVEL9K_CUSTOM_VPN_STATUS="vpn_status"
-POWERLEVEL9K_CUSTOM_VPN_STATUS_FOREGROUND="196"
-POWERLEVEL9K_CUSTOM_VPN_STATUS_ICON="\uf023"
-
-
-
-  # The list of segments shown on the left. Fill it with the most important segments.
-POWERLEVEL9K_TIME_FORMAT="%D{%m.%d.%y %I:%M:%S}"
-POWERLEVEL9K_EXPERIMENTAL_TIME_REALTIME=true
+  POWERLEVEL9K_DISABLE_RPROMPT=true
+  POWERLEVEL9K_TIME_BACKGROUND="clear"
+  POWERLEVEL9K_VPN_IP_BACKGROUND="clear"
+  POWERLEVEL9K_AWS_BACKGROUND="clear"
+  POWERLEVEL9K_DIR_BACKGROUND="clear"
+  POWERLEVEL9K_DIR_DEFAULT_FOREGROUND="clear"
+  POWERLEVEL9K_CONTEXT_BACKGROUND="clear"
+  POWERLEVEL9K_CUSTOM_TF_SIGNAL_BACKGROUND="clear"
+  POWERLEVEL9K_VCS_BACKGROUND="clear"
+  POWERLEVEL9K_STATUS_BACKGROUND="clear"
+  POWERLEVEL9K_CUSTOM_TF_SIGNAL="my_tf"
+  POWERLEVEL9K_CUSTOM_TF_SIGNAL_FOREGROUND="129"
+  POWERLEVEL9K_CUSTOM_TF_SIGNAL_ICON=$'\U271D'
+  POWERLEVEL9K_TIME_FORMAT="%D{%m.%d.%y %I:%M:%S}"
+  POWERLEVEL9K_EXPERIMENTAL_TIME_REALTIME=true
 
   typeset -ga POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
       time
-      custom_vpn_status
+      vpn_ip
       aws
       dir                     # current directory
       context
       custom_tf_signal
+      pyenv
       vcs                     # git status
       status
   )
 
-  # The list of segments shown on the right. Fill it with less important segments.
-  # Right prompt on the last prompt line (where you are typing your commands) gets
-  # automatically hidden when the input line reaches it. Right prompt above the
-  # last prompt line gets hidden if it would overlap with left prompt.
-POWERLEVEL9K_DISABLE_RPROMPT=true
+  ##############################################################################
+  # CUSTOM SETTINGS
+  ##############################################################################
+
   typeset -g POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(
       # status                  # exit code of the last command
       # command_execution_time  # duration of the last command
@@ -167,6 +156,7 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
   # https://github.com/romkatv/powerlevel10k/#recommended-meslo-nerd-font-patched-for-powerlevel10k
   # and set POWERLEVEL9K_MODE=nerdfont-complete.
   typeset -g POWERLEVEL9K_MODE=nerdfont-complete
+  # typeset -g POWERLEVEL9K_MODE=compatible
 
   # When set to true, icons appear before content on both sides of the prompt. When set
   # to false, icons go after content. If empty or not set, icons go before content in the left
@@ -187,30 +177,19 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
   # Connect left prompt lines with these symbols. You'll probably want to use the same color
   # as POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND below.
   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX=""
-  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=" \uf460 "
-  # typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX='%240F╭─'
-  # typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_PREFIX='%240F├─'
-  # typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX='%240F╰─'
-  # # Connect right prompt lines with these symbols.
-  # typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_SUFFIX='%240F─╮'
-  # typeset -g POWERLEVEL9K_MULTILINE_NEWLINE_PROMPT_SUFFIX='%240F─┤'
-  # typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_SUFFIX='%240F─╯'
+  typeset -g POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX=" \Ubb "
 
-  # Filler between left and right prompt on the first prompt line. You can set it to ' ', '·' or
-  # '─'. The last two make it easier to see the alignment between left and right prompt and to
-  # separate prompt from command output. You might want to set POWERLEVEL9K_PROMPT_ADD_NEWLINE=false
-  # for more compact prompt if using using this option.
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=' '
-  typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_BACKGROUND=
-  if [[ $POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR != ' ' ]]; then
-    # The color of the filler. You'll probably want to match the color of POWERLEVEL9K_MULTILINE
-    # ornaments defined above.
-    typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=240
-    # Start filler from the edge of the screen if there are no left segments on the first line.
-    typeset -g POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
-    # End filler on the edge of the screen if there are no right segments on the first line.
-    typeset -g POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
-  fi
+  # typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR=' '
+  # typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_BACKGROUND=
+  # if [[ $POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_CHAR != ' ' ]]; then
+  #   # The color of the filler. You'll probably want to match the color of POWERLEVEL9K_MULTILINE
+  #   # ornaments defined above.
+  #   typeset -g POWERLEVEL9K_MULTILINE_FIRST_PROMPT_GAP_FOREGROUND=240
+  #   # Start filler from the edge of the screen if there are no left segments on the first line.
+  #   typeset -g POWERLEVEL9K_EMPTY_LINE_LEFT_PROMPT_FIRST_SEGMENT_END_SYMBOL='%{%}'
+  #   # End filler on the edge of the screen if there are no right segments on the first line.
+  #   typeset -g POWERLEVEL9K_EMPTY_LINE_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='%{%}'
+  # fi
 
   # Default background color.
   typeset -g POWERLEVEL9K_BACKGROUND=236
@@ -225,9 +204,10 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
   # Separator between different-color segments on the right.
   typeset -g POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=''
   # The right end of left prompt.
-  typeset -g POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL='\uE0B0'
+  # typeset -g POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL='\uE0B0'
+  typeset -g POWERLEVEL9K_LEFT_PROMPT_LAST_SEGMENT_END_SYMBOL=''
   # The left end of right prompt.
-  typeset -g POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL='\uE0B2'
+  typeset -g POWERLEVEL9K_RIGHT_PROMPT_FIRST_SEGMENT_START_SYMBOL=''
   # The left end of left prompt.
   typeset -g POWERLEVEL9K_LEFT_PROMPT_FIRST_SEGMENT_START_SYMBOL=''
   # The right end of right prompt.
@@ -705,6 +685,7 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
   #[ aws: aws profile (https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) ]#
   # AWS profile color.
   typeset -g POWERLEVEL9K_AWS_FOREGROUND=208
+  typeset -g POWERLEVEL9K_AWS_ICON='AWS'
   # Custom icon.
   # typeset -g POWERLEVEL9K_AWS_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
@@ -809,14 +790,10 @@ POWERLEVEL9K_DISABLE_RPROMPT=true
 
   ########################[ vpn_ip: virtual private network indicator ]#########################
   # VPN IP color.
-  typeset -g POWERLEVEL9K_VPN_IP_FOREGROUND=81
-  # When on VPN, show just an icon without the IP address.
-  typeset -g POWERLEVEL9K_VPN_IP_CONTENT_EXPANSION=
-  # Regular expression for the VPN network interface. Run ifconfig while on VPN to see the
-  # name of the interface.
+  typeset -g POWERLEVEL9K_VPN_IP_FOREGROUND=196
+  typeset -g POWERLEVEL9K_VPN_IP_CONTENT_EXPANSION=''
   typeset -g POWERLEVEL9K_VPN_IP_INTERFACE='(wg|(.*tun))[0-9]*'
-  # Custom icon.
-  # typeset -g POWERLEVEL9K_VPN_IP_VISUAL_IDENTIFIER_EXPANSION='⭐'
+  typeset -g POWERLEVEL9K_VPN_IP_VISUAL_IDENTIFIER_EXPANSION=$'\U1f512'
 
   #########################[ proxy: system-wide http/https/ftp proxy ]##########################
   # Proxy color.
