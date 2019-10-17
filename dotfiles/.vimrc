@@ -21,6 +21,9 @@ set number
 augroup redraw_on_refocus
   au FocusGained * :redraw!
 augroup END
+
+" mouse mode in tmux
+set mouse=r
 " }}}
 " Line 100 Column and cursor highlighting ----------------- {{{
 set cursorline
