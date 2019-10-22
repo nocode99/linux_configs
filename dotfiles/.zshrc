@@ -81,6 +81,11 @@ function cctf() {
   fi
 }
 
+function copy() {
+  # paste contents of a file to clipboard
+  cat $1 | xclip -selection clipboard
+}
+
 ################################################################################
 # ZPLUG SETTINGS
 ################################################################################
