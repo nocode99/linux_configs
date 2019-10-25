@@ -41,7 +41,6 @@
 
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
       time                    # show time in seconds
-      vpn_ip                  # if connected, show lock
       aws                     # aws profile
       dir                     # current directory
       custom_tf_signal        # show what tf version is being used
@@ -72,12 +71,6 @@
   typeset -g POWERLEVEL9K_TIME_VISUAL_IDENTIFIER_EXPANSION=
   # updates the time in terminal in realtime
   typeset -g POWERLEVEL9K_EXPERIMENTAL_TIME_REALTIME=true
-
-  typeset -g POWERLEVEL9K_VPN_IP_BACKGROUND="clear"
-  typeset -g POWERLEVEL9K_VPN_IP_FOREGROUND=196
-  typeset -g POWERLEVEL9K_VPN_IP_CONTENT_EXPANSION=''
-  typeset -g POWERLEVEL9K_VPN_IP_INTERFACE='(wg|(.*tun))[0-9]*'
-  typeset -g POWERLEVEL9K_VPN_IP_VISUAL_IDENTIFIER_EXPANSION=$'\U1f512'
 
   typeset -g POWERLEVEL9K_AWS_BACKGROUND="clear"
   typeset -g POWERLEVEL9K_AWS_FOREGROUND=208
