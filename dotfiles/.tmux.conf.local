@@ -107,7 +107,7 @@ set -g status-left "#[fg=green] #h#[fg=red]#{vpn_status}#[fg=green] "
 # show session name, window & pane number, date and time on right side of
 # status bar
 set -g status-right-length 60
-set -g status-right "#{battery_level} #[fg=blue]#S #I:#P #[fg=yellow]:: %b %d %Y #[fg=green]:: %l:%M %p :: #[fg=purple]UTC #(date -u | awk '{print $4}')::"
+set -g status-right "#{battery_level} #[fg=blue]#S #I:#P #[fg=yellow]: %b %d %Y #[fg=colour063]: %l:%M %p : #[fg=colour067]UTC #(date -u | awk '{print $4}')"
 
 # Copy contents to clipboard using "y"
 bind y run "tmux show-buffer | xclip -selection clipboard"
