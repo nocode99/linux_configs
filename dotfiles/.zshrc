@@ -1,3 +1,6 @@
+if [ ! -z $ZPROF ]; then
+  zmodload zsh/zprof
+fi
 ################################################################################
 # FUNCTIONS
 ################################################################################
@@ -96,7 +99,6 @@ if [ -f ~/.zplug/init.zsh ]; then
   zplug "greymd/docker-zsh-completion", as:plugin
   zplug "zsh-users/zsh-completions", as:plugin
   zplug "zsh-users/zsh-syntax-highlighting", as:plugin
-  zplug "nobeans/zsh-sdkman", as:plugin
   zplug "junegunn/fzf-bin", \
     from:gh-r, \
     as:command, \
@@ -104,14 +106,6 @@ if [ -f ~/.zplug/init.zsh ]; then
   zplug "mdumitru/git-aliases", as:plugin
 
   zplug "romkatv/powerlevel10k", as:theme, depth:1
-
-  # Install plugins if there are plugins that have not been installed
-  if ! zplug check --verbose; then
-      printf "Install? [y/N]: "
-      if read -q; then
-          echo; zplug install
-      fi
-  fi
 
   # Then, source plugins and add commands to $PATH
   zplug load
@@ -193,49 +187,6 @@ _fzf_compgen_dir() {
 # FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
 # export FZF_DEFAULT_COMMAND
 
-
-################################################################################
-# POWERLEVEL10k THEME
-################################################################################
-# POWERLEVEL9K_PROMPT_ON_NEWLINE=true
-# POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
-# POWERLEVEL9K_RPROMPT_ON_NEWLINE=false
-# POWERLEVEL9K_DISABLE_RPROMPT=true
-# POWERLEVEL9K_SHORTEN_DIR_LENGTH=3
-# POWERLEVEL9K_SHORTEN_STRATEGY="truncate_beginning"
-# POWERLEVEL9K_RVM_BACKGROUND="black"
-# POWERLEVEL9K_RVM_FOREGROUND="249"
-# POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
-# POWERLEVEL9K_TIME_BACKGROUND="black"
-# POWERLEVEL9K_TIME_FOREGROUND="249"
-POWERLEVEL9K_TIME_FORMAT="%D{%m.%d.%y %I:%M:%S}"
-# POWERLEVEL9K_RVM_BACKGROUND="black"
-# POWERLEVEL9K_RVM_FOREGROUND="249"
-# POWERLEVEL9K_RVM_VISUAL_IDENTIFIER_COLOR="red"
-# POWERLEVEL9K_STATUS_VERBOSE=false
-# POWERLEVEL9K_VCS_CLEAN_FOREGROUND='black'
-# POWERLEVEL9K_VCS_CLEAN_BACKGROUND='green'
-# POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='black'
-# POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='red'
-# POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='black'
-# POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='orange1'
-# POWERLEVEL9K_COMMAND_EXECUTION_TIME_BACKGROUND='black'
-# POWERLEVEL9K_COMMAND_EXECUTION_TIME_FOREGROUND='blue'
-# POWERLEVEL9K_FOLDER_ICON=''
-# POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
-# POWERLEVEL9K_STATUS_VERBOSE=false
-# POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-# POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-# POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-# POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-# POWERLEVEL9K_VCS_COMMIT_ICON="\uf417"
-# POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="%F{blue}\u256D\u2500%f"
-# POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="%F{blue}$ "
-# POWERLEVEL9K_EXPERIMENTAL_TIME_REALTIME=true
-# POWERLEVEL9K_TERRAFORM_FOREGROUND=38
-# POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(virtualenv context ssh root_indicator dir dir_writable vcs status terraform)
-# POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(time terraform)
-
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
 
@@ -271,9 +222,6 @@ _vault_complete() {
 }
 compctl -f -K _vault_complete vault
 
-# stack
-# eval "$(stack --bash-completion-script stack)"
-
 # Add autocompletion path
 fpath+=~/.zfunc
 
@@ -292,22 +240,11 @@ if [ -d $HOME/autocompleters ]; then
   done
 fi
 
-# Check to see if Linux or Mac
-BASE_OS="$(uname)"
-case $BASE_OS in
-  'Linux')
-    OS='linux'
-    ;;
-  'Darwin')
-    OS='darwin'
-    ;;
-esac
-
-if [[ $OS == 'linux' ]]; then
+if [[ $OS == 'Linux' ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
     alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
     alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
-elif [[ $OS == 'darwin' ]] ; then
+elif [[ $OS == 'Darwin' ]] ; then
     alias ll='ls -alhG'
 fi
 
@@ -334,7 +271,6 @@ alias ms='mux start'
 alias di='docker images'
 
 alias kip='cd ~/src/KeplerGroup'
-alias kvpn='sudo openvpn --config ~/openvpn/openvpn.conf'
 alias zo='source ~/.zshrc'
 alias ap='ansible-playbook'
 
@@ -373,13 +309,6 @@ KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
 
 PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:
 
-# gcloud autocompletion
-PATH_GCLOUD_AUTO="$HOME/.gcloud-zsh-completion/src"
-
-if [[ -d "$PATH_GCLOUD_AUTO" ]]; then
-  fpath=($PATH_GCLOUD_AUTO $fpath)
-fi
-
 # kubectl autocomplete
 if [ $commands[kubectl] ]; then
   kubectl() {
@@ -395,12 +324,8 @@ if [[ -f /usr/bin/direnv ]]; then
   eval "$(direnv hook zsh)"
 fi
 
-autoload -Uz compinit
-if [[ -n ${ZDOTDIR:-${HOME}}/$ZSH_COMPDUMP(#qN.mh+24) ]]; then
-  compinit -d $ZSH_COMPDUMP;
-else
-  compinit -C;
-fi;
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+if [ ! -z $ZPROF ]; then
+  zprof
+fi
