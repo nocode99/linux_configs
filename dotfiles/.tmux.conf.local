@@ -94,20 +94,20 @@ set-option -g status-bg colour235 #base02
 set-option -g status-fg yellow #yellow
 
 # set window list colors - red for active and cyan for inactive
-set -g window-status-style fg=blue
-set -g window-status-current-style fg=black,bg=green
+set -g window-status-style fg=colour039
+set -g window-status-current-style fg=black,bg=colour014
 
 # Window option navigation using VI (for viewing history)
 set-window-option -g mode-keys vi
 
 # show host name and IP address on left side of status bar
 set -g status-left-length 70
-set -g status-left "#[fg=green] #h#[fg=red]#{vpn_status}#[fg=green] "
+set -g status-left "#[fg=white] #h#[fg=red]#{vpn_status}#[fg=green] "
 
 # show session name, window & pane number, date and time on right side of
 # status bar
 set -g status-right-length 60
-set -g status-right "#{battery_level} #[fg=blue]#S #I:#P #[fg=yellow]: %b %d %Y #[fg=colour063]: %l:%M %p : #[fg=colour067]UTC #(date -u | awk '{print $4}')"
+set -g status-right "#[fg=colour046,bold]#{battery_level} #[fg=white]#S #I:#P #[fg=colour006]: %b %d %Y #[fg=colour063]: %l:%M %p : #[fg=colour067]UTC #(date -u | awk '{print $4}')"
 
 # Copy contents to clipboard using "y"
 bind y run "tmux show-buffer | xclip -selection clipboard"
