@@ -240,11 +240,11 @@ if [ -d $HOME/autocompleters ]; then
   done
 fi
 
-if [[ $OS == 'Linux' ]]; then
+if [[ "$OSTYPE" == *"linux"* ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
     alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
     alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
-elif [[ $OS == 'Darwin' ]] ; then
+elif [[ "$OSTYPE" == *"darwin"* ]]; then
     alias ll='ls -alhG'
 fi
 
