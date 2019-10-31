@@ -249,14 +249,8 @@ elif [[ "$OSTYPE" == *"darwin"* ]]; then
 fi
 
 ################################################################################
-# EXPORT / ALIAS
+# ALIAS
 ###############################################################################
-export EDITOR='/usr/bin/nvim'
-export TERM=screen-256color
-export ANSIBLE_COW_SELECTION='tux'
-# customize exa output
-# export EXA_COLORS="uu=36:da=34"
-
 alias .='cd ..'
 alias ..='cd ../..'
 alias ...='cd ../../..'
@@ -285,6 +279,21 @@ alias smux='mux start kepler'
 
 # returns current public IP
 alias myip='curl -sq checkip.amazonaws.com | pbcopy'
+
+if [ -d "$HOME/.terraform.d/plugin-cache" ]; then
+  mkdir $HOME/.terraform.d/plugin-cache
+fi
+
+################################################################################
+# EXPORT
+###############################################################################
+export EDITOR='/usr/bin/nvim'
+export TERM=screen-256color
+export ANSIBLE_COW_SELECTION='tux'
+export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
+# customize exa output
+# export EXA_COLORS="uu=36:da=34"
+
 
 ################################################################################
 # ASDF
