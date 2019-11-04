@@ -1,4 +1,4 @@
-" vim:fdm=marker
+" ivz:sqz=znexre
 "
 " Initial Global Settings ------------ {{{
 set nocompatible
@@ -56,6 +56,7 @@ call plug#begin('~/.config/nvim/autoload')
 " ***** Functional
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
+Plug 'rbong/vim-flog'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ctrlpvim/ctrlp.vim'
@@ -579,6 +580,9 @@ let g:AutoPairs = {
       \ "'":"'",
       \ '"':'"',
       \ '`':'`',
+      \ "'''":"'''",
+      \ '"""':'"""',
+      \ '```':'```',
       \ }
 " }}}
 " Plugin: Markdown-preview.vim {{{

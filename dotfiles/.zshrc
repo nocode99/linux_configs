@@ -244,6 +244,7 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
     alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
     alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
+    alias cat='bat'
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
     alias ll='ls -alhG'
 fi
@@ -291,6 +292,7 @@ export EDITOR='/usr/bin/nvim'
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
+export MANPAGER="nvim -c 'set ft=man' -"
 # customize exa output
 # export EXA_COLORS="uu=36:da=34"
 
