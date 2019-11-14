@@ -25,7 +25,7 @@
     local color='%F{129}'
     if [ -f .terraform-version ]; then
       echo -n "%{$color%}$(cat .terraform-version)"
-    elif; then
+    else
       echo -n "%{$color%}$(terraform --version | head -n1 | awk '{print $2}')"
     fi
   }
