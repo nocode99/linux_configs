@@ -1,5 +1,3 @@
-" ivz:sqz=znexre
-"
 " Initial Global Settings ------------ {{{
 set nocompatible
 " Highlight search
@@ -448,8 +446,6 @@ let g:ansible_extra_keywords_highlight = 1
 let g:terraform_align = 1
 
 let g:terraform_fold_sections = 1
-
-let g:terraform_remap_spacebar = 1
 
 let g:terraform_fmt_on_save = 1
 " }}}
