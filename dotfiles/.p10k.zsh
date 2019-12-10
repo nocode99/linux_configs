@@ -44,7 +44,7 @@
       aws                     # aws profile
       dir                     # current directory
       custom_tf_signal        # show what tf version is being used
-      kubecontext
+      # kubecontext
       virtualenv
       status
   )
