@@ -46,6 +46,10 @@ function klone() {
   fi
 }
 
+function update_kitty() {
+  curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+}
+
 function dato() {
   PAYLOAD=$(jq -n \
     --arg user "$1" \
