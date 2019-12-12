@@ -50,6 +50,24 @@ function update_kitty() {
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 }
 
+function switchenv() {
+  # Switch only the environment in the CWD
+  # Requires environment as an argument
+  # Example: switchenv master
+  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+  ENV=$(echo ${DIR} | sed "s/^.*\/kepler-terraform\///" | cut -d / -f 1)
+  DIR_PREFIX=$(echo $DIR | awk -F "${ENV}" '{print $1}')
+  DIR_SUFFIX=$(echo $DIR | awk -F "${ENV}" '{print $2}')
+  if [[ $ENV == 'master' ]]; then
+    NEW_ENV='integration'
+  elif [[ $ENV == 'integration' ]]; then
+    NEW_ENV='master'
+  else
+    NEW_ENV=$1
+  fi
+  cd "$DIR_PREFIX/$NEW_ENV/$DIR_SUFFIX"
+}
+
 function dato() {
   PAYLOAD=$(jq -n \
     --arg user "$1" \
