@@ -68,6 +68,36 @@ function switchenv() {
   cd "$DIR_PREFIX/$NEW_ENV/$DIR_SUFFIX"
 }
 
+function s3size() {
+  # USAGE: returns s3 bucket size in GB
+  # s3size kepler-devops (returns todays storage)
+  # s3size kepler-devops 7 (returns storage from 7 days ago)
+  if [[ -z $1 ]]; then
+    echo "pass in S3 Bucket name! e.g. s3size kepler-devops"
+    return 1
+  fi
+  S3_BUCKET=$1
+  REGION=${REGION:-us-east-1}
+  DATE_NOW=$(date +"%Y-%m-%d")
+  if [[ ! -z $2 ]]; then
+    DATE=$(date --date="$2 days ago" +"%Y-%m-%d")
+  else
+    DATE=$DATE_NOW
+  fi
+
+  aws cloudwatch get-metric-statistics \
+    --namespace AWS/S3 \
+    --start-time "${DATE}T00:00:00" \
+    --end-time "${DATE}T01:00:00" \
+    --statistics Average \
+    --region $REGION \
+    --period 86400 \
+    --metric-name BucketSizeBytes \
+    --dimensions Name=BucketName,Value=$S3_BUCKET Name=StorageType,Value=StandardStorage \
+    | jq '.Datapoints[].Average' -r \
+    | awk '{print $1/1024/1024/1024 " GB "}'
+}
+
 function dato() {
   PAYLOAD=$(jq -n \
     --arg user "$1" \
