@@ -297,6 +297,8 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
     alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
     alias cat='bat'
+    alias pbcopy='xclip -selection clipboard'
+    alias pbpaste='xclip -select clipboard -o'
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
     alias ll='ls -alhG'
 fi
@@ -304,14 +306,11 @@ fi
 ################################################################################
 # ALIAS
 ###############################################################################
-alias .='cd ..'
 alias ..='cd ../..'
 alias ...='cd ../../..'
 alias ....='cd ../../../..'
 
 alias mkdir='mkdir -p'
-alias pbcopy='xclip -selection clipboard'
-alias pbpaste='xclip -select clipboard -o'
 alias vim='nvim'
 alias grep='grep --color=auto'
 alias ms='mux start'
