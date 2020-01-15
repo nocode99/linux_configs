@@ -46,6 +46,12 @@ function klone() {
   fi
 }
 
+function clone() {
+  if [[ ! -d ./$2 ]]; then
+    git clone git@github.com:$1/$2.git
+  fi
+}
+
 function update_kitty() {
   curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
 }
@@ -260,7 +266,8 @@ zstyle ':completion:*' matcher-list '' \
   'm:{a-z\-A-Z}={A-Z\_a-z}' \
   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-A-Z}={A-Z\_a-z}' \
   'r:|?=** m:{a-z\-A-Z}={A-Z\_a-z}'
-fpath=(/usr/local/share/zsh-completions $fpath)
+fpath+=(/usr/local/share/zsh-completions $fpath)
+fpath+=~/autocompleters
 zmodload -i zsh/complist
 
 # Manual libraries
