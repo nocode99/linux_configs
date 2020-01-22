@@ -400,8 +400,8 @@ export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$H
 
 typeset -aU path
 
-if [[ -f /usr/bin/direnv ]]; then
-  eval "$(direnv hook zsh)"
+if [[ -f /usr/bin/local/direnv ]]; then
+  eval "$(direnv hook $SHELL)"
 fi
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
