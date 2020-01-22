@@ -249,7 +249,7 @@ _fzf_compgen_dir() {
 export LANG=en_US.UTF-8
 
 ################################################################################
-# ZShell Auto Completion
+# Auto Completion
 ################################################################################
 
 autoload -U +X bashcompinit && bashcompinit
@@ -284,6 +284,32 @@ compctl -f -K _vault_complete vault
 # Add autocompletion path
 fpath+=~/.zfunc
 
+if [ -d $HOME/autocompleters ]; then
+  for file in $HOME/autocompleters/*sh; do
+    source $file
+  done
+fi
+
+# kubectl autocomplete
+if [ $commands[kubectl] ]; then
+  kubectl() {
+    unfunction "$0"
+    source <(kubectl completion zsh)
+    $0 "$@"
+  }
+fi
+
+################################################################################
+# tldr SETTINGS
+################################################################################
+
+complete -W "$(tldr 2>/dev/null --list)" tldr
+export TLDR_HEADER='blue bold underline'
+export TLDR_QUOTE='italic'
+export TLDR_DESCRIPTION='cyan'
+export TLDR_CODE='magenta'
+export TLDR_PARAM='blue'
+
 ################################################################################
 # CUSTOM SETTINGS
 ################################################################################
@@ -292,12 +318,6 @@ fpath+=~/.zfunc
 stty -ixon
 
 include ~/.sensitive/zsh
-
-if [ -d $HOME/autocompleters ]; then
-  for file in $HOME/autocompleters/*sh; do
-    source $file
-  done
-fi
 
 if [[ "$OSTYPE" == *"linux"* ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
@@ -376,16 +396,7 @@ POETRY_ROOT="$HOME/.poetry/bin"
 ASDF_SHIMS="$HOME/.asdf/shims"
 KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
 
-PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:
-
-# kubectl autocomplete
-if [ $commands[kubectl] ]; then
-  kubectl() {
-    unfunction "$0"
-    source <(kubectl completion zsh)
-    $0 "$@"
-  }
-fi
+export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin
 
 typeset -aU path
 
