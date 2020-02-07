@@ -1,14 +1,14 @@
-DOCKER_VERSION: 18.06.1~ce~3-0~ubuntu
-VAGRANT_VERSION: 2.2.3
-VAGRANT_DOWNLOAD_URL: https://releases.hashicorp.com/vagrant/{{ VAGRANT_VERSION }}/vagrant_{{ VAGRANT_VERSION }}_x86_64.deb
+DOCKER_VERSION: 5:18.09.9~3-0~ubuntu-bionic
+SLACK_VERSION: 4.3.2
 
 APT_PROGRAMS:
+  - automake
+  - byacc
   - cmake
   - cowsay
   - ctags
   - direnv
-#  - docker-ce={{ DOCKER_VERSION }}
-  - dropbox
+  - docker-ce={{ DOCKER_VERSION }}
   - fonts-hack-ttf
   - fortunes
   - graphviz
@@ -17,26 +17,25 @@ APT_PROGRAMS:
   - jq
   - libbz2-dev
   - libclang-dev
+  - libevent-dev
   - libfreetype6-dev
   - libfontconfig1-dev
   - libxcb-xfixes0-dev
   - libncurses5
   - libncurses5-dev
   - neovim
+  - network-manager-openvpn
   - nodejs
   - npm
   - openresolv
-  - openvpn-systemd-resolved
   - python3-pip
   - python3-gpg
   - ruby-dev
   - snapd
-  - stow
   - texlive-full
   - tk-dev
   - tmux
   - tree
-  - virtualbox-6.0
   - whois
   - xclip
   - xsel

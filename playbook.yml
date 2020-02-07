@@ -2,5 +2,4 @@
   connection: local
   tasks:
     - include_role:
-        name: configure_mint
-      when: ansible_distribution_release == 'linuxmint'
+        name: configure_ubuntu
