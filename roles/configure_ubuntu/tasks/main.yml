@@ -33,16 +33,15 @@
 #  args:
 #    chdir: ~/src/linux_configs/dotfiles
 
-##- name: "neovim: setup symlink"
-##  file:
-##    src: ~/src/linux_configs/.vimrc
-##    dest: ~/.config/nvim/init.vim
-##    state: link
-##
 - name: "zsh: configure zplug"
   git:
     repo: https://github.com/zplug/zplug
     dest: ~/.zplug
+
+- name: "zsh: configure fzf"
+  git:
+    repo: https://github.com/tmux-plugins/tpm
+    dest: ~/.tmux/plugins/tpm
 
 - name: "zsh: configure fzf"
   git:
@@ -52,12 +51,6 @@
 
 - name: "fzf: configure plugin"
   command: ~/.fzf/install --no-bash --no-fish --all --completion --key-bindings
-
-- name: "pip: install for system"
-  pip:
-    name: ['setuptools', 'neovim', 'pynvim', 'awscli']
-    state: latest
-    extra_args: --user
 
 - name: "gem: install for system"
   become: yes
@@ -72,21 +65,6 @@
     - terraform
     - lolcat
     - tmuxinator
-
-################################################################################
-# install vagrant
-################################################################################
-- name: "vagrant: download"
-  get_url:
-    uri: "{{ VAGRANT_DOWNLOAD_URL }}"
-    dest: /tmp/vagrant.deb
-  tags: ['vagrant']
-
-- name: "vagrant: install"
-  become: yes
-  apt:
-    deb: /tmp/vagrant.deb
-  tags: ['vagrant']
 
 ################################################################################
 # additional docker configurations
@@ -125,7 +103,7 @@
 
 - name: "slack: download"
   get_url:
-    url: https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.7-amd64.deb
+    url: https://downloads.slack-edge.com/linux_releases/slack-desktop-{{ slack_version }}-amd64.deb
     dest: /tmp/slack-desktop.deb
   tags: ['slack']
 
@@ -136,43 +114,17 @@
   tags: ['slack']
 
 ################################################################################
-# configure alacritty as default terminal
-################################################################################
-
-- name: "system: mv default terminal"
-  become: yes
-  command: mv /usr/bin/gnome-terminal /usr/bin/gnome-terminal.backup
-
-- name: "system: set alacritty as default"
-  become: yes
-  file:
-    src: ~/.cargo/bin/alacritty
-    dest: /usr/bin/gnome-terminal
-    state: link
-
-################################################################################
 # configure tmux
 ################################################################################
 
-- name: "tmux: install oh-my-tmux"
-  git:
-    repo: https://github.com/gpakosz/.tmux.git
-    dest: ~/src/.tmux
-  tags: tmux
-
-- name: "tmux: set symlink"
-  file:
-    src: ~/src/.tmux/.tmux.conf
-    dest: ~/.tmux.conf
-  tags: tmux
-
 - name: copy tmuxinator templates
   copy:
-    src: "{{ TMUXINATOR_FILES }}"
+    src: "{{ item }}"
     dest: ~/.config/tmuxinator/{{ TMUXINATOR_FILES}}
+  with_items: "{{ TMUXINATOR_FILES }}"
   tags: tmux
 
 
 #- include: env_managers.yml
 
-# - include: autocompleters.yml
+- include: autocompleters.yml

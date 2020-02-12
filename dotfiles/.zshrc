@@ -400,7 +400,7 @@ export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$H
 
 typeset -aU path
 
-if [[ -f /usr/bin/local/direnv ]]; then
+if [[ $(command -v direnv) ]]; then
   eval "$(direnv hook $SHELL)"
 fi
 
