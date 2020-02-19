@@ -71,9 +71,24 @@ Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'vim-scripts/groovyindent-unix' " groovy indentation
 Plug '~/.fzf'
 Plug 'tibabit/vim-templates'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+for coc_plugin in [
+      \ 'git@github.com:coc-extensions/coc-svelte.git',
+      \ 'git@github.com:fannheyward/coc-markdownlint.git',
+      \ 'git@github.com:josa42/coc-docker.git',
+      \ 'git@github.com:neoclide/coc-css.git',
+      \ 'git@github.com:neoclide/coc-html.git',
+      \ 'git@github.com:neoclide/coc-json.git',
+      \ 'git@github.com:neoclide/coc-pairs.git',
+      \ 'git@github.com:neoclide/coc-python.git',
+      \ 'git@github.com:neoclide/coc-rls.git',
+      \ 'git@github.com:neoclide/coc-snippets.git',
+      \ 'git@github.com:neoclide/coc-tsserver.git',
+      \ 'git@github.com:neoclide/coc-yaml.git',
+      \ ]
+endfor
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
@@ -103,20 +118,13 @@ Plug 'nginx/nginx', { 'rtp': 'contrib/vim' }
 Plug 'pappasam/vim-filetype-formatter'
 Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
-Plug 'bronson/vim-trailing-whitespace'
+Plug 'ntpeters/vim-better-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'juliosueiras/vim-terraform-completion'
 
 " ***** PREVIEWERS
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 
-if has('nvim')
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-else
-  Plug 'Shougo/deoplete.nvim'
-  Plug 'roxma/nvim-yarp'
-  Plug 'roxma/vim-hug-neovim-rpc'
-endif
 call plug#end()
 
 " }}}
@@ -228,22 +236,22 @@ let g:go_template_autocreate = 0
 " vim-commentary ------------------ {{{
 autocmd Filetype terraform setlocal commentstring=#\ %s
 " }}}
-" Trailing whitespace ------------- {{{
-function! <SID>StripTrailingWhitespaces()
-    if exists('b:noStripWhitespace')
-        return
-    endif
-    let l = line(".")
-    let c = col(".")
-    %s/\s\+$//e
-    call cursor(l, c)
-endfun
-augroup allfiles_trailingspace
-    autocmd!
-    autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
-    autocmd FileType markdown let b:noStripWhitespace=1
-augroup END
-" }}}
+"" Trailing whitespace ------------- {{{
+"function! <SID>StripTrailingWhitespaces()
+"    if exists('b:noStripWhitespace')
+"        return
+"    endif
+"    let l = line(".")
+"    let c = col(".")
+"    %s/\s\+$//e
+"    call cursor(l, c)
+"endfun
+"augroup allfiles_trailingspace
+"    autocmd!
+"    autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+"    autocmd FileType markdown let b:noStripWhitespace=1
+"augroup END
+"" }}}
 " Configure Rainbow ------------- {{{
 let g:rainbow#max_level = 16
 let g:rainbow#pairs = [['{', '}'], ['(', ')'], ['[', ']']]
@@ -384,54 +392,6 @@ augroup END
 
 let g:vim_markdown_folding_disabled=1
 " }}}
-" MACOSX SETTINGS {{{
-if has('macunix')
-  set backspace=indent,eol,start
-endif
-" }}}
-" Deoplete / LSP {{{
-let g:deoplete#enable_at_startup = 1
-
-" deoplete tab-complete
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-
-" LSP LanguageClient:
-let g:LanguageClient_serverCommands = {
-      \ 'c': ['clangd', '-background-index'],
-      \ 'cpp': ['clangd', '-background-index'],
-      \ 'java': [$HOME . '/java/java-language-server/dist/mac/bin/launcher', '--quiet'],
-      \ 'javascript': ['npx', '--no-install', '-q', 'flow', 'lsp'],
-      \ 'javascript.jsx': ['npx', '--no-install', 'flow', 'lsp'],
-      \ 'python': ['jedi-language-server'],
-      \ 'python.jinja2': ['jedi-language-server'],
-      \ 'r': ['R', '--slave', '-e', 'languageserver::run()'],
-      \ 'ruby': ['solargraph', 'stdio'],
-      \ 'rust': ['~/.cargo/bin/rustup', 'run', 'nightly', 'rls'],
-      \ 'terraform': ['terraform-lsp'],
-      \ 'typescript': ['npx', '--no-install', '-q', 'typescript-language-server', '--stdio'],
-      \ }
-let g:LanguageClient_autoStart = v:true
-let g:LanguageClient_hoverPreview = 'auto'
-let g:LanguageClient_diagnosticsEnable = v:false
-let g:LanguageClient_selectionUI = 'quickfix'
-function! CustomLanguageClientConfig()
-  nnoremap <buffer> <C-]> :call LanguageClient#textDocument_definition()<CR>
-  nnoremap <buffer> <leader>sd :call LanguageClient#textDocument_hover()<CR>
-  nnoremap <buffer> <leader>sr :call LanguageClient#textDocument_rename()<CR>
-  nnoremap <buffer> <leader>sf :call LanguageClient#textDocument_formatting()<CR>
-  nnoremap <buffer> <leader>su :call LanguageClient#textDocument_references()<CR>
-  nnoremap <buffer> <leader>sa :call LanguageClient#textDocument_codeAction()<CR>
-  nnoremap <buffer> <leader>ss :call LanguageClient#textDocument_documentSymbol()<CR>
-  nnoremap <buffer> <leader>sc :call LanguageClient_contextMenu()<CR>
-  setlocal omnifunc=LanguageClient#complete
-endfunction
-augroup languageclient_on_vim_startup
-  autocmd!
-  execute 'autocmd FileType '
-        \ . join(keys(g:LanguageClient_serverCommands), ',')
-        \ . ' call CustomLanguageClientConfig()'
-augroup END
-" }}}
 " Key Remappings {{{
 nnoremap T gT
 nnoremap t gt
@@ -552,17 +512,6 @@ let g:terraform_completion_keys = 1
 
 " (Optional) Default: 1, enable(1)/disable(0) terraform module registry completion
 " let g:terraform_registry_module_completion = 0
-
-" Terraform
-augroup terraform_complete
-  autocmd FileType terraform setlocal omnifunc=terraformcomplete#Complete
-augroup END
-
-" terraform deoplete settings
-let g:deoplete#omni_patterns = {}
-let g:deoplete#omni_patterns.terraform = '[^ *\t"{=$]\w*'
-let g:deoplete#enable_at_startup = 1
-call deoplete#initialize()
 
 " vim-filetype-formatter settings
 let g:vim_filetype_formatter_commands = {
