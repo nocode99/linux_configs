@@ -236,22 +236,6 @@ let g:go_template_autocreate = 0
 " vim-commentary ------------------ {{{
 autocmd Filetype terraform setlocal commentstring=#\ %s
 " }}}
-"" Trailing whitespace ------------- {{{
-"function! <SID>StripTrailingWhitespaces()
-"    if exists('b:noStripWhitespace')
-"        return
-"    endif
-"    let l = line(".")
-"    let c = col(".")
-"    %s/\s\+$//e
-"    call cursor(l, c)
-"endfun
-"augroup allfiles_trailingspace
-"    autocmd!
-"    autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
-"    autocmd FileType markdown let b:noStripWhitespace=1
-"augroup END
-"" }}}
 " Configure Rainbow ------------- {{{
 let g:rainbow#max_level = 16
 let g:rainbow#pairs = [['{', '}'], ['(', ')'], ['[', ']']]
@@ -725,3 +709,5 @@ nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
 " Resume latest coc list
 nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " }}}
+" Simple remap to update terraform lines to first class expressions
+vnoremap <C-t> :'<,'>!tr -d '"{$}'<CR>
