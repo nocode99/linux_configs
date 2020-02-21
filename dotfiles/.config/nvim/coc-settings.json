@@ -8,5 +8,6 @@
   },
   "suggest.autoTrigger": "always",
   "suggest.noselect": true,
-  "pairs.enableCharacters": ["(", "[", "{", "<"]
+  "pairs.enableCharacters": ["(", "[", "{", "<", "\"", "'", "`"]
 }
+

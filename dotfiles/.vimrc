@@ -116,7 +116,6 @@ Plug 'nginx/nginx', { 'rtp': 'contrib/vim' }
 
 " ***** AUTO
 Plug 'pappasam/vim-filetype-formatter'
-Plug 'jiangmiao/auto-pairs'
 Plug 'godlygeek/tabular'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -503,20 +502,7 @@ let g:vim_filetype_formatter_commands = {
       \ 'rust': 'rustfmt'
       \}
 
-let g:AutoPairs = {
-      \ '(':')',
-      \ '[':']',
-      \ '{':'}',
-      \ "'":"'",
-      \ '"':'"',
-      \ '`':'`',
-      \ "'''":"'''",
-      \ '"""':'"""',
-      \ '```':'```',
-      \ }
-" }}}
 " Plugin: Markdown-preview.vim {{{
-
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_close = 0
 
