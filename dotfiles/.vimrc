@@ -71,8 +71,6 @@ Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'vim-scripts/groovyindent-unix' " groovy indentation
 Plug '~/.fzf'
 Plug 'tibabit/vim-templates'
-" Plug 'prabirshrestha/async.vim'
-" Plug 'prabirshrestha/vim-lsp'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 for coc_plugin in [
       \ 'git@github.com:coc-extensions/coc-svelte.git',
@@ -88,6 +86,8 @@ for coc_plugin in [
       \ 'git@github.com:neoclide/coc-tsserver.git',
       \ 'git@github.com:neoclide/coc-yaml.git',
       \ ]
+    Plug coc_plugin, {
+          \ 'do': 'yarn install --frozen-lockfile && yarn build' }
 endfor
 
 " ****** THEMES
@@ -120,6 +120,8 @@ Plug 'godlygeek/tabular'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'juliosueiras/vim-terraform-completion'
+Plug 'camspiers/animate.vim'
+Plug 'camspiers/lens.vim'
 
 " ***** PREVIEWERS
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
@@ -697,3 +699,11 @@ nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
 " }}}
 " Simple remap to update terraform lines to first class expressions
 vnoremap <C-t> :'<,'>!tr -d '"{$}'<CR>
+" lens.vim settings {{{
+let g:lens#disabled_filetypes = ['nerdtree', 'fzf']
+
+" coc-pairs to auto indent braces, parentheses, etc
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+				\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" }}}
