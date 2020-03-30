@@ -52,8 +52,16 @@ function clone() {
   fi
 }
 
-function update_kitty() {
-  curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+function update_program() {
+  case $1 in
+    kitty)
+      curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+      ;;
+    zoom)
+      curl -Lsf https://zoom.us/client/latest/zoom_amd64.deb -o /tmp/zoom_amd64.deb
+      sudo dpkg -i /tmp/zoom_amd64.deb
+      ;;
+  esac
 }
 
 function switchenv() {
