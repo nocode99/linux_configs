@@ -566,6 +566,11 @@ endfunction
 command! Preview call _Preview()
 
 " }}}
+" better-whitespace settings {{{
+let g:better_whitespace_enabled=1
+let g:strip_whitespace_on_save=1
+let g:strip_whitespace_confirm=0
+" }}}
 
 " coc settings {{{
 " if hidden is not set, TextEdit might fail.
