@@ -61,6 +61,15 @@ function update_program() {
       curl -Lsf https://zoom.us/client/latest/zoom_amd64.deb -o /tmp/zoom_amd64.deb
       sudo dpkg -i /tmp/zoom_amd64.deb
       ;;
+    vault)
+      if [ -z $2 ]; then
+        echo "Missing Vault Version!"
+      else
+        curl -Lsf https://releases.hashicorp.com/vault/${2}/vault_${2}_linux_amd64.zip -o /tmp/vault.zip
+        unzip -o -d $HOME/.local/bin/ /tmp/vault.zip
+        echo "Updated Vault to $2"
+      fi
+      ;;
   esac
 }
 
