@@ -43,7 +43,7 @@
       time                    # show time in seconds
       aws                     # aws profile
       dir                     # current directory
-      custom_tf_signal        # show what tf version is being used
+      # custom_tf_signal        # show what tf version is being used
       # kubecontext
       virtualenv
       status

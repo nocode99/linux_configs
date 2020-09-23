@@ -2,5 +2,7 @@
   name = Byron Kim
   email = nocode99@gmail.com
 [core]
-	pager = diff-so-fancy | less --tabs=4 -RFX
+  pager = diff-so-fancy | less --tabs=4 -RFX
   mergeoptions = --no-edit
+[credential]
+  helper = store
