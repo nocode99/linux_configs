@@ -1,7 +1,8 @@
 name: Add Github username as comment
 
 on:
-  pull_request: {branches: master}
+  pull_request:
+    types: [opened]
 
 jobs:
   github_username_commentor:
