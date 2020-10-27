@@ -93,8 +93,8 @@ function switchenv() {
 
 function s3size() {
   # USAGE: returns s3 bucket size in GB
-  # s3size kepler-devops (returns todays storage)
-  # s3size kepler-devops 7 (returns storage from 7 days ago)
+  # s3size s3-bucket (returns todays storage)
+  # s3size s3-bucket 7 (returns storage from 7 days ago)
   if [[ -z $1 ]]; then
     echo "pass in S3 Bucket name! e.g. s3size kepler-devops"
     return 1
@@ -172,6 +172,7 @@ if [ -f ~/.zplug/init.zsh ]; then
 
   zplug "paulirish/git-open", as:plugin
   zplug "greymd/docker-zsh-completion", as:plugin
+  zplug "qoomon/zjump", as:plugin
   zplug "zsh-users/zsh-completions", as:plugin
   zplug "zsh-users/zsh-syntax-highlighting", as:plugin
   zplug "junegunn/fzf-bin", \

@@ -80,7 +80,7 @@ for coc_plugin in [
       \ 'git@github.com:neoclide/coc-html.git',
       \ 'git@github.com:neoclide/coc-json.git',
       \ 'git@github.com:neoclide/coc-pairs.git',
-      \ 'git@github.com:neoclide/coc-python.git',
+      \ 'git@github.com:pappasam/coc-jedi.git',
       \ 'git@github.com:neoclide/coc-rls.git',
       \ 'git@github.com:neoclide/coc-snippets.git',
       \ 'git@github.com:neoclide/coc-tsserver.git',
@@ -110,7 +110,6 @@ Plug 'lepture/vim-jinja'
 Plug 'google/vim-searchindex'
 Plug 'rust-lang/rust.vim'
 Plug 'aklt/plantuml-syntax'
-Plug 'vim-syntastic/syntastic'
 Plug 'martinda/Jenkinsfile-vim-syntax'  "Jenkinsfile
 Plug 'nginx/nginx', { 'rtp': 'contrib/vim' }
 
@@ -477,10 +476,10 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 0
+" let g:syntastic_check_on_wq = 0
 
 " (Optional)Remove Info(Preview) window
 set completeopt-=preview
@@ -490,7 +489,7 @@ autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 " (Optional) Enable terraform plan to be include in filter
-let g:syntastic_terraform_tffilter_plan = 1
+" let g:syntastic_terraform_tffilter_plan = 1
 
 " (Optional) Default: 0, enable(1)/disable(0) plugin's keymapping
 let g:terraform_completion_keys = 1
