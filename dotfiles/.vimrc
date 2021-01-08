@@ -52,7 +52,7 @@ endif
 call plug#begin('~/.config/nvim/autoload')
 
 " ***** Functional
-Plug 'scrooloose/nerdtree'
+" Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-fugitive'
 Plug 'rbong/vim-flog'
 Plug 'vim-airline/vim-airline'
@@ -71,6 +71,10 @@ Plug 'weirongxu/plantuml-previewer.vim'
 Plug 'vim-scripts/groovyindent-unix' " groovy indentation
 Plug '~/.fzf'
 Plug 'tibabit/vim-templates'
+Plug 'Shougo/defx.nvim'
+Plug 'kristijanhusak/defx-git'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 for coc_plugin in [
       \ 'git@github.com:coc-extensions/coc-svelte.git',
@@ -87,11 +91,12 @@ for coc_plugin in [
       \ 'git@github.com:neoclide/coc-yaml.git',
       \ ]
     Plug coc_plugin, {
-          \ 'do': 'yarn install --frozen-lockfile && yarn build' }
+          \ 'do': 'yarn install --frozen-lockfile' }
 endfor
 
 " ****** THEMES
 Plug 'NLKNguyen/papercolor-theme'
+Plug 'kristijanhusak/defx-icons'
 
 " ***** Syntax Highlighters
 Plug 'hdima/python-syntax'
@@ -179,57 +184,213 @@ let g:tagbar_type_terraform = {
     \ 'sort' : 0
     \ }
 " }}}
-" Plug settings for Nerdtree ----------------- {{{
-map F2 for Nerdtree
-map <F2> :NERDTreeToggle<CR>
-let g:NERDTreeMapOpenInTab = '<C-t>'
-let g:NERDTreeMapOpenInTabSilent = ''
-let g:NERDTreeMapOpenSplit = '<C-s>'
-let g:NERDTreeMapOpenVSplit = '<C-v>'
-let g:NERDTreeShowLineNumbers = 1
-let g:NERDTreeCaseSensitiveSort = 0
-let g:NERDTreeWinPos = 'left'
-let g:NERDTreeWinSize = 31
-let g:NERDTreeAutoDeleteBuffer = 1
-let g:NERDTreeSortOrder = ['*', '\/$']
-let g:NERDTreeIgnore=[
-      \'venv$[[dir]]',
-      \'.terraform$[[dir]]',
-      \'__pycache__$[[dir]]',
-      \'.egg-info$[[dir]]',
-      \'node_modules$[[dir]]',
-      \'elm-stuff$[[dir]]',
-      \'\.aux$[[file]]',
-      \'\.toc$[[file]]',
-      \'\.pdf$[[file]]',
-      \'\.out$[[file]]',
-      \'\.o$[[file]]',
-      \]
 
-function! NERDTreeToggleCustom()
-    if exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1
-      " if NERDTree is open in window in current tab...
-      exec 'NERDTreeClose'
-    else
-      exec 'NERDTree %'
-    endif
-endfunction
+" Package: defx {{{
 
-function! s:CloseIfOnlyControlWinLeft()
-  if winnr("$") != 1
+" TogglePluginWindows:
+nnoremap <silent> <space>j <cmd>Defx
+      \ -buffer-name=defx
+      \ -columns=mark:git:indent:icons:filename:type
+      \ -direction=topleft
+      \ -search=`expand('%:p')`
+      \ -session-file=`g:custom_defx_state`
+      \ -ignored-files=`g:defx_ignored_files`
+      \ -split=vertical
+      \ -toggle
+      \ -floating-preview
+      \ -vertical-preview
+      \ -preview-height=50
+      \ -winwidth=31
+      \ -root-marker=''
+      \ <CR>
+nnoremap <silent> <space>J <cmd>Defx `expand('%:p:h')`
+      \ -buffer-name=defx
+      \ -columns=mark:git:indent:icons:filename:type
+      \ -direction=topleft
+      \ -search=`expand('%:p')`
+      \ -ignored-files=`g:defx_ignored_files`
+      \ -split=vertical
+      \ -floating-preview
+      \ -vertical-preview
+      \ -preview-height=50
+      \ -winwidth=31
+      \ -root-marker=''
+      \ <CR>
+
+" Override <C-w>H to delete defx buffers
+nnoremap <C-w>H <cmd>windo if &filetype == 'defx' <bar> close <bar> endif<CR><C-w>H
+
+let g:custom_defx_state = tempname()
+
+let g:defx_ignored_files = join([
+      \ '*.aux',
+      \ '*.egg-info/',
+      \ '*.o',
+      \ '*.out',
+      \ '*.pdf',
+      \ '*.pyc',
+      \ '*.toc',
+      \ '.*',
+      \ '__pycache__/',
+      \ 'build/',
+      \ 'dist/',
+      \ 'docs/_build/',
+      \ 'fonts/',
+      \ 'node_modules/',
+      \ 'pip-wheel-metadata/',
+      \ 'plantuml-images/',
+      \ 'site/',
+      \ 'target/',
+      \ 'venv.bak/',
+      \ 'venv/',
+      \ ], ',')
+
+let g:custom_defx_mappings = [
+      \ ['!             ', "defx#do_action('execute_command')"],
+      \ ['*             ', "defx#do_action('toggle_select_all')"],
+      \ [';             ', "defx#do_action('repeat')"],
+      \ ['<2-LeftMouse> ', "defx#is_directory() ? defx#do_action('open_tree', 'toggle') : defx#do_action('drop')"],
+      \ ['<C-g>         ', "defx#do_action('print')"],
+      \ ['<C-h>         ', "defx#do_action('resize', 31)"],
+      \ ['<C-i>         ', "defx#do_action('open_directory')"],
+      \ ['<C-o>         ', "defx#do_action('cd', ['..'])"],
+      \ ['<C-r>         ', "defx#do_action('redraw')"],
+      \ ['<C-t>         ', "defx#do_action('open', 'tabe')"],
+      \ ['<C-v>         ', "defx#do_action('open', 'vsplit')"],
+      \ ['<C-x>         ', "defx#do_action('drop', 'split')"],
+      \ ['<CR>          ', "defx#do_action('drop')"],
+      \ ['<RightMouse>  ', "defx#do_action('cd', ['..'])"],
+      \ ['O             ', "defx#do_action('open_tree', 'recursive:3')"],
+      \ ['p             ', "defx#do_action('preview')"],
+      \ ['a             ', "defx#do_action('toggle_select')"],
+      \ ['cc            ', "defx#do_action('copy')"],
+      \ ['cd            ', "defx#do_action('change_vim_cwd')"],
+      \ ['i             ', "defx#do_action('toggle_ignored_files')"],
+      \ ['ma            ', "defx#do_action('new_file')"],
+      \ ['md            ', "defx#do_action('remove')"],
+      \ ['mm            ', "defx#do_action('rename')"],
+      \ ['o             ', "defx#is_directory() ? defx#do_action('open_tree', 'toggle') : defx#do_action('drop')"],
+      \ ['P             ', "defx#do_action('paste')"],
+      \ ['q             ', "defx#do_action('quit')"],
+      \ ['ss            ', "defx#do_action('multi', [['toggle_sort', 'TIME'], 'redraw'])"],
+      \ ['t             ', "defx#do_action('open_tree', 'toggle')"],
+      \ ['u             ', "defx#do_action('cd', ['..'])"],
+      \ ['x             ', "defx#do_action('execute_system')"],
+      \ ['yy            ', "defx#do_action('yank_path')"],
+      \ ['~             ', "defx#do_action('cd')"],
+      \ ]
+
+function! s:autocmd_custom_defx()
+  if !exists('g:loaded_defx')
     return
   endif
-  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
-        \ || &buftype == 'quickfix'
-    q
+  call defx#custom#column('filename', {
+        \ 'min_width': 100,
+        \ 'max_width': 100,
+        \ })
+endfunction
+
+function! s:open_defx_if_directory()
+  if !exists('g:loaded_defx')
+    echom 'Defx not installed, skipping...'
+    return
+  endif
+  if isdirectory(expand(expand('%:p')))
+    Defx `expand('%:p')`
+        \ -buffer-name=defx
+        \ -columns=mark:git:indent:icons:filename:type:size:time
   endif
 endfunction
 
-augroup CloseIfOnlyControlWinLeft
-  au!
-  au BufEnter * call s:CloseIfOnlyControlWinLeft()
-augroup END
+function! s:defx_redraw()
+  if !exists('g:loaded_defx')
+    return
+  endif
+  call defx#redraw()
+endfunction
+
+function! s:defx_buffer_remappings() abort
+  " Define mappings
+  for [key, value] in g:custom_defx_mappings
+    execute 'nnoremap <silent><buffer><expr> ' . key . ' ' . value
+  endfor
+  nnoremap <silent><buffer> ?
+        \ :for [key, value] in g:custom_defx_mappings <BAR>
+        \ echo '' . key . ': ' . value <BAR>
+        \ endfor<CR>
+endfunction
+
+augroup custom_defx
+  autocmd!
+  autocmd VimEnter * call s:autocmd_custom_defx()
+  autocmd BufEnter * call s:open_defx_if_directory()
+  autocmd BufLeave,BufWinLeave \[defx\]* silent call defx#call_action('add_session')
+  autocmd FileType defx setlocal nonumber norelativenumber
+augroup end
+
+augroup custom_remap_defx
+  autocmd!
+  autocmd FileType defx call s:defx_buffer_remappings()
+  autocmd FileType defx nmap     <buffer> <silent> gp <Plug>(defx-git-prev)
+  autocmd FileType defx nmap     <buffer> <silent> gn <Plug>(defx-git-next)
+  autocmd FileType defx nmap     <buffer> <silent> gs <Plug>(defx-git-stage)
+  autocmd FileType defx nmap     <buffer> <silent> gu <Plug>(defx-git-reset)
+  autocmd FileType defx nmap     <buffer> <silent> gd <Plug>(defx-git-discard)
+  autocmd FileType defx nnoremap <buffer> <silent> <C-l> <cmd>ResizeWindowWidth<CR>
+augroup end
 " }}}
+
+" " Plug settings for Nerdtree ----------------- {{{
+" map F2 for Nerdtree
+" map <F2> :NERDTreeToggle<CR>
+" let g:NERDTreeMapOpenInTab = '<C-t>'
+" let g:NERDTreeMapOpenInTabSilent = ''
+" let g:NERDTreeMapOpenSplit = '<C-s>'
+" let g:NERDTreeMapOpenVSplit = '<C-v>'
+" let g:NERDTreeShowLineNumbers = 1
+" let g:NERDTreeCaseSensitiveSort = 0
+" let g:NERDTreeWinPos = 'left'
+" let g:NERDTreeWinSize = 31
+" let g:NERDTreeAutoDeleteBuffer = 1
+" let g:NERDTreeSortOrder = ['*', '\/$']
+" let g:NERDTreeIgnore=[
+"       \'venv$[[dir]]',
+"       \'.terraform$[[dir]]',
+"       \'__pycache__$[[dir]]',
+"       \'.egg-info$[[dir]]',
+"       \'node_modules$[[dir]]',
+"       \'elm-stuff$[[dir]]',
+"       \'\.aux$[[file]]',
+"       \'\.toc$[[file]]',
+"       \'\.pdf$[[file]]',
+"       \'\.out$[[file]]',
+"       \'\.o$[[file]]',
+"       \]
+
+" function! NERDTreeToggleCustom()
+"     if exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1
+"       " if NERDTree is open in window in current tab...
+"       exec 'NERDTreeClose'
+"     else
+"       exec 'NERDTree %'
+"     endif
+" endfunction
+
+" function! s:CloseIfOnlyControlWinLeft()
+"   if winnr("$") != 1
+"     return
+"   endif
+"   if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+"         \ || &buftype == 'quickfix'
+"     q
+"   endif
+" endfunction
+
+" augroup CloseIfOnlyControlWinLeft
+"   au!
+"   au BufEnter * call s:CloseIfOnlyControlWinLeft()
+" augroup END
+" " }}}
 " vim-go settings ------------------ {{{
 let g:go_template_autocreate = 0
 " }}}
@@ -275,6 +436,9 @@ try
     let g:airline_theme = 'papercolor
 catch
 endtry
+
+" }}}
+" defx-icon settings {{{
 
 " }}}
 " vim-go settings {{{
@@ -684,30 +848,27 @@ command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organize
 set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Using CocList
-" Show all diagnostics
-nnoremap <silent> <space>a  :<C-u>CocList diagnostics<cr>
-" Manage extensions
-nnoremap <silent> <space>e  :<C-u>CocList extensions<cr>
 " Show commands
-nnoremap <silent> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent>        <leader>sc <cmd>CocList commands<cr>
 " Find symbol of current document
-nnoremap <silent> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent>        <leader>so <cmd>CocList -A outline<cr>
 " Search workspace symbols
-nnoremap <silent> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent>        <leader>sw <cmd>CocList -A -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent>        <leader>sn <cmd>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent>        <leader>sp <cmd>CocPrev<CR>
 " Resume latest coc list
-nnoremap <silent> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent>        <leader>sl <cmd>CocListResume<CR>
 " }}}
 " Simple remap to update terraform lines to first class expressions
 vnoremap <C-t> :'<,'>!tr -d '"{$}'<CR>
 " lens.vim settings {{{
-let g:lens#disabled_filetypes = ['nerdtree', 'fzf']
+let g:lens#animate = 0
+let g:lens#disabled_filetypes = ['nerdtree', 'fzf', 'defx']
 
 " coc-pairs to auto indent braces, parentheses, etc
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-				\: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+  \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " }}}
