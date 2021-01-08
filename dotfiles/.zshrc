@@ -93,8 +93,8 @@ function switchenv() {
 
 function s3size() {
   # USAGE: returns s3 bucket size in GB
-  # s3size kepler-devops (returns todays storage)
-  # s3size kepler-devops 7 (returns storage from 7 days ago)
+  # s3size s3-bucket (returns todays storage)
+  # s3size s3-bucket 7 (returns storage from 7 days ago)
   if [[ -z $1 ]]; then
     echo "pass in S3 Bucket name! e.g. s3size kepler-devops"
     return 1
@@ -163,6 +163,25 @@ function copy() {
   cat $1 | xclip -selection clipboard
 }
 
+function ssm {
+  # AWS SSM connect to instance. Pass in ECS cluster to select any instance
+  # in the cluster or pass in instance-id
+  if [ -z "$1" ]; then
+    echo "Must Define a cluster! eg mgmt-ecs"
+    return 1
+  fi
+
+  if [ -z "$2" ]; then
+    local INSTANCE_INDEX=0
+  else
+    local INSTANCE_INDEX=$2
+  fi
+
+  local ARN=$(aws ecs list-container-instances --cluster $1 --status ACTIVE | jq ".containerInstanceArns [$INSTANCE_INDEX]" | tr -d '"')
+  local ID=$(aws ecs describe-container-instances --cluster $1 --container-instances $ARN | jq '.containerInstances [0].ec2InstanceId' | tr -d '"')
+  aws ssm start-session --target $ID
+}
+
 ################################################################################
 # ZPLUG SETTINGS
 ################################################################################
@@ -172,8 +191,9 @@ if [ -f ~/.zplug/init.zsh ]; then
 
   zplug "paulirish/git-open", as:plugin
   zplug "greymd/docker-zsh-completion", as:plugin
+  zplug "qoomon/zjump", as:plugin
   zplug "zsh-users/zsh-completions", as:plugin
-  zplug "zsh-users/zsh-syntax-highlighting", as:plugin
+  zplug "zdharma/fast-syntax-highlighting", as:plugin
   zplug "junegunn/fzf-bin", \
     from:gh-r, \
     as:command, \
@@ -411,7 +431,6 @@ CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
 POETRY_ROOT="$HOME/.poetry/bin"
 ASDF_SHIMS="$HOME/.asdf/shims"
-KNOT_ROOT="$HOME/src/knotel/mono/tools/knot/bin2"
 
 export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin
 
@@ -426,3 +445,6 @@ fi
 if [ ! -z $ZPROF ]; then
   zprof
 fi
+
+export PATH="$HOME/.poetry/bin:$PATH"
+
