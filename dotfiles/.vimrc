@@ -100,7 +100,7 @@ Plug 'kristijanhusak/defx-icons'
 
 " ***** Syntax Highlighters
 Plug 'hdima/python-syntax'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', { 'do': ':silent GoUpdateBinaries' }
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'elzr/vim-json'
