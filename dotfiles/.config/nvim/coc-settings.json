@@ -4,11 +4,16 @@
       "command": "terraform-lsp",
       "filetypes": ["terraform"],
       "initializationOptions": {}
+    },
+    "nginx-language-server": {
+      "command": "nginx-language-server",
+      "filetypes": ["nginx"],
+      "rootPatterns": ["nginx.conf", ".git"]
     }
   },
   "suggest.autoTrigger": "always",
   "diagnostic.enable": false,
   "suggest.noselect": true,
   "pairs.enableCharacters": ["(", "[", "{", "<", "\"", "'", "`"]
-}
+  }
 
