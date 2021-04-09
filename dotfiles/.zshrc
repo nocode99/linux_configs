@@ -38,6 +38,10 @@ function drmi() {
   done
 }
 
+function get_github_latest_release() {
+  curl -s "https://api.github.com/repos/$1/releases/latest" | jq -r .tag_name
+}
+
 function klone() {
   if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
     git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
@@ -69,6 +73,14 @@ function update_program() {
         unzip -o -d $HOME/.local/bin/ /tmp/vault.zip
         echo "Updated Vault to $2"
       fi
+      ;;
+    yy) # yakyak
+      local yy_version=$(get_github_latest_release "yakyak/yakyak")
+      local yy_sem="${yy_version//v}"
+      curl -o /tmp/yakyak.deb  \
+        -Lsf https://github.com/yakyak/yakyak/releases/download/$yy_version/yakyak-$yy_sem-linux-amd64.deb
+      sudo dpkg -i /tmp/yakyak.deb
+      rm -f /tmp/yakyak.deb
       ;;
   esac
 }
