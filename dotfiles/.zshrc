@@ -133,19 +133,6 @@ function s3size() {
     | awk '{print $1/1024/1024/1024 " GB "}'
 }
 
-function dato() {
-  PAYLOAD=$(jq -n \
-    --arg user "$1" \
-    --arg email "$2" \
-    '{adhoc: true, username: $user, recipient: $email}')
-  echo $PAYLOAD
-  aws lambda invoke \
-    --function-name kip-credential-rotater \
-    --log-type Tail \
-    --payload $PAYLOAD \
-    /tmp/lambda.txt
-}
-
 function include() {
   [[ -f "$1" ]] && source "$1"
 }
@@ -160,14 +147,6 @@ function params() {
     --recursive \
     | jq '.Parameters[].Name' -r \
     | sort
-}
-
-function cctf() {
-  if [[ $1 != "" ]]; then
-    cookiecutter git@github.com:KeplerGroup/cookiecutter-terraform-$1
-  else
-    echo "need to include argument! ie `cctf s3-bucket`"
-  fi
 }
 
 function copy() {
@@ -288,11 +267,6 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
-
-# export FZF_COMPLETION_TRIGGER=''
-# export FZF_DEFAULT_OPTS="--bind=ctrl-o:accept --ansi"
-# FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!.git/*"'
-# export FZF_DEFAULT_COMMAND
 
 # You may need to manually set your language environment
 export LANG=en_US.UTF-8
@@ -451,7 +425,7 @@ export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$H
 
 typeset -aU path
 
-if [[ -f /usr/bin/local/direnv ]] || [[ -f /usr/bin/direnv ]]; then
+if [[ -f $(which direnv) ]]; then
   eval "$(direnv hook $SHELL)"
 fi
 
