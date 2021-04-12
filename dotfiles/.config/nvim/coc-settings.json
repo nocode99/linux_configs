@@ -1,9 +1,14 @@
 {
   "languageserver": {
     "terraform": {
-      "command": "terraform-lsp",
-      "filetypes": ["terraform"],
-      "initializationOptions": {}
+      "command": "terraform-ls",
+      "args": ["serve"],
+      "filetypes": [
+        "terraform",
+        "tf"
+      ],
+      "initializationOptions": {},
+      "settings": {}
     },
     "nginx-language-server": {
       "command": "nginx-language-server",
@@ -15,5 +20,5 @@
   "diagnostic.enable": false,
   "suggest.noselect": true,
   "pairs.enableCharacters": ["(", "[", "{", "<", "\"", "'", "`"]
-  }
+}
 

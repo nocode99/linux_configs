@@ -301,7 +301,9 @@ export LANG=en_US.UTF-8
 # Auto Completion
 ################################################################################
 
-autoload -U +X bashcompinit && bashcompinit
+autoload -U +X bashcompinit
+bashcompinit
+
 zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
 
 # CURRENT STATE: does not select any sort of searching
@@ -370,18 +372,19 @@ include ~/.sensitive/zsh
 
 if [[ "$OSTYPE" == *"linux"* ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
-    alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
-    alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
     alias cat='bat'
     alias pbcopy='xclip -selection clipboard'
     alias pbpaste='xclip -select clipboard -o'
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
-    alias ll='ls -alhG'
+    # do nothing
 fi
 
 ################################################################################
 # ALIAS
 ###############################################################################
+alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
+alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
+
 alias ..='cd ../..'
 alias ...='cd ../../..'
 alias ....='cd ../../../..'
