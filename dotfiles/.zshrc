@@ -356,8 +356,8 @@ fi
 ################################################################################
 # ALIAS
 ###############################################################################
-alias ll='exa -alh --group-directories-first --color-scale --time-style long-iso'
-alias l='exa -alh --group-directories-first --color-scale --time-style long-iso'
+alias ll='lsd -l'
+alias l='lsd -l'
 
 alias ..='cd ../..'
 alias ...='cd ../../..'

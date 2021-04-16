@@ -1,8 +1,19 @@
 [user]
   name = Byron Kim
   email = nocode99@gmail.com
+
 [core]
-  pager = diff-so-fancy | less --tabs=4 -RFX
+  editor = nvim
+  pager = delta
   mergeoptions = --no-edit
-[credential]
-  helper = store
+
+[delta]
+  features = side-by-side line-numbers decorations
+  whitespace-error-style = 22 reverse
+  navigate = true
+
+
+[delta "decorations"]
+  commit-decoration-style = bold yellow box ul
+  file-style = bold yellow ul
+  file-decoration-style = none
