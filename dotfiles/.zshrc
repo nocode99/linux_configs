@@ -421,7 +421,7 @@ LOCAL_ROOT="$HOME/.local/bin"
 POETRY_ROOT="$HOME/.poetry/bin"
 ASDF_SHIMS="$HOME/.asdf/shims"
 
-export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin
+export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin:/usr/local/sbin
 
 typeset -aU path
 
