@@ -350,14 +350,15 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     alias pbcopy='xclip -selection clipboard'
     alias pbpaste='xclip -select clipboard -o'
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
-    # do nothing
+  bindkey "\e[1;3D" backward-word # ⌥←
+  bindkey "\e[1;3C" forward-word # ⌥→
 fi
 
 ################################################################################
 # ALIAS
 ###############################################################################
-alias ll='lsd -l'
-alias l='lsd -l'
+alias ll='lsd -al'
+alias l='lsd -al'
 
 alias ..='cd ../..'
 alias ...='cd ../../..'
