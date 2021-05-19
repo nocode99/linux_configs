@@ -108,7 +108,9 @@ Plug 'plasticboy/vim-markdown'
 Plug 'docker/docker' , {'rtp': '/contrib/syntax/vim/'}
 Plug 'hashivim/vim-vagrant'
 Plug 'hashivim/vim-terraform'
+Plug 'rhadley-recurly/vim-terragrunt'
 Plug 'hashivim/vim-vaultproject'
+" Plug 'jvirtanen/vim-hcl'
 Plug 'pearofducks/ansible-vim'
 Plug 'Glench/Vim-Jinja2-Syntax'
 Plug 'lepture/vim-jinja'
@@ -396,6 +398,8 @@ let g:go_template_autocreate = 0
 " }}}
 " vim-commentary ------------------ {{{
 autocmd Filetype terraform setlocal commentstring=#\ %s
+au BufRead,BufNewFile *.hcl set filetype=hcl
+autocmd Filetype hcl setlocal commentstring=#\ %s
 " }}}
 " Configure Rainbow ------------- {{{
 let g:rainbow#max_level = 16
@@ -428,12 +432,14 @@ let g:PaperColor_Theme_Options = {
       \   }
 
 try
+    syntax on
+    set termguicolors
     set t_Co=256 " says terminal has 256 colors
     set background=dark
     colorscheme PaperColor
     " Set background to black
     "highlight Normal ctermbg=NONE
-    let g:airline_theme = 'papercolor
+    let g:airline_theme = 'papercolor'
 catch
 endtry
 

@@ -383,6 +383,9 @@ alias vauth='unset VAULT_TOKEN && vault login -method=github'
 alias vgit='echo $VAULT_AUTH_GITHUB_TOKEN | pbcopy'
 alias smux='mux start kepler'
 
+# terraform/terragrunt
+alias tgp='terragrunt plan'
+
 # returns current public IP
 alias myip='curl -sq checkip.amazonaws.com | pbcopy'
 
