@@ -1,14 +1,10 @@
 {
   "languageserver": {
-    "terraform": {
+    "terraform-ls": {
       "command": "terraform-ls",
       "args": ["serve"],
-      "filetypes": [
-        "terraform",
-        "tf"
-      ],
-      "initializationOptions": {},
-      "settings": {}
+      "filetypes": ["terraform", "tf"],
+      "rootPatterns": ["Makefile", ".git"]
     },
     "nginx-language-server": {
       "command": "nginx-language-server",
