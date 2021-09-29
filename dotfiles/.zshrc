@@ -44,7 +44,7 @@ function get_github_latest_release() {
 
 function klone() {
   if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
-    git clone git@github.com:KeplerGroup/$1.git ~/src/KeplerGroup/$1
+    git clone git@github.com:KeplerGroup$2/$1.git ~/src/KeplerGroup$2/$1
   else
     echo "Repo is already kloned!"
   fi
@@ -62,7 +62,9 @@ function update_program() {
       curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
       ;;
     zoom)
-      curl -Lsf https://zoom.us/client/latest/zoom_amd64.deb -o /tmp/zoom_amd64.deb
+      if [[ ! -f /tmp/zoom_amd64.deb ]]; then
+        curl -Lsf https://zoom.us/client/latest/zoom_amd64.deb -o /tmp/zoom_amd64.deb
+      fi
       sudo dpkg -i /tmp/zoom_amd64.deb
       ;;
     vault)
