@@ -74,33 +74,10 @@ local layoutSingleScreen = {
   {vscode, nil, mainMonitor, hs.layout.maximized, nil, nil},
 }
 
-local function launchApps()
-  for i, appName in ipairs(appNames) do
-    hs.application.launchOrFocus(appName)
-  end
-end
-
-local menu = hs.menubar.new()
-local function setSingleScreen()
-  menu:setTitle("🖥1")
-  menu:setTooltip("Single Screen Layout")
-  hs.layout.apply(layoutSingleScreen)
-end
-
-local function setLGScreen()
-  menu:setTitle("🖥LG")
-  menu:setTooltip("LG Widescreen Layout")
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Up", function()
   hs.layout.apply(lgWideScreen)
-end
+end)
 
-local function enableMenu()
-  menu:setTitle("🖥")
-  menu:setTooltip("No Layout")
-  menu:setMenu({
-      { title = "Launch Apps", fn = launchApps },
-      { title = "Set LG Widescreen", fn = setLGScreen },
-      { title = "Set Single Screen Layout", fn = setSingleScreen },
-  })
-end
-
-enableMenu()
+hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Down", function()
+  hs.layout.apply(layoutSingleScreen)
+end)
