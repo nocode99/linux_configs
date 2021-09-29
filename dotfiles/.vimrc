@@ -135,6 +135,66 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 call plug#end()
 
 " }}}
+" Functions ----- {{{
+" General: spacesurround and pairs {{{
+
+" Helper functions to format surrounding text as I type
+" The function is: Surround<Key>, where key is the intended mapping key
+
+" 1. Add two spaces around cursor when pressing space bar.
+" 2. Spaces will be deleted if cursor is in middle with 1 space on either side.
+"     For example: ( | ), pressing <bs> or <c-w> should delete surrounding
+"     spaces
+let s:surround_spaces = {
+      \ '()': 1,
+      \ '[]': 1,
+      \ '{}': 1,
+      \ }
+
+function! SurroundSpace()
+  let line_this = getline('.')
+  let col_this = col('.')
+  let char_left = line_this[col_this - 2]
+  let char_right = line_this[col_this - 1]
+  let left_right = char_left . char_right
+  if has_key(s:surround_spaces, left_right)
+    call feedkeys("\<space>\<space>\<left>", 'ni')
+  else
+    call feedkeys("\<space>", 'ni')
+  endif
+endfunction
+
+" delete surround items if surrounding cursor with no space
+" for example: (|)
+" when pressing delete, surrounding parentheses will be deleted
+let s:surround_delete = {
+      \ "''": 1,
+      \ '""': 1,
+      \ '()': 1,
+      \ '[]': 1,
+      \ '{}': 1,
+      \ }
+
+function! SurroundBackspace()
+  let line_this = getline('.')
+  let col_this = col('.')
+  let char_left = line_this[col_this - 3]
+  let char_left_mid = line_this[col_this - 2]
+  let char_right_mid = line_this[col_this - 1]
+  let char_right = line_this[col_this]
+  let mid_left_right = char_left_mid . char_right_mid
+  let left_right = char_left . char_right
+  if has_key(s:surround_delete, mid_left_right)
+    call feedkeys("\<bs>\<right>\<bs>", 'ni')
+  elseif mid_left_right != '  '
+    call feedkeys("\<bs>", 'ni')
+  elseif has_key(s:surround_spaces, left_right)
+    execute "normal! \<right>di" . left_right[1]
+  else
+    call feedkeys("\<bs>", 'ni')
+  endif
+endfunction
+" }}}
 " Plug settings for Status Line (powerline, airline) ----------------- {{{
 "set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
 set laststatus=2
@@ -188,36 +248,6 @@ let g:tagbar_type_terraform = {
 " }}}
 
 " Package: defx {{{
-
-" TogglePluginWindows:
-nnoremap <silent> <space>j <cmd>Defx
-      \ -buffer-name=defx
-      \ -columns=mark:git:indent:icons:filename:type
-      \ -direction=topleft
-      \ -search=`expand('%:p')`
-      \ -session-file=`g:custom_defx_state`
-      \ -ignored-files=`g:defx_ignored_files`
-      \ -split=vertical
-      \ -toggle
-      \ -floating-preview
-      \ -vertical-preview
-      \ -preview-height=50
-      \ -winwidth=31
-      \ -root-marker=''
-      \ <CR>
-nnoremap <silent> <space>J <cmd>Defx `expand('%:p:h')`
-      \ -buffer-name=defx
-      \ -columns=mark:git:indent:icons:filename:type
-      \ -direction=topleft
-      \ -search=`expand('%:p')`
-      \ -ignored-files=`g:defx_ignored_files`
-      \ -split=vertical
-      \ -floating-preview
-      \ -vertical-preview
-      \ -preview-height=50
-      \ -winwidth=31
-      \ -root-marker=''
-      \ <CR>
 
 " Override <C-w>H to delete defx buffers
 nnoremap <C-w>H <cmd>windo if &filetype == 'defx' <bar> close <bar> endif<CR><C-w>H
@@ -616,25 +646,25 @@ augroup end
 " courtesy of pappasam
 set completeopt=menuone,longest,preview
 
-" Omnicompletion:
-" <C-@> is signal sent by terminal when pressing <C-Space>
-" Need to include <C-Space> as well for neovim sometimes
-inoremap <C-@> <C-x><C-o>
-inoremap <C-space> <C-x><C-o>
+" " Omnicompletion:
+" " <C-@> is signal sent by terminal when pressing <C-Space>
+" " Need to include <C-Space> as well for neovim sometimes
+" inoremap <C-@> <C-x><C-o>
+" inoremap <C-space> <C-x><C-o>
 
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#goto_command = "<C-]>"
-let g:jedi#documentation_command = "<leader>sd"
-let g:jedi#usages_command = "<leader>su"
-let g:jedi#rename_command = "<leader>sr"
+" let g:jedi#auto_vim_configuration = 0
+" let g:jedi#goto_command = "<C-]>"
+" let g:jedi#documentation_command = "<leader>sd"
+" let g:jedi#usages_command = "<leader>su"
+" let g:jedi#rename_command = "<leader>sr"
 
 
-augroup vimscript_complete
-  autocmd!
-  autocmd FileType vim nnoremap <buffer> <C-]> yiw:help <C-r>"<CR>
-  autocmd FileType vim inoremap <buffer> <C-@> <C-x><C-v>
-  autocmd FileType vim inoremap <buffer> <C-space> <C-x><C-v>
-augroup END
+" augroup vimscript_complete
+"   autocmd!
+"   autocmd FileType vim nnoremap <buffer> <C-]> yiw:help <C-r>"<CR>
+"   autocmd FileType vim inoremap <buffer> <C-@> <C-x><C-v>
+"   autocmd FileType vim inoremap <buffer> <C-space> <C-x><C-v>
+" augroup END
 
 " let g:virtual_auto_activate = 1
 
@@ -674,6 +704,7 @@ let g:vim_filetype_formatter_commands = {
       \}
 
 " Plugin: Markdown-preview.vim {{{
+let g:mkdp_browser = 'firefox'
 let g:mkdp_auto_start = 0
 let g:mkdp_auto_close = 0
 
@@ -761,40 +792,10 @@ set shortmess+=c
 " always show signcolumns
 set signcolumn=yes
 
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-" Use <c-space> to trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-
-" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Or use `complete_info` if your vim support it, like:
-" inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
-
-" Use `[g` and `]g` to navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
-
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
 
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -807,13 +808,6 @@ endfunction
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-
-" Remap for format selected region
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-
 augroup mygroup
   autocmd!
   " Setup formatexpr specified filetype(s).
@@ -822,59 +816,225 @@ augroup mygroup
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
 
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-xmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Create mappings for function text object, requires document symbols feature of languageserver.
-xmap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap if <Plug>(coc-funcobj-i)
-omap af <Plug>(coc-funcobj-a)
-
-" Use <TAB> for select selections ranges, needs server support, like: coc-tsserver, coc-python
-nmap <silent> <TAB> <Plug>(coc-range-select)
-xmap <silent> <TAB> <Plug>(coc-range-select)
-
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-
-" Use `:Fold` to fold current buffer
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" use `:OR` for organize import of current buffer
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
-
-" Add status line support, for integration with other plugin, checkout `:h coc-status`
-set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
-
-" Using CocList
-" Show commands
-nnoremap <silent>        <leader>sc <cmd>CocList commands<cr>
-" Find symbol of current document
-nnoremap <silent>        <leader>so <cmd>CocList -A outline<cr>
-" Search workspace symbols
-nnoremap <silent>        <leader>sw <cmd>CocList -A -I symbols<cr>
-" Do default action for next item.
-nnoremap <silent>        <leader>sn <cmd>CocNext<CR>
-" Do default action for previous item.
-nnoremap <silent>        <leader>sp <cmd>CocPrev<CR>
-" Resume latest coc list
-nnoremap <silent>        <leader>sl <cmd>CocListResume<CR>
 " }}}
+" General: mappings {{{
+
+let mapleader = ','
+
+function! s:default_key_mappings()
+  " Coc: settings for coc.nvim
+  nmap     <silent>        <C-]> <Plug>(coc-definition)
+  nmap     <silent>        <C-LeftMouse> <Plug>(coc-definition)
+  nnoremap <silent>        <C-k> <cmd>call <SID>show_documentation()<CR>
+  inoremap <silent>        <C-s> <cmd>call CocActionAsync('showSignatureHelp')<CR>
+  nmap     <silent>        <leader>st <Plug>(coc-type-definition)
+  nmap     <silent>        <leader>si <Plug>(coc-implementation)
+  nmap     <silent>        <leader>su <Plug>(coc-references)
+  nmap     <silent>        <leader>sr <Plug>(coc-rename)
+  nmap     <silent>        <leader>sa v<Plug>(coc-codeaction-selected)
+  vmap     <silent>        <leader>sa <Plug>(coc-codeaction-selected)
+  nnoremap <silent>        <leader>sn <cmd>CocNext<CR>
+  nnoremap <silent>        <leader>sp <cmd>CocPrev<CR>
+  nnoremap <silent>        <leader>sl <cmd>CocListResume<CR>
+  nnoremap <silent>        <leader>sc <cmd>CocList commands<cr>
+  nnoremap <silent>        <leader>so <cmd>CocList -A outline<cr>
+  nnoremap <silent>        <leader>sw <cmd>CocList -A -I symbols<cr>
+  inoremap <silent> <expr> <c-space> coc#refresh()
+
+  nnoremap <silent><nowait><expr> <C-e> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-e>"
+  nnoremap <silent><nowait><expr> <C-y> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-y>"
+  inoremap <silent><nowait><expr> <C-e> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<C-e>"
+  inoremap <silent><nowait><expr> <C-y> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<C-y>"
+  vnoremap <silent><nowait><expr> <C-e> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-e>"
+  vnoremap <silent><nowait><expr> <C-y> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-y>"
+
+  imap     <silent> <expr> <C-l> coc#expandable() ? "<Plug>(coc-snippets-expand)" : "\<C-y>"
+  inoremap <silent> <expr> <CR> pumvisible() ? '<CR>' : '<C-g>u<CR><c-r>=coc#on_enter()<CR>'
+  nnoremap                 <leader>d <cmd>call CocActionAsync('diagnosticToggle')<CR>
+  nnoremap                 <leader>D <cmd>call CocActionAsync('diagnosticPreview')<CR>
+  nmap     <silent>        ]g <Plug>(coc-diagnostic-next)
+  nmap     <silent>        [g <Plug>(coc-diagnostic-prev)
+
+  " Pairs: Utilities for dealing with pairs
+  " NOTE: <C-w><C-p> gets you in, and out, of floating windows
+  inoremap <silent>        <space>  <cmd>call SurroundSpace()<CR>
+  inoremap <silent>        <bs>     <cmd>call SurroundBackspace()<CR>
+  inoremap <silent>        <C-h>    <cmd>call SurroundBackspace()<CR>
+  inoremap <silent>        <C-w>    <cmd>call SurroundCw()<CR>
+  inoremap <silent>        }        <cmd>call SurroundPairCloseJump('{' , '}' )<CR>
+  inoremap <silent>        )        <cmd>call SurroundPairCloseJump('(' , ')' )<CR>
+  inoremap <silent>        ]        <cmd>call SurroundPairCloseJump('\[', '\]')<CR>
+
+  " Escape: also clears highlighting
+  nnoremap <silent> <esc> :noh<return><esc>
+
+  " J: unmap in normal mode unless range explicitly specified
+  nnoremap <silent> <expr> J v:count == 0 ? '<esc>' : 'J'
+
+  " SearchBackward: remap comma to single quote
+  nnoremap ' ,
+
+  " Exit: Preview, Help, QuickFix, and Location List
+  inoremap <silent> <C-c> <Esc>:pclose <BAR> cclose <BAR> lclose <CR>a
+  nnoremap <silent> <C-c> :pclose <BAR> cclose <BAR> lclose <CR>
+
+  " InsertModeHelpers: Insert one line above after enter
+  inoremap <M-CR> <CR><C-o>O
+
+  " MoveVisual: up and down visually only if count is specified before
+  nnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+  vnoremap <expr> k v:count == 0 ? 'gk' : 'k'
+  nnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+  vnoremap <expr> j v:count == 0 ? 'gj' : 'j'
+
+  " Macro Repeater:
+  " Enable calling a function within the mapping for @
+  nnoremap <expr> <plug>@init AtInit()
+  " A macro could, albeit unusually, end in Insert mode.
+  inoremap <expr> <plug>@init "\<c-o>".AtInit()
+  nnoremap <expr> <plug>qstop QStop()
+  inoremap <expr> <plug>qstop "\<c-o>".QStop()
+  " The following code allows pressing . immediately after
+  " recording a macro to play it back.
+  nmap <expr> @ AtReg()
+  " Finally, remap q! Recursion is actually useful here I think,
+  " otherwise I would use 'nnoremap'.
+  nmap <expr> q QStart()
+
+  " MoveTabs: goto tab number. Same as Firefox
+  nnoremap <A-1> 1gt
+  nnoremap <A-2> 2gt
+  nnoremap <A-3> 3gt
+  nnoremap <A-4> 4gt
+  nnoremap <A-5> 5gt
+  nnoremap <A-6> 6gt
+  nnoremap <A-7> 7gt
+  nnoremap <A-8> 8gt
+  nnoremap <A-9> 9gt
+
+  " Substitute: replace word under cursor
+  nnoremap <leader><leader>s yiw:%s/\<<C-R>0\>//g<Left><Left>
+  vnoremap <leader><leader>s y:%s/<C-R>0//g<Left><Left>
+
+  " IndentComma: placing commas one line down; usable with repeat operator '.'
+  nnoremap <silent> <Plug>NewLineComma f,wi<CR><Esc>
+        \:call repeat#set("\<Plug>NewLineComma")<CR>
+  nmap <leader><CR> <Plug>NewLineComma
+
+  " Jinja2Toggle: the following mapping toggles jinja2 for any filetype
+  nnoremap <silent> <leader><leader>j <cmd>Jinja2Toggle<CR>
+
+  " ToggleRelativeNumber: uses custom functions
+  nnoremap <silent> <leader>R <cmd>ToggleNumber<CR>
+  nnoremap <silent> <leader>r <cmd>ToggleRelativeNumber<CR>
+
+  " TogglePluginWindows:
+  nnoremap <silent> <space>j <cmd>Defx
+        \ -buffer-name=defx
+        \ -columns=mark:git:indent:icons:space:filename:type
+        \ -direction=topleft
+        \ -search=`expand('%:p')`
+        \ -session-file=`g:custom_defx_state`
+        \ -ignored-files=`g:defx_ignored_files`
+        \ -split=vertical
+        \ -toggle
+        \ -floating-preview
+        \ -vertical-preview
+        \ -preview-height=50
+        \ -preview-width=85
+        \ -winwidth=31
+        \ -root-marker=''
+        \ <CR>
+  nnoremap <silent> <space>J <cmd>Defx `expand('%:p:h')`
+        \ -buffer-name=defx
+        \ -columns=mark:git:indent:icons:space:filename:type
+        \ -direction=topleft
+        \ -search=`expand('%:p')`
+        \ -ignored-files=`g:defx_ignored_files`
+        \ -split=vertical
+        \ -floating-preview
+        \ -vertical-preview
+        \ -preview-height=50
+        \ -preview-width=85
+        \ -winwidth=31
+        \ -root-marker=''
+        \ <CR>
+  nnoremap <silent> <space>l <cmd>Vista!!<CR>
+  nnoremap <silent> <space>L <cmd>Vista focus<CR>
+  nnoremap <silent> <space>u <cmd>UndotreeToggle<CR>
+
+  " Override <C-w>H to delete defx buffers
+  nnoremap <C-w>H <cmd>windo if &filetype == 'defx' <bar> close <bar> endif<CR><C-w>H
+
+  " IndentLines: toggle if indent lines is visible
+  nnoremap <silent> <leader>i <cmd>IndentLinesToggle<CR>
+
+  " ResizeWindow: up and down; relies on custom functions
+  nnoremap <silent> <leader><leader>h <cmd>ResizeWindowHeight<CR>
+  nnoremap <silent> <leader><leader>w <cmd>ResizeWindowWidth<CR>
+
+  " Sandwich: below mappings address the issue raised here:
+  " https://github.com/machakann/vim-sandwich/issues/62
+  xmap s  <Nop>
+  omap s  <Nop>
+  xmap ib <Plug>(textobj-sandwich-auto-i)
+  omap ib <Plug>(textobj-sandwich-auto-i)
+  xmap ab <Plug>(textobj-sandwich-auto-a)
+  omap ab <Plug>(textobj-sandwich-auto-a)
+  xmap iq <Plug>(textobj-sandwich-query-i)
+  omap iq <Plug>(textobj-sandwich-query-i)
+  xmap aq <Plug>(textobj-sandwich-query-a)
+  omap aq <Plug>(textobj-sandwich-query-a)
+
+  " FZF: create shortcuts for finding stuff
+  nnoremap <silent> <C-p><C-p> <cmd>call <SID>fzf_avoid_defx('Files')<CR>
+  nnoremap <silent> <C-p><C-b> <cmd>call <SID>fzf_avoid_defx('Buffers')<CR>
+  nnoremap          <C-n><C-n> yiw:Rg <C-r>"<CR>
+  vnoremap          <C-n><C-n> y:Rg <C-r>"<CR>
+
+  " FiletypeFormat: remap leader f to do filetype formatting
+  nnoremap <silent> <leader>f <cmd>FiletypeFormat<cr>
+  vnoremap <silent> <leader>f :FiletypeFormat<cr>
+
+  " " " Open Browser: override netrw
+  " " nmap gx <Plug>(openbrowser-smart-search)
+  " " vmap gx <Plug>(openbrowser-smart-search)
+
+  " " GitMessenger:
+  " nmap <leader>sg <Plug>(git-messenger)
+
+  """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " Mouse Configuration: remaps mouse to work better in terminal
+
+  " Out Jump List: <C-RightMouse> already mapped to something like <C-t>
+  nnoremap <RightMouse> <C-o>
+
+  " Clipboard Copy: Visual mode copy is pretty simple
+  vnoremap <leader>y "+y
+  nnoremap <leader>y "+y
+
+  " Mouse Copy: system copy mouse characteristics
+  vnoremap <RightMouse> "+y
+
+  " Mouse Paste: make it come from the system register
+  nnoremap <MiddleMouse> "+<MiddleMouse>
+
+  " Scrolling Dropdown: dropdown scrollable + click to select highlighted
+  inoremap <expr> <S-ScrollWheelUp>   pumvisible() ? '<C-p><C-p><C-p><C-p><C-p><C-p><C-p><C-p><C-p><C-p>' : '<Esc><S-ScrollWheelUp>'
+  inoremap <expr> <S-ScrollWheelDown> pumvisible() ? '<C-n><C-n><C-n><C-n><C-n><C-n><C-n><C-n><C-n><C-n>' : '<Esc><S-ScrollWheelDown>'
+  inoremap <expr> <ScrollWheelUp>     pumvisible() ? '<C-p>' : '<Esc><ScrollWheelUp>'
+  inoremap <expr> <ScrollWheelDown>   pumvisible() ? '<C-n>' : '<Esc><ScrollWheelDown>'
+  inoremap <expr> <LeftMouse>         pumvisible() ? '<CR><Backspace>' : '<Esc><LeftMouse>'
+
+  " Auto-execute all filetypes
+  let &filetype=&filetype
+endfunction
+
+call s:default_key_mappings()
+
 " Simple remap to update terraform lines to first class expressions
 vnoremap <C-t> :'<,'>!tr -d '"{$}'<CR>
 " lens.vim settings {{{
 let g:lens#animate = 0
 let g:lens#disabled_filetypes = ['nerdtree', 'fzf', 'defx']
-
-" coc-pairs to auto indent braces, parentheses, etc
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-  \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-
 " }}}
