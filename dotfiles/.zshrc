@@ -192,6 +192,8 @@ if [ -f ~/.zplug/init.zsh ]; then
     as:command, \
     rename-to:fzf
   zplug "mdumitru/git-aliases", as:plugin
+  zplug "blimmer/zsh-aws-vault", as:plugin
+  zplug "plugins/git",   from:oh-my-zsh
 
   zplug "romkatv/powerlevel10k", as:theme, depth:1
 
@@ -369,8 +371,8 @@ alias ....='cd ../../../..'
 alias mkdir='mkdir -p'
 alias vim='nvim'
 alias grep='grep --color=auto'
-alias ms='mux start'
 alias di='docker images'
+alias assume="source assume"
 
 alias kip='cd ~/src/KeplerGroup'
 alias zo='source ~/.zshrc'
@@ -387,6 +389,12 @@ alias smux='mux start kepler'
 
 # terraform/terragrunt
 alias tgp='terragrunt plan'
+alias tg='terragrunt'
+alias tga='terragrunt apply'
+alias tgi='terragrunt init'
+alias tgir='terragrunt init -reconfigure'
+alias tgo='terragrunt output'
+alias tgr='terragrunt refresh'
 
 # returns current public IP
 alias myip='curl -sq checkip.amazonaws.com | pbcopy'
@@ -402,7 +410,7 @@ export EDITOR='/usr/bin/nvim'
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
-export MANPAGER="nvim -c 'set ft=man' -"
+export MANPAGER='nvim +Man!'.
 # customize exa output
 # export EXA_COLORS="uu=36:da=34"
 
