@@ -327,10 +327,6 @@ export TLDR_PARAM='blue'
 ################################################################################
 # CUSTOM SETTINGS
 ################################################################################
-
-# Disables CTRL+S/CTRL+Q in Terminal
-stty -ixon
-
 include ~/.sensitive/zsh
 
 if [[ "$OSTYPE" == *"linux"* ]]; then
@@ -338,6 +334,8 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     alias cat='bat'
     alias pbcopy='xclip -selection clipboard'
     alias pbpaste='xclip -select clipboard -o'
+    # Disables CTRL+S/CTRL+Q in Terminal
+    stty -ixon
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
   bindkey "\e[1;3D" backward-word # ⌥←
   bindkey "\e[1;3C" forward-word # ⌥→
