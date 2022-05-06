@@ -1,17 +1,13 @@
 -- enable lookup for to spotlight
 hs.application.enableSpotlightForNameSearches(true)
 
-local win = hs.window.focusedWindow()
-local f = win:frame()
-local screen = win:screen()
-local max = screen:frame()
-
-print(f)
-print(max.w)
-print(max.h)
-
 -- Map app to the left half of the screen
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Left", function()
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
   f.x = max.x
   f.y = max.y
   f.w = max.w / 2
@@ -21,6 +17,11 @@ end)
 
 -- Map app to the right half of the screen
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Right", function()
+  local win = hs.window.focusedWindow()
+  local f = win:frame()
+  local screen = win:screen()
+  local max = screen:frame()
+
   f.x = max.x + (max.w / 2)
   f.y = max.y
   f.w = max.w / 2
