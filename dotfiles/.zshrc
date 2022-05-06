@@ -335,7 +335,7 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
     alias pbcopy='xclip -selection clipboard'
     alias pbpaste='xclip -select clipboard -o'
     # Disables CTRL+S/CTRL+Q in Terminal
-    stty -ixon
+    stty -ixon 2>/dev/null
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
   bindkey "\e[1;3D" backward-word # ⌥←
   bindkey "\e[1;3C" forward-word # ⌥→

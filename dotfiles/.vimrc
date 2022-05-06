@@ -96,7 +96,8 @@ for coc_plugin in [
 endfor
 
 " ****** THEMES
-Plug 'NLKNguyen/papercolor-theme'
+" Plug 'NLKNguyen/papercolor-theme'
+Plug 'arcticicestudio/nord-vim'
 Plug 'kristijanhusak/defx-icons'
 
 " ***** Syntax Highlighters
@@ -464,12 +465,12 @@ let g:PaperColor_Theme_Options = {
 
 try
     syntax on
+    colorscheme nord
     set termguicolors
     set t_Co=256 " says terminal has 256 colors
-    set background=dark
-    colorscheme PaperColor
     " Set background to black
-    "highlight Normal ctermbg=NONE
+    highlight Normal guibg=black guifg=white ctermbg=none
+    set background=dark
     let g:airline_theme = 'papercolor'
 catch
 endtry
@@ -1041,73 +1042,73 @@ let g:lens#disabled_filetypes = ['nerdtree', 'fzf', 'defx']
 " }}}
 " Package: treesitter {{{
 
-" function s:init_treesitter()
-"   if !exists('g:loaded_nvim_treesitter')
-"     echom 'nvim-treesitter does not exist, skipping...'
-"     return
-"   endif
-" lua << EOF
-" -- nvim-treesitter/queries/python/injections.scm, with docstring
-" -- injections removed
-" local py_injections = [[
-" ((call
-"   function: (attribute object: (identifier) @_re)
-"   arguments: (argument_list (string) @regex))
-"  (#eq? @_re "re")
-"  (#match? @regex "^r.*"))
+function s:init_treesitter()
+  if !exists('g:loaded_nvim_treesitter')
+    echom 'nvim-treesitter does not exist, skipping...'
+    return
+  endif
+lua << EOF
+-- nvim-treesitter/queries/python/injections.scm, with docstring
+-- injections removed
+local py_injections = [[
+((call
+  function: (attribute object: (identifier) @_re)
+  arguments: (argument_list (string) @regex))
+ (#eq? @_re "re")
+ (#match? @regex "^r.*"))
 
-" (comment) @comment
-" ]]
-" vim.treesitter.set_query('python', 'injections', py_injections)
-" require('nvim-treesitter.configs').setup({
-"   highlight = { enable = true },
-"   textobjects = {
-"     select = {
-"       enable = true,
-"         keymaps = {
-"           -- You can use the capture groups defined in textobjects.scm
-"           ["af"] = "@function.outer",
-"           ["if"] = "@function.inner",
-"           ["ac"] = "@class.outer",
-"           ["ic"] = "@class.inner",
-"       },
-"     },
-"   },
-"   ensure_installed = {
-"     'bash',
-"     'c',
-"     'css',
-"     'gdscript',
-"     'go',
-"     'graphql',
-"     'html',
-"     'java',
-"     'javascript',
-"     'jsdoc',
-"     'json',
-"     'jsonc',
-"     'julia',
-"     'ledger',
-"     'lua',
-"     'ocaml',
-"     'php',
-"     'python',
-"     'query',
-"     'regex',
-"     'rst',
-"     'ruby',
-"     'rust',
-"     'svelte',
-"     'toml',
-"     'tsx',
-"     'typescript',
-" }})
-" EOF
-" endfunction
+(comment) @comment
+]]
+vim.treesitter.set_query('python', 'injections', py_injections)
+require('nvim-treesitter.configs').setup({
+  highlight = { enable = true },
+  textobjects = {
+    select = {
+      enable = true,
+        keymaps = {
+          -- You can use the capture groups defined in textobjects.scm
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["ac"] = "@class.outer",
+          ["ic"] = "@class.inner",
+      },
+    },
+  },
+  ensure_installed = {
+    'bash',
+    'c',
+    'css',
+    'gdscript',
+    'go',
+    'graphql',
+    'html',
+    'java',
+    'javascript',
+    'jsdoc',
+    'json',
+    'jsonc',
+    'julia',
+    'ledger',
+    'lua',
+    'ocaml',
+    'php',
+    'python',
+    'query',
+    'regex',
+    'rst',
+    'ruby',
+    'rust',
+    'svelte',
+    'toml',
+    'tsx',
+    'typescript',
+}})
+EOF
+endfunction
 
-" augroup custom_treesitter
-"   autocmd!
-"   autocmd VimEnter * call s:init_treesitter()
-" augroup end
+augroup custom_treesitter
+  autocmd!
+  autocmd VimEnter * call s:init_treesitter()
+augroup end
 
 " }}}
