@@ -18,24 +18,6 @@ function dsp() {
   docker images
 }
 
-function drun() {
-  if [[ $2 == 'bash' ]]; then
-    docker run --rm -it $1 /bin/bash
-  else
-    docker run --rm -it $1 /bin/sh
-  fi
-}
-
-function dsh() {
-  docker run --rm -it \
-    $(docker images --format "{{.ID}}" | head -n1) /bin/sh
-}
-
-function dbash() {
-  docker run --rm -it \
-    $(docker images --format "{{.ID}}" | head -n1) /bin/bash
-}
-
 function drmi() {
   for img in "$@"
   do
@@ -43,10 +25,6 @@ function drmi() {
       $(docker images --format "{{.Repository}}:{{.Tag}}" | grep $img)
     echo "rm $img"
   done
-}
-
-function get_github_latest_release() {
-  curl -s "https://api.github.com/repos/$1/releases/latest" | jq -r .tag_name
 }
 
 function klone() {
