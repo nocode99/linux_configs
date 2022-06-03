@@ -179,6 +179,7 @@ if [ -f ~/.zplug/init.zsh ]; then
   zplug "mdumitru/git-aliases", as:plugin
   zplug "blimmer/zsh-aws-vault", as:plugin
   zplug "plugins/git",   from:oh-my-zsh
+  zplug "Dbz/kube-aliases", as:plugin
 
   zplug "romkatv/powerlevel10k", as:theme, depth:1
 
@@ -304,14 +305,11 @@ if [ -d $HOME/autocompleters ]; then
   done
 fi
 
-# kubectl autocomplete
-if [ $commands[kubectl] ]; then
-  kubectl() {
-    unfunction "$0"
-    source <(kubectl completion zsh)
-    $0 "$@"
-  }
-fi
+# kubectl autocomplete & settings
+alias k=kubectl
+export KUBE_EDITOR=nvim
+[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+
 
 ################################################################################
 # tldr SETTINGS
