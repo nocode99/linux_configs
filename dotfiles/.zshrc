@@ -1,9 +1,14 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
+
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
+
+(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
 
 if [ ! -z $ZPROF ]; then
   zmodload zsh/zprof
@@ -305,10 +310,25 @@ if [ -d $HOME/autocompleters ]; then
   done
 fi
 
-# kubectl autocomplete & settings
+# kubeernetes settings
 alias k=kubectl
 export KUBE_EDITOR=nvim
 [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+
+# remova kga alias from kube-aliases plugin
+unalias kga
+function kga {
+  for i in $(kubectl api-resources --verbs=list --namespaced -o name | grep -v "events.events.k8s.io" | grep -v "events" | sort | uniq); do
+    echo "Resource:" $i
+
+    if [ -z "$1" ]
+    then
+        kubectl get --ignore-not-found ${i}
+    else
+        kubectl -n ${1} get --ignore-not-found ${i}
+    fi
+  done
+}
 
 
 ################################################################################
@@ -421,7 +441,7 @@ export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$H
 typeset -aU path
 
 if [[ -f $(which direnv) ]]; then
-  eval "$(direnv hook $SHELL)"
+  eval "$(direnv hook zsh)"
 fi
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
