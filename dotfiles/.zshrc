@@ -431,3 +431,5 @@ if [ ! -z $ZPROF ]; then
 fi
 
 export PATH="$HOME/.poetry/bin:$PATH"
+
+function gam() { "/home/bkim/bin/gam/gam" "$@" ; }
