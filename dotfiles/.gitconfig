@@ -7,6 +7,18 @@
   pager = delta
   mergeoptions = --no-edit
 
+[interactive]
+  diffFilter = delta --color-only
+
+[delta]
+  navigate = true
+  light = false
+
+[merge]
+  conflictstyle = diff3
+
+[diff]
+  colorMoved = default
 ; [delta]
 ;   features = side-by-side line-numbers decorations
 ;   whitespace-error-style = 22 reverse
