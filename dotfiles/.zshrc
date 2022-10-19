@@ -119,7 +119,7 @@ zinit snippet OMZP::git
 
 zinit ice wait lucid
 zinit light felixr/docker-zsh-completion
-# zinit light qoomon/zjump
+zinit light qoomon/zjump
 zinit light zsh-users/zsh-completions
 # performance issue
 # zinit light Dbz/kube-aliases
