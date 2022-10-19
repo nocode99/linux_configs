@@ -10,6 +10,8 @@ fi
 
 (( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
 
+# ZPROF=1
+
 if [ ! -z $ZPROF ]; then
   zmodload zsh/zprof
 fi
@@ -66,63 +68,7 @@ function update_program() {
         echo "Updated Vault to $2"
       fi
       ;;
-    yy) # yakyak
-      local yy_version=$(get_github_latest_release "yakyak/yakyak")
-      local yy_sem="${yy_version//v}"
-      curl -o /tmp/yakyak.deb  \
-        -Lsf https://github.com/yakyak/yakyak/releases/download/$yy_version/yakyak-$yy_sem-linux-amd64.deb
-      sudo dpkg -i /tmp/yakyak.deb
-      rm -f /tmp/yakyak.deb
-      ;;
   esac
-}
-
-function switchenv() {
-  # Switch only the environment in the CWD
-  # Requires environment as an argument
-  # Example: switchenv master
-  DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-  ENV=$(echo ${DIR} | sed "s/^.*\/kepler-terraform\///" | cut -d / -f 1)
-  DIR_PREFIX=$(echo $DIR | awk -F "${ENV}" '{print $1}')
-  DIR_SUFFIX=$(echo $DIR | awk -F "${ENV}" '{print $2}')
-  if [[ $ENV == 'master' ]]; then
-    NEW_ENV='integration'
-  elif [[ $ENV == 'integration' ]]; then
-    NEW_ENV='master'
-  else
-    NEW_ENV=$1
-  fi
-  cd "$DIR_PREFIX/$NEW_ENV/$DIR_SUFFIX"
-}
-
-function s3size() {
-  # USAGE: returns s3 bucket size in GB
-  # s3size s3-bucket (returns todays storage)
-  # s3size s3-bucket 7 (returns storage from 7 days ago)
-  if [[ -z $1 ]]; then
-    echo "pass in S3 Bucket name! e.g. s3size kepler-devops"
-    return 1
-  fi
-  S3_BUCKET=$1
-  REGION=${REGION:-us-east-1}
-  DATE_NOW=$(date +"%Y-%m-%d")
-  if [[ ! -z $2 ]]; then
-    DATE=$(date --date="$2 days ago" +"%Y-%m-%d")
-  else
-    DATE=$DATE_NOW
-  fi
-
-  aws cloudwatch get-metric-statistics \
-    --namespace AWS/S3 \
-    --start-time "${DATE}T00:00:00" \
-    --end-time "${DATE}T01:00:00" \
-    --statistics Average \
-    --region $REGION \
-    --period 86400 \
-    --metric-name BucketSizeBytes \
-    --dimensions Name=BucketName,Value=$S3_BUCKET Name=StorageType,Value=StandardStorage \
-    | jq '.Datapoints[].Average' -r \
-    | awk '{print $1/1024/1024/1024 " GB "}'
 }
 
 function include() {
@@ -133,66 +79,55 @@ function doit() {
   sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 }
 
-function params() {
-  aws ssm get-parameters-by-path \
-    --path / \
-    --recursive \
-    | jq '.Parameters[].Name' -r \
-    | sort
-}
-
 function copy() {
   # paste contents of a file to clipboard
   cat $1 | xclip -selection clipboard
 }
 
-function ssm {
-  # AWS SSM connect to instance. Pass in ECS cluster to select any instance
-  # in the cluster or pass in instance-id
-  if [ -z "$1" ]; then
-    echo "Must Define a cluster! eg mgmt-ecs"
-    return 1
-  fi
+#-------------------------------------------------------------------------------
+# zinit
+#-------------------------------------------------------------------------------
 
-  if [ -z "$2" ]; then
-    local INSTANCE_INDEX=0
-  else
-    local INSTANCE_INDEX=$2
-  fi
-
-  local ARN=$(aws ecs list-container-instances --cluster $1 --status ACTIVE | jq ".containerInstanceArns [$INSTANCE_INDEX]" | tr -d '"')
-  local ID=$(aws ecs describe-container-instances --cluster $1 --container-instances $ARN | jq '.containerInstances [0].ec2InstanceId' | tr -d '"')
-  aws ssm start-session --target $ID
-}
-
-################################################################################
-# ZPLUG SETTINGS
-################################################################################
-
-if [ -f ~/.zplug/init.zsh ]; then
-  source ~/.zplug/init.zsh
-
-  zplug "paulirish/git-open", as:plugin
-  zplug "greymd/docker-zsh-completion", as:plugin
-  zplug "qoomon/zjump", as:plugin
-  zplug "zsh-users/zsh-completions", as:plugin
-  zplug "zdharma/fast-syntax-highlighting", as:plugin
-  zplug "junegunn/fzf-bin", \
-    from:gh-r, \
-    as:command, \
-    rename-to:fzf
-  zplug "mdumitru/git-aliases", as:plugin
-  zplug "blimmer/zsh-aws-vault", as:plugin
-  zplug "plugins/git",   from:oh-my-zsh
-  zplug "Dbz/kube-aliases", as:plugin
-
-  zplug "romkatv/powerlevel10k", as:theme, depth:1
-
-  # Then, source plugins and add commands to $PATH
-  zplug load
-else
-  echo "zplug not installed"
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
 fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zi light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+### End of Zinit's installer chunk
+
+zinit light zdharma/fast-syntax-highlighting
+zinit light paulirish/git-open
+zinit ice depth"1" # git clone depth
+zinit light romkatv/powerlevel10k
+zinit snippet OMZL::git.zsh
+zinit snippet OMZP::git
+
+zinit ice wait lucid
+zinit light felixr/docker-zsh-completion
+# zinit light qoomon/zjump
+zinit light zsh-users/zsh-completions
+# performance issue
+# zinit light Dbz/kube-aliases
+zinit light junegunn/fzf
+#-------------------------------------------------------------------------------
+# end zinit
+#-------------------------------------------------------------------------------
+
 
 ################################################################################
 # SET OPTIONS
@@ -231,8 +166,6 @@ export SAVEHIST=5000
 bindkey -e
 bindkey "^[[1;5C" forward-word
 bindkey "^[[1;5D" backward-word
-# bindkey "^A" vi-beginning-of-line
-# bindkey "^E" vi-end-of-line
 
 #######################################################################
 # Unset options
@@ -273,7 +206,7 @@ export LANG=en_US.UTF-8
 autoload -U +X bashcompinit
 bashcompinit
 
-zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
+# zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
 
 # CURRENT STATE: does not select any sort of searching
 # searching was too annoying and I didn't really use it
@@ -290,17 +223,6 @@ fpath+=(/usr/local/share/zsh-completions $fpath)
 fpath+=~/autocompleters
 zmodload -i zsh/complist
 
-# Manual libraries
-
-# vault, by Hashicorp
-_vault_complete() {
-  local word completions
-  word="$1"
-  completions="$(vault --cmplt "${word}")"
-  reply=( "${(ps:\n:)completions}" )
-}
-compctl -f -K _vault_complete vault
-
 # Add autocompletion path
 fpath+=~/.zfunc
 
@@ -313,10 +235,9 @@ fi
 # kubeernetes settings
 alias k=kubectl
 export KUBE_EDITOR=nvim
-[[ $commands[kubectl] ]] && source <(kubectl completion zsh)
+# [[ $commands[kubectl] ]] && echo "hello"
+# [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
 
-# remova kga alias from kube-aliases plugin
-unalias kga
 function kga {
   for i in $(kubectl api-resources --verbs=list --namespaced -o name | grep -v "events.events.k8s.io" | grep -v "events" | sort | uniq); do
     echo "Resource:" $i
@@ -330,22 +251,9 @@ function kga {
   done
 }
 
-
-################################################################################
-# tldr SETTINGS
-################################################################################
-
-complete -W "$(tldr 2>/dev/null --list)" tldr
-export TLDR_HEADER='blue bold underline'
-export TLDR_QUOTE='italic'
-export TLDR_DESCRIPTION='cyan'
-export TLDR_CODE='magenta'
-export TLDR_PARAM='blue'
-
 ################################################################################
 # CUSTOM SETTINGS
 ################################################################################
-include ~/.sensitive/zsh
 
 if [[ "$OSTYPE" == *"linux"* ]]; then
     # alias ll='ls -alh --color=auto --group-directories-first'
@@ -397,9 +305,6 @@ alias tgir='terragrunt init -reconfigure'
 alias tgo='terragrunt output'
 alias tgr='terragrunt refresh'
 
-# returns current public IP
-alias myip='curl -sq checkip.amazonaws.com | pbcopy'
-
 if [ -d "$HOME/.terraform.d/plugin-cache" ]; then
   mkdir $HOME/.terraform.d/plugin-cache
 fi
@@ -412,9 +317,6 @@ export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 export MANPAGER='nvim +Man!'.
-# customize exa output
-# export EXA_COLORS="uu=36:da=34"
-
 
 ################################################################################
 # ASDF
@@ -444,12 +346,12 @@ if [[ -f $(which direnv) ]]; then
   eval "$(direnv hook zsh)"
 fi
 
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+export PATH="$HOME/.poetry/bin:$PATH"
+
+function gam() { "/home/bkim/bin/gam/gam" "$@" ; }
 
 if [ ! -z $ZPROF ]; then
   zprof
 fi
 
-export PATH="$HOME/.poetry/bin:$PATH"
-
-function gam() { "/home/bkim/bin/gam/gam" "$@" ; }
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
