@@ -56,8 +56,9 @@ function update_program() {
     zoom)
       if [[ ! -f /tmp/zoom_amd64.deb ]]; then
         curl -Lsf https://zoom.us/client/latest/zoom_amd64.deb -o /tmp/zoom_amd64.deb
+        dpkg-sig --verify /tmp/zoom_amd64.deb
+        sudo dpkg -i /tmp/zoom_amd64.deb
       fi
-      sudo dpkg -i /tmp/zoom_amd64.deb
       ;;
     vault)
       if [ -z $2 ]; then
@@ -119,10 +120,10 @@ zinit snippet OMZP::git
 
 zinit ice wait lucid
 zinit light felixr/docker-zsh-completion
-zinit light qoomon/zjump
 zinit light zsh-users/zsh-completions
 # performance issue
 # zinit light Dbz/kube-aliases
+zinit light qoomon/zjump
 zinit light junegunn/fzf
 #-------------------------------------------------------------------------------
 # end zinit
@@ -249,6 +250,11 @@ function kga {
         kubectl -n ${1} get --ignore-not-found ${i}
     fi
   done
+}
+
+function left_click() {
+  # fix left click on mouse when waking up computer
+  sudo udevadm trigger
 }
 
 ################################################################################
