@@ -62,11 +62,21 @@ function update_program() {
       ;;
     vault)
       if [ -z $2 ]; then
-        echo "Missing Vault Version!"
+        echo "missing vault version!"
       else
         curl -Lsf https://releases.hashicorp.com/vault/${2}/vault_${2}_linux_amd64.zip -o /tmp/vault.zip
         unzip -o -d $HOME/.local/bin/ /tmp/vault.zip
-        echo "Updated Vault to $2"
+        echo "updated vault to $2"
+      fi
+      ;;
+    lsd)
+      if [ -z $2 ]; then
+        echo "missing lsd version!"
+      else
+        curl -Lsf https://github.com/Peltoche/lsd/releases/download/$2/lsd_$2_amd64.deb \
+          -o /tmp/lsd.deb
+        sudo dpkg -i /tmp/lsd.deb
+        echo "updated lsd to $2"
       fi
       ;;
   esac
@@ -356,8 +366,8 @@ export PATH="$HOME/.poetry/bin:$PATH"
 
 function gam() { "/home/bkim/bin/gam/gam" "$@" ; }
 
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
 if [ ! -z $ZPROF ]; then
   zprof
 fi
-
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
