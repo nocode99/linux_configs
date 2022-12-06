@@ -244,7 +244,7 @@ if [ -d $HOME/autocompleters ]; then
 fi
 
 # kubeernetes settings
-alias k=kubectl
+alias k=kubecolor
 export KUBE_EDITOR=nvim
 # [[ $commands[kubectl] ]] && echo "hello"
 # [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
@@ -294,7 +294,7 @@ alias ...='cd ../../..'
 alias ....='cd ../../../..'
 
 alias mkdir='mkdir -p'
-alias vim='nvim'
+alias vim='lvim'
 alias grep='grep --color=auto'
 alias di='docker images'
 alias assume="source assume"
