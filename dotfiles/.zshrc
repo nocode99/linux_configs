@@ -56,9 +56,9 @@ function update_program() {
     zoom)
       if [[ ! -f /tmp/zoom_amd64.deb ]]; then
         curl -Lsf https://zoom.us/client/latest/zoom_amd64.deb -o /tmp/zoom_amd64.deb
-        dpkg-sig --verify /tmp/zoom_amd64.deb
-        sudo dpkg -i /tmp/zoom_amd64.deb
       fi
+      dpkg-sig --verify /tmp/zoom_amd64.deb
+      sudo dpkg -i /tmp/zoom_amd64.deb
       ;;
     vault)
       if [ -z $2 ]; then
@@ -294,7 +294,7 @@ alias ...='cd ../../..'
 alias ....='cd ../../../..'
 
 alias mkdir='mkdir -p'
-alias vim='lvim'
+alias vim='nvim'
 alias grep='grep --color=auto'
 alias di='docker images'
 alias assume="source assume"

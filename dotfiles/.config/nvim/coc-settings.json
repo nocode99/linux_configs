@@ -1,20 +1,90 @@
 {
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.source.emoji.filetypes": ["markdown", "rst"],
+  "coc.source.dictionary.filetypes": [
+    "gitcommit",
+    "html",
+    "markdown",
+    "rst",
+    "text"
+  ],
+  "coc.source.word.filetypes": ["gitcommit", "html", "markdown", "rst", "text"],
+  "suggest.autoTrigger": "always",
+  "suggest.noselect": true,
+  "diagnostic.enable": true,
+  "signature.hideOnTextChange": true,
+  "signature.enable": false,
+  "html.autoClosingTags": false,
+  "html.completion.attributeDefaultValue": "empty",
+  "svelte.enable-ts-plugin": true,
+  "vimlsp.suggest.fromRuntimepath": true,
+  "vimlsp.indexes.count": 50,
+  "java.enabled": false,
+  "rust-client.rlsPath": "rls",
+  "rust-client.channel": "stable",
+  "list.normalMappings": {
+    "<C-v>": "action:vsplit",
+    "<C-x>": "action:split",
+    "<C-t>": "action:tabe"
+  },
+  "list.insertMappings": {
+    "<C-v>": "action:vsplit",
+    "<C-x>": "action:split",
+    "<C-t>": "action:tabe"
+  },
+  "yaml.schemas": {
+    "https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.24.3-standalone-strict/all.json": [
+      "/*.yml",
+      "/*.yaml"
+    ],
+    "https://raw.githubusercontent.com/docker/compose/master/compose/config/compose_spec.json": "/*docker-compose.yml",
+    "https://raw.githubusercontent.com/threadheap/serverless-ide-vscode/master/packages/serverless-framework-schema/schema.json": "/*serverless.yml",
+    "https://raw.githubusercontent.com/OAI/OpenAPI-Specification/3.0.3/schemas/v3.0/schema.json": [
+      "/*open-api*.yml",
+      "/*open-api*.yaml"
+    ]
+  },
   "languageserver": {
     "terraform-ls": {
       "command": "terraform-ls",
       "args": ["serve"],
       "filetypes": ["terraform", "tf"],
-      "rootPatterns": ["Makefile", ".git"]
+      "initializationOptions": {},
+      "rootPatterns": ["*.tf", "*.tfvars"],
+      "settings": {}
     },
-    "nginx-language-server": {
-      "command": "nginx-language-server",
-      "filetypes": ["nginx"],
-      "rootPatterns": ["nginx.conf", ".git"]
+    "tflint": {
+      "command": "tflint",
+      "args": ["--langserver"],
+      "filetypes": ["terraform", "tf"],
+      "rootPatterns": ["Makefile", ".git"]
     }
   },
-  "suggest.autoTrigger": "always",
-  "diagnostic.enable": false,
-  "suggest.noselect": true,
-  "pairs.enableCharacters": ["(", "[", "{", "<", "\"", "'", "`"]
+  "suggest.completionItemKindLabels": {
+    "keyword": "\uf1de",
+    "variable": "\ue79b",
+    "value": "\uf89f",
+    "operator": "\u03a8",
+    "function": "\u0192",
+    "reference": "\ufa46",
+    "constant": "\uf8fe",
+    "method": "\uf09a",
+    "struct": "\ufb44",
+    "class": "\uf0e8",
+    "interface": "\uf417",
+    "text": "\ue612",
+    "enum": "\uf435",
+    "enumMember": "\uf02b",
+    "module": "\uf40d",
+    "color": "\ue22b",
+    "property": "\ue624",
+    "field": "\uf9be",
+    "unit": "\uf475",
+    "event": "\ufacd",
+    "file": "\uf723",
+    "folder": "\uf114",
+    "snippet": "\ue60b",
+    "typeParameter": "\uf728",
+    "default": "\uf29c"
+  }
 }
-
