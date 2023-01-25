@@ -148,6 +148,7 @@ function! s:packager_init(packager) abort
   call a:packager.add('https://github.com/unblevable/quick-scope')
   call a:packager.add('https://github.com/windwp/nvim-autopairs.git')
   call a:packager.add('https://github.com/NvChad/nvim-colorizer.lua')
+  call a:packager.add('https://github.com/t9md/vim-choosewin')
 
   " Fuzzy Finder:
   call a:packager.add('https://github.com/nvim-telescope/telescope.nvim.git', {'requires': [
@@ -168,7 +169,8 @@ function! s:packager_init(packager) abort
   call a:packager.add('https://github.com/pappasam/vim-filetype-formatter')
 
   " Syntax Theme:
-  call a:packager.add('https://github.com/pappasam/papercolor-theme-slim.git')
+  call a:packager.add('https://github.com/folke/tokyonight.nvim')
+  call a:packager.add('https://github.com/LunarVim/lunar.nvim')
 
   " Syntax Highlighting & Indentation:
   call a:packager.add('https://github.com/evanleck/vim-svelte.git', {'requires': [
@@ -184,6 +186,7 @@ function! s:packager_init(packager) abort
   call a:packager.add('https://github.com/chr4/nginx.vim.git')
   " terraform
   call a:packager.add('https://github.com/hashivim/vim-hashicorp-tools')
+  call a:packager.add('https://github.com/hashivim/vim-terraform')
 endfunction
 
 packadd vim-packager
@@ -266,6 +269,10 @@ function! s:default_key_mappings()
 
   " Auto-execute all filetypes
   let &filetype=&filetype
+
+  " choosewin
+  nmap \ <Plug>(choosewin)
+
 endfunction
 
 call s:default_key_mappings()
@@ -410,20 +417,20 @@ augroup custom_colorscheme
   autocmd ColorScheme * highlight CocInfoHighlight gui=undercurl
   autocmd ColorScheme * highlight CocHintHighlight gui=undercurl
 
-  autocmd ColorScheme PaperColorSlim
-    \ if &background == 'light' |
-    \   execute 'highlight CocSearch guifg=#005f87' |
-    \   execute 'highlight CocMenuSel guibg=#bcbcbc' |
-    \ else |
-    \   execute 'highlight CocSearch guifg=#5fafd7' |
-    \   execute 'highlight CocMenuSel guibg=#585858' |
-    \ endif
+  " autocmd ColorScheme lunar
+  "   \ if &background == 'light' |
+  "   \   execute 'highlight CocSearch guifg=#005f87' |
+  "   \   execute 'highlight CocMenuSel guibg=#bcbcbc' |
+  "   \ else |
+  "   \   execute 'highlight CocSearch guifg=#5fafd7' |
+  "   \   execute 'highlight CocMenuSel guibg=#585858' |
+  "   \ endif
 augroup end
 
 try
-  colorscheme PaperColorSlim
+  colorscheme tokyonight
 catch
-  echo 'An error occurred while configuring Papercolor'
+  echo 'An error occurred while configuring colorscheme'
 endtry
 
 " }}}
@@ -569,6 +576,14 @@ function! s:gx_improved()
   silent execute '!gio open ' . expand('<cfile>')
 endfunction
 
+" }}}
+" General: terraform settings {{{
+
+let g:terraform_align = 1
+
+let g:terraform_fold_sections = 0
+
+let g:terraform_fmt_on_save = 1
 " }}}
 " General: trailing whitespace {{{
 
@@ -717,4 +732,3 @@ let g:vim_filetype_formatter_commands = {
       \ }
 
 " }}}
-
