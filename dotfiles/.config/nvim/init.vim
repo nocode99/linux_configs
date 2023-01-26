@@ -39,7 +39,7 @@ set expandtab autoindent smartindent shiftwidth=2 softtabstop=2 tabstop=8
 set isfname+=@-@ isfname+=:
 
 " Highlight Search: do that
-" note: hlsearcha nd nohlsearch are defined in autocmd outside function
+" note: hlsearch and nohlsearch are defined in autocmd outside function
 set incsearch inccommand=nosplit
 
 " Spell Checking:
@@ -109,7 +109,7 @@ augroup end
 augroup custom_incsearch_highlight
   autocmd!
   autocmd CmdlineEnter /,\? set hlsearch
-  autocmd CmdlineLeave /,\? set nohlsearch
+  " autocmd CmdlineLeave /,\? set nohlsearch
 augroup end
 
 augroup custom_nginx
