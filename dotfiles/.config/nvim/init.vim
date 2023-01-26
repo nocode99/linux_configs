@@ -147,6 +147,7 @@ function! s:packager_init(packager) abort
   " General:
   call a:packager.add('https://github.com/unblevable/quick-scope')
   call a:packager.add('https://github.com/windwp/nvim-autopairs.git')
+  call a:packager.add('https://github.com/machakann/vim-sandwich')
   call a:packager.add('https://github.com/NvChad/nvim-colorizer.lua')
   call a:packager.add('https://github.com/t9md/vim-choosewin')
 
@@ -259,6 +260,10 @@ function! s:default_key_mappings()
   " FiletypeFormat: remap leader f to do filetype formatting
   nnoremap <silent> <leader>f <Cmd>FiletypeFormat<cr>
   vnoremap <silent> <leader>f :FiletypeFormat<cr>
+
+  " Sandwich: plugin-recommended mappings
+  nmap s <Nop>
+  xmap s <Nop>
 
   " Open GitHub ssh url
   nnoremap gx <Cmd>call <SID>gx_improved()<CR>
