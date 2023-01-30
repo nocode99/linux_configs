@@ -2,10 +2,22 @@ require("nvim-treesitter.configs").setup({
   highlight = {
     enable = true,
     additional_vim_regex_highlighting = false,
+    disable = function(lang, bufnr)
+      if lang == "javascript" then
+        return vim.api.nvim_buf_line_count(bufnr) > 10000
+      end
+      return vim.api.nvim_buf_line_count(bufnr) > 50000
+    end,
   },
   indent = {
     enable = true,
-    disable = { "python", "html", "css", "svelte", "markdown" },
+    disable = function(lang, bufnr)
+      if lang == "python" then
+        return true
+      end
+      return vim.api.nvim_buf_line_count(bufnr) > 10000
+    end,
+
   },
   autotag = {
     enable = true,
@@ -36,13 +48,16 @@ require("nvim-treesitter.configs").setup({
     "latex",
     "ledger",
     "lua",
+    "make",
     "markdown",
     "markdown_inline",
+    "mermaid",
     "ocaml",
     "php",
     "prisma",
     "python",
     "query",
+    "r",
     "regex",
     "rst",
     "ruby",
