@@ -48,9 +48,9 @@
     "terraform-ls": {
       "command": "terraform-ls",
       "args": ["serve"],
-      "filetypes": ["terraform", "tf"],
+      "filetypes": ["terraform", "tf", "hcl"],
       "initializationOptions": {},
-      "rootPatterns": ["*.tf", "*.tfvars"],
+      "rootPatterns": ["*.tf", "*.tfvars", "*.hcl"],
       "settings": {}
     },
     "tflint": {
