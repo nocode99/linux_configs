@@ -133,7 +133,7 @@ zinit light felixr/docker-zsh-completion
 zinit light zsh-users/zsh-completions
 # performance issue
 # zinit light Dbz/kube-aliases
-zinit light qoomon/zjump
+# zinit light qoomon/zjump
 zinit light junegunn/fzf
 #-------------------------------------------------------------------------------
 # end zinit
@@ -320,6 +320,7 @@ alias tgi='terragrunt init'
 alias tgir='terragrunt init -reconfigure'
 alias tgo='terragrunt output'
 alias tgr='terragrunt refresh'
+alias tff='terragrunt force-unlock -force'
 
 if [ -d "$HOME/.terraform.d/plugin-cache" ]; then
   mkdir $HOME/.terraform.d/plugin-cache
@@ -333,6 +334,7 @@ export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 export MANPAGER='nvim +Man!'.
+export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 
 ################################################################################
 # ASDF
@@ -361,7 +363,9 @@ if [[ -f $(which direnv) ]]; then
   eval "$(direnv hook zsh)"
 fi
 
-function gam() { "/home/bkim/bin/gam/gam" "$@" ; }
+if [[ -f $(which zoxide) ]]; then
+  eval "$(zoxide init zsh --cmd j)"
+fi
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
