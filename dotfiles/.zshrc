@@ -2,19 +2,16 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 
-(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv export zsh)"
-
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
-
-(( ${+commands[direnv]} )) && emulate zsh -c "$(direnv hook zsh)"
 
 # ZPROF=1
 
 if [ ! -z $ZPROF ]; then
   zmodload zsh/zprof
 fi
+
 ################################################################################
 # FUNCTIONS
 ################################################################################
@@ -48,7 +45,8 @@ function clone() {
   fi
 }
 
-function update_program() {
+# up = update_program
+function up() {
   case $1 in
     kitty)
       curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
@@ -243,7 +241,10 @@ if [ -d $HOME/autocompleters ]; then
   done
 fi
 
-# kubeernetes settings
+#mise
+eval "$(/home/bkim/.local/bin/mise activate zsh)"
+
+# kubernetes settings
 alias k=kubecolor
 export KUBE_EDITOR=nvim
 # [[ $commands[kubectl] ]] && echo "hello"
@@ -340,12 +341,12 @@ export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 # ASDF
 ###############################################################################
 
-if [[ ! -d $HOME/.asdf ]]; then
-  git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-fi
+# if [[ ! -d $HOME/.asdf ]]; then
+#   git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+# fi
 
-source $HOME/.asdf/asdf.sh
-source $HOME/.asdf/completions/asdf.bash
+# source $HOME/.asdf/asdf.sh
+# source $HOME/.asdf/completions/asdf.bash
 
 ################################################################################
 # PATHS
@@ -353,9 +354,10 @@ source $HOME/.asdf/completions/asdf.bash
 
 CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
-ASDF_SHIMS="$HOME/.asdf/shims"
+# ASDF_SHIMS="$HOME/.asdf/shims"
 
-export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin:/usr/local/sbin
+# export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin:/usr/local/sbin
+export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$KNOT_ROOT:$HOME/.serverless/bin:/usr/local/sbin
 
 typeset -aU path
 
