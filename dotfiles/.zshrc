@@ -242,7 +242,7 @@ if [ -d $HOME/autocompleters ]; then
 fi
 
 #mise
-eval "$(/home/bkim/.local/bin/mise activate zsh)"
+eval "$($HOME/.local/bin/mise activate zsh)"
 
 # kubernetes settings
 alias k=kubecolor
