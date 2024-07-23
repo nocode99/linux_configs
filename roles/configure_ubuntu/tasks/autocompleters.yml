@@ -1,4 +1,0 @@
-- name: "autocompleters: tmuxinator"
-  get_url:
-    url: https://raw.githubusercontent.com/tmuxinator/tmuxinator/master/completion/tmuxinator.zsh
-    dest: ~/autocompleters/tmuxinator.zsh

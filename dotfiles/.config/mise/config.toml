@@ -5,7 +5,7 @@ tmux = "3.4"
 awscli = "2.15.52"
 go = "1.19.3"
 node = "20.0.0"
-yarn = "1.22.11"
+yarn = "latest"
 python = "3.12.3"
 zoxide = "latest"
 github-cli = "latest"
@@ -15,3 +15,7 @@ poetry = "latest"
 kubectl = "1.28.0"
 azure-cli = "2.50.0"
 tflint = "latest"
+lsd = "1.1.2"
+
+[settings]
+experimental = true

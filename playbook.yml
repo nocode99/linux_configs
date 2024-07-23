@@ -1,5 +1,0 @@
-- hosts: all
-  connection: local
-  tasks:
-    - include_role:
-        name: configure_ubuntu
