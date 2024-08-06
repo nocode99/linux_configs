@@ -31,6 +31,7 @@ end)
 
 local laptopScreen = "Color LCD"
 local mainMonitor = "LG HDR WQHD"
+local secondMonitor = "LG Ultra HD"
 
 -- Define position values that don't exist by default in hs.layout.*
 local positions = {
@@ -44,35 +45,24 @@ local positions = {
 
 local firefox="Firefox"
 local slack="Slack"
-local outlook="Microsoft Outlook"
 local kitty="kitty"
-local workspaces="WorkSpacesClient.macOS"
-local vscode="Code"
 local appNames = {
   firefox,
   slack,
-  outlook,
   kitty,
-  workspaces,
 }
 
 
 local lgWideScreen = {
-  {firefox, nil, mainMonitor, positions.leftSide, nil, nil},
+  {firefox, nil, mainMonitor, positions.rightSide, nil, nil},
   {slack, nil, mainMonitor, positions.leftSide, nil, nil},
-  {outlook, nil, mainMonitor, positions.leftSide, nil, nil},
-  {kitty, nil, mainMonitor, positions.rightSide, nil, nil},
-  {workspaces, nil, mainMonitor, positions.rightSide, nil, nil},
-  {vscode, nil, mainMonitor, positions.rightSide, nil, nil},
+  {kitty, nil, secondMonitor, hs.layout.maximized, nil, nil},
 }
 
 local layoutSingleScreen = {
-  {firefox, nil, mainMonitor, hs.layout.maximized, nil, nil},
-  {slack, nil, mainMonitor, hs.layout.maximized, nil, nil},
-  {outlook, nil, mainMonitor, hs.layout.maximized, nil, nil},
-  {kitty, nil, mainMonitor, hs.layout.maximized, nil, nil},
-  {workspaces, nil, mainMonitor, hs.layout.maximized, nil, nil},
-  {vscode, nil, mainMonitor, hs.layout.maximized, nil, nil},
+  {firefox, nil, laptopScreen, hs.layout.maximized, nil, nil},
+  {slack, nil, laptopScreen, hs.layout.maximized, nil, nil},
+  {kitty, nil, laptopScreen, hs.layout.maximized, nil, nil},
 }
 
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Up", function()
@@ -82,3 +72,15 @@ end)
 hs.hotkey.bind({"cmd", "alt", "ctrl"}, "Down", function()
   hs.layout.apply(layoutSingleScreen)
 end)
+
+
+function moveWindowToDisplay(d)
+  return function()
+    local displays = hs.screen.allScreens()
+    local win = hs.window.focusedWindow()
+    win:moveToScreen(displays[d], false, true)
+  end
+end
+
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "1", moveWindowToDisplay(1))
+hs.hotkey.bind({"ctrl", "alt", "cmd"}, "2", moveWindowToDisplay(2))
