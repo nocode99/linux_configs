@@ -241,3 +241,4 @@ ${PS1_END}"
 
 # Disables CTRL+S/CTRL+Q in Terminal
 stty -ixon
+. "$HOME/.cargo/env"

@@ -32,8 +32,8 @@ function drmi() {
 }
 
 function klone() {
-  if [[ ! -d ~/src/KeplerGroup/$1 ]]; then
-    git clone git@github.com:KeplerGroup$2/$1.git ~/src/KeplerGroup$2/$1
+  if [[ ! -d ~/src/keplergroup/$1 ]]; then
+    git clone git@github.com:KeplerGroup$2/$1.git ~/src/keplergroup$2/$1
   else
     echo "Repo is already kloned!"
   fi
@@ -186,11 +186,32 @@ unsetopt MENU_COMPLETE
 # do not automatically remove the slash
 unsetopt AUTO_REMOVE_SLASH
 
+################################################################################
+# CUSTOM SETTINGS
+################################################################################
+
+if [[ "$OSTYPE" == *"linux"* ]]; then
+    # alias ll='ls -alh --color=auto --group-directories-first'
+    alias cat='bat'
+    alias pbcopy='xclip -selection clipboard'
+    alias pbpaste='xclip -select clipboard -o'
+    # Disables CTRL+S/CTRL+Q in Terminal
+    stty -ixon 2>/dev/null
+elif [[ "$OSTYPE" == *"darwin"* ]]; then
+  bindkey "\e[1;3D" backward-word # ⌥←
+  bindkey "\e[1;3C" forward-word # ⌥→
+  eval $(/opt/homebrew/bin/brew shellenv)
+fi
+
+
 #######################################################################
 # fzf SETTINGS
 #######################################################################
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [[ "$OSTYPE" == *"darwin"* ]]; then
+  eval "$(fzf --zsh)"
+fi
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
@@ -267,23 +288,6 @@ function left_click() {
   # fix left click on mouse when waking up computer
   sudo udevadm trigger
 }
-
-################################################################################
-# CUSTOM SETTINGS
-################################################################################
-
-if [[ "$OSTYPE" == *"linux"* ]]; then
-    # alias ll='ls -alh --color=auto --group-directories-first'
-    alias cat='bat'
-    alias pbcopy='xclip -selection clipboard'
-    alias pbpaste='xclip -select clipboard -o'
-    # Disables CTRL+S/CTRL+Q in Terminal
-    stty -ixon 2>/dev/null
-elif [[ "$OSTYPE" == *"darwin"* ]]; then
-  bindkey "\e[1;3D" backward-word # ⌥←
-  bindkey "\e[1;3C" forward-word # ⌥→
-  eval $(/opt/homebrew/bin/brew shellenv)
-fi
 
 ################################################################################
 # ALIAS

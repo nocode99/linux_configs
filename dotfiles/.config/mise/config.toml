@@ -1,7 +1,7 @@
 [tools]
 terraform = "1.7.5"
 terraform-ls = "latest"
-tmux = "3.4"
+tmux = "latest"
 awscli = "2.15.52"
 go = "1.19.3"
 node = "20.0.0"
@@ -16,6 +16,16 @@ kubectl = "1.28.0"
 azure-cli = "2.50.0"
 tflint = "latest"
 lsd = "1.1.2"
+rust = "latest"
+"cargo:ripgrep" = "latest"
+"cargo:fd-find" = "latest"
+ruby = "latest"
+"cargo:tree-sitter-cli" = "latest"
+vault = "latest"
+granted = "latest"
 
 [settings]
 experimental = true
+
+[alias.node]
+latest = '20'

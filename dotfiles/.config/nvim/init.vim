@@ -846,7 +846,10 @@ command! Preview call s:preview()
 " Package: misc global var config {{{
 
 " Languages: configure location of host
-" let g:python3_host_prog = "$HOME/.asdf/shims/python"
+let g:python3_host_prog = "$HOME/.local/share/mise/installs/python/latest/bin/python"
+let g:loaded_node_provider = 0
+let g:loaded_ruby_provider = 0
+let g:loaded_perl_provider = 0
 
 " Configure clipboard explicitly. Speeds up startup
 let g:clipboard = {
