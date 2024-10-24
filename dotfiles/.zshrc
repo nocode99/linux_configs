@@ -201,6 +201,11 @@ elif [[ "$OSTYPE" == *"darwin"* ]]; then
   bindkey "\e[1;3D" backward-word # ⌥←
   bindkey "\e[1;3C" forward-word # ⌥→
   eval $(/opt/homebrew/bin/brew shellenv)
+  alias kvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client start odx --mode=ovpn'
+
+  # autocompletion for macos
+  autoload -Uz compinit
+  compinit
 fi
 
 
@@ -210,7 +215,7 @@ fi
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 if [[ "$OSTYPE" == *"darwin"* ]]; then
-  eval "$(fzf --zsh)"
+  source <("$HOME/.fzf/bin/fzf" --zsh)
 fi
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
@@ -249,7 +254,7 @@ zstyle ':completion:*' matcher-list '' \
   'm:{a-z\-A-Z}={A-Z\_a-z}' \
   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-A-Z}={A-Z\_a-z}' \
   'r:|?=** m:{a-z\-A-Z}={A-Z\_a-z}'
-fpath+=(/usr/local/share/zsh-completions $fpath)
+fpath+=($HOME/.local/share/zinit/completions $fpath)
 fpath+=~/autocompleters
 zmodload -i zsh/complist
 

@@ -188,6 +188,8 @@ function! s:packager_init(packager) abort
   " terraform
   call a:packager.add('https://github.com/hashivim/vim-hashicorp-tools')
   call a:packager.add('https://github.com/hashivim/vim-terraform')
+  " kube
+  call a:packager.add('https://github.com/Ramilito/kubectl.nvim')
 endfunction
 
 packadd vim-packager
@@ -814,13 +816,19 @@ let g:mkdp_browserfunc = ''
 "   top: mean the vim top viewport alway show at the top of the preview page
 "   relative: mean the cursor position alway show at the relative positon of the preview page
 let g:mkdp_preview_options = {
-      \ 'mkit': {},
-      \ 'katex': {},
-      \ 'uml': {},
-      \ 'maid': {},
-      \ 'disable_sync_scroll': 0,
-      \ 'sync_scroll_type': 'middle'
-      \ }
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1,
+    \ 'sequence_diagrams': {},
+    \ 'flowchart_diagrams': {},
+    \ 'content_editable': v:false,
+    \ 'disable_filename': 0,
+    \ 'toc': {}
+    \ }
 
 " }}}
 " Package: preview compiled stuff in viewer {{{
@@ -852,18 +860,19 @@ let g:loaded_ruby_provider = 0
 let g:loaded_perl_provider = 0
 
 " Configure clipboard explicitly. Speeds up startup
-let g:clipboard = {
-      \ 'name': 'xsel',
-      \ 'copy': {
-      \    '+': 'xsel --clipboard --input',
-      \    '*': 'xsel --clipboard --input',
-      \  },
-      \ 'paste': {
-      \    '+': 'xsel --clipboard --output',
-      \    '*': 'xsel --clipboard --output',
-      \ },
-      \ 'cache_enabled': 0,
-      \ }
+set clipboard=unnamedplus
+" let g:clipboard = {
+"       \ 'name': 'xsel',
+"       \ 'copy': {
+"       \    '+': 'xsel --clipboard --input',
+"       \    '*': 'xsel --clipboard --input',
+"       \  },
+"       \ 'paste': {
+"       \    '+': 'xsel --clipboard --output',
+"       \    '*': 'xsel --clipboard --output',
+"       \ },
+"       \ 'cache_enabled': 0,
+"       \ }
 
 " Netrw: disable completely
 let g:loaded_netrw = 1
