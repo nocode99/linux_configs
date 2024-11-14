@@ -202,6 +202,8 @@ elif [[ "$OSTYPE" == *"darwin"* ]]; then
   bindkey "\e[1;3C" forward-word # ⌥→
   eval $(/opt/homebrew/bin/brew shellenv)
   alias kvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client start odx --mode=ovpn'
+  alias stopvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client stop odx'
+  export GPG_TTY=$(tty)
 
   # autocompletion for macos
   autoload -Uz compinit
