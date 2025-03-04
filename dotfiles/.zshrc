@@ -342,12 +342,14 @@ fi
 ################################################################################
 # EXPORT
 ###############################################################################
-export EDITOR='/usr/bin/nvim'
+export EDITOR=$(which nvim)
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
 export MANPAGER='nvim +Man!'.
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
+# for mise installs of terraform-ls
+export ASDF_HASHICORP_SKIP_VERIFY=true
 
 ################################################################################
 # ASDF
