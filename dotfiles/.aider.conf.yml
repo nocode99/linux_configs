@@ -1,0 +1,37 @@
+# https://aider.chat/docs/config/aider_conf.html
+
+# Default Model
+model: claude-3-7-sonnet-20250219
+
+# AWS Settings
+set-env:
+  - AWS_REGION=us-east-1
+  - AWS_PROFILE=kepler
+
+alias:
+  - "kip:bedrock/us.anthropic.claude-3-7-sonnet-20250219-v1:0"
+
+# Behavior
+watch-files: true
+multiline: false
+suggest-shell-commands: true
+cache-prompts: true
+stream: false # necessary when caching prompts
+read: ["CONVENTIONS.md"]
+
+# Git
+gitignore: false
+auto-commits: false
+dirty-commits: false
+
+# Theme
+code-theme: monokai
+user-input-color: "#d7af5f"
+tool-output-color: "#d0d0d0"
+tool-error-color: "#ff8080"
+tool-warning-color: "#afd700"
+assistant-output-color: "#d0d0d0"
+completion-menu-color: "#d0d0d0"
+completion-menu-bg-color: "#303030"
+completion-menu-current-color: "#585858"
+
