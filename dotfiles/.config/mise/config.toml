@@ -26,6 +26,7 @@ zoxide = "latest"
 kubecolor = "latest"
 terragrunt = "latest"
 helm = "latest"
+gcloud = "latest"
 
 [settings]
 experimental = true
