@@ -7,13 +7,10 @@ azure-cli = "2.50.0"
 github-cli = "latest"
 go = "1.19.3"
 granted = "latest"
-k9s = "latest"
 kubectl = "1.28.0"
 lsd = "1.1.2"
 neovim = "0.10.0"
-node = "20.0.0"
 poetry = "latest"
-python = "3.12.3"
 ruby = "3.3.4"
 rust = "1.79.0"
 terraform = "1.7.5"
@@ -27,9 +24,15 @@ kubecolor = "latest"
 terragrunt = "latest"
 helm = "latest"
 gcloud = "latest"
+node = "22.10.0"
+python = "3.12.5"
+k9s = "latest"
+delta = "latest"
+argocd = "latest"
 
 [settings]
 experimental = true
+idiomatic_version_file_enable_tools = ["terraform"]
 
-[alias.node]
+[alias.node.versions]
 latest = '20'

@@ -544,6 +544,7 @@ function! s:setup_lua_packages()
   call s:safe_require('config.nvim-web-devicons')
   call s:safe_require('config.spellsitter')
   call s:safe_require('config.telescope')
+  call s:safe_require('config.clipboard')
 endfunction
 
 call s:setup_lua_packages()
@@ -860,7 +861,6 @@ let g:loaded_ruby_provider = 0
 let g:loaded_perl_provider = 0
 
 " Configure clipboard explicitly. Speeds up startup
-set clipboard=unnamedplus
 " let g:clipboard = {
 "       \ 'name': 'xsel',
 "       \ 'copy': {
@@ -898,5 +898,40 @@ let g:vim_filetype_formatter_ft_no_defaults = []
 let g:vim_filetype_formatter_commands = {
       \ 'python': 'black -q - | isort -q - | docformatter -',
       \ }
+
+" }}}
+" General: Custom functions {{{
+
+function! ReplacePreservingCase(match, old_text, new_text)
+  let old_words = split(a:old_text, '[-_ ]')
+  let new_words = split(a:new_text, '[-_ ]')
+  let match_parts = split(a:match, '[-_ ]')
+
+  " Detect separator used in the match
+  let sep = a:match[len(match_parts[0])]
+
+  " Build result preserving case of each word
+  let result = []
+  for i in range(len(new_words))
+    let new_word = new_words[i]
+    if i < len(match_parts) && match_parts[i][0] =~# '\u'
+      " Original was uppercase, make new uppercase
+      let new_word = toupper(new_word[0]) . new_word[1:]
+    else
+      " Keep lowercase
+      let new_word = tolower(new_word[0]) . new_word[1:]
+    endif
+    call add(result, new_word)
+  endfor
+
+  return join(result, sep)
+endfunction
+
+function! SmartReplace(old_text, new_text)
+  let pattern = '\c' . substitute(a:old_text, '[-_ ]', '[-_ ]', 'g')
+  execute '%s/' . pattern . '/\=ReplacePreservingCase(submatch(0), "' . a:old_text . '", "' . a:new_text . '")/g'
+endfunction
+
+" Usage: :call SmartReplace('hello world now', 'foo bar later')
 
 " }}}

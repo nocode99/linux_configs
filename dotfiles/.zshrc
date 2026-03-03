@@ -32,8 +32,9 @@ function drmi() {
 }
 
 function klone() {
-  if [[ ! -d ~/src/keplergroup/$1 ]]; then
-    git clone git@github.com:KeplerGroup$2/$1.git ~/src/keplergroup$2/$1
+  # Arg1: Org; Arg2: repo name
+  if [[ ! -d ~/src/$1/$2 ]]; then
+    git clone git@github.com:$1/$2.git ~/src/$1/$2
   else
     echo "Repo is already kloned!"
   fi
@@ -201,13 +202,14 @@ elif [[ "$OSTYPE" == *"darwin"* ]]; then
   bindkey "\e[1;3D" backward-word # ⌥←
   bindkey "\e[1;3C" forward-word # ⌥→
   eval $(/opt/homebrew/bin/brew shellenv)
-  alias kvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client start odx --mode=ovpn'
-  alias stopvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client stop odx'
+  alias kvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client start mcn --mode=ovpn'
+  alias stopvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client stop mcn'
   export GPG_TTY=$(tty)
 
   # autocompletion for macos
   autoload -Uz compinit
   compinit
+  [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 fi
 
 
@@ -270,10 +272,11 @@ if [ -d $HOME/autocompleters ]; then
 fi
 
 #mise
-eval "$($HOME/.local/bin/mise activate zsh)"
+eval "$(mise activate zsh)"
 
 # kubernetes settings
 alias k=kubecolor
+alias kdry=kubecolor --dry-run=server
 export KUBE_EDITOR=nvim
 # [[ $commands[kubectl] ]] && echo "hello"
 # [[ $commands[kubectl] ]] && source <(kubectl completion zsh)
@@ -313,6 +316,7 @@ alias di='docker images'
 alias assume="source assume"
 
 alias kip='cd ~/src/KeplerGroup'
+alias kyu='cd ~/src/kyu'
 alias zo='source ~/.zshrc'
 alias ap='ansible-playbook'
 
@@ -368,10 +372,11 @@ export ASDF_HASHICORP_SKIP_VERIFY=true
 
 CARGO_ROOT="$HOME/.cargo/bin"
 LOCAL_ROOT="$HOME/.local/bin"
+PSQL_PATH="/opt/homebrew/opt/libpq/bin"
 # ASDF_SHIMS="$HOME/.asdf/shims"
 
 # export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$ASDF_SHIMS:$KNOT_ROOT:$HOME/.serverless/bin:/usr/local/sbin
-export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$KNOT_ROOT:$HOME/.serverless/bin:/usr/local/sbin
+export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$KNOT_ROOT:$PSQL_PATH:$HOME/.serverless/bin:/usr/local/sbin
 
 typeset -aU path
 
