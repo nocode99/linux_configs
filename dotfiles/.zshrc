@@ -316,7 +316,7 @@ alias di='docker images'
 alias assume="source assume"
 
 alias kip='cd ~/src/KeplerGroup'
-alias kyu='cd ~/src/kyu'
+alias kyu='cd ~/src/kyucollective'
 alias zo='source ~/.zshrc'
 alias ap='ansible-playbook'
 

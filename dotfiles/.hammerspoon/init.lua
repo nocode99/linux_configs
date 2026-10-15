@@ -81,6 +81,3 @@ function moveWindowToDisplay(d)
     win:moveToScreen(displays[d], false, true)
   end
 end
-
-hs.hotkey.bind({"ctrl", "alt", "cmd"}, "1", moveWindowToDisplay(1))
-hs.hotkey.bind({"ctrl", "alt", "cmd"}, "2", moveWindowToDisplay(2))

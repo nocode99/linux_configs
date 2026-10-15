@@ -292,6 +292,13 @@ augroup custom_remap_man_help
   autocmd FileType man,help nnoremap <buffer> <silent> <C-]> <C-]>
 augroup end
 
+" vim-terraform detects *.tfvars as terraform; terraform-ls needs terraform-vars
+augroup custom_tfvars_filetype
+  autocmd!
+  autocmd FileType terraform ++nested if expand('<afile>:e') ==# 'tfvars' | setlocal filetype=terraform-vars | endif
+  autocmd FileType terraform-vars setlocal syntax=terraform
+augroup end
+
 augroup custom_remap_nvim_tree_lua
   autocmd!
   autocmd FileType NvimTree nnoremap <buffer> <silent> <C-l> <Cmd>NvimTreeResize +2<CR>

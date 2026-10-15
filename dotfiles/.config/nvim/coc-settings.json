@@ -48,7 +48,7 @@
     "terraform-ls": {
       "command": "terraform-ls",
       "args": ["serve"],
-      "filetypes": ["terraform", "tf", "hcl"],
+      "filetypes": ["terraform", "terraform-vars", "tf", "hcl"],
       "initializationOptions": {},
       "rootPatterns": ["*.tf", "*.tfvars", "*.hcl"],
       "settings": {}
@@ -108,5 +108,8 @@
     "default": "\uf29c"
   },
   "snippets.ultisnips.pythonPrompt": false,
-  "inlayHint.enable": false
+  "inlayHint.enable": false,
+  "json.schemaDownload.trustedDomains": {
+    "https://www.schemastore.org": true
+  }
 }
