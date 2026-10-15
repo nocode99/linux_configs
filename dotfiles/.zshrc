@@ -126,6 +126,8 @@ zinit ice depth"1" # git clone depth
 zinit light romkatv/powerlevel10k
 zinit snippet OMZL::git.zsh
 zinit snippet OMZP::git
+# caches `eval "$(tool init)"` output; run `_evalcache_clear` after upgrading a tool
+zinit light mroth/evalcache
 
 zinit ice wait lucid
 zinit light felixr/docker-zsh-completion
@@ -201,15 +203,10 @@ if [[ "$OSTYPE" == *"linux"* ]]; then
 elif [[ "$OSTYPE" == *"darwin"* ]]; then
   bindkey "\e[1;3D" backward-word # ⌥←
   bindkey "\e[1;3C" forward-word # ⌥→
-  eval $(/opt/homebrew/bin/brew shellenv)
+  _evalcache /opt/homebrew/bin/brew shellenv
   alias kvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client start mcn --mode=ovpn'
   alias stopvpn='/Applications/Pritunl.app/Contents/Resources/pritunl-client stop mcn'
-  export GPG_TTY=$(tty)
-
-  # autocompletion for macos
-  autoload -Uz compinit
-  compinit
-  [[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
+  export GPG_TTY=$TTY
 fi
 
 
@@ -218,9 +215,6 @@ fi
 #######################################################################
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-if [[ "$OSTYPE" == *"darwin"* ]]; then
-  source <("$HOME/.fzf/bin/fzf" --zsh)
-fi
 
 # Use fd (https://github.com/sharkdp/fd) instead of the default find
 # command for listing path candidates.
@@ -242,8 +236,28 @@ export LANG=en_US.UTF-8
 # Auto Completion
 ################################################################################
 
+# fpath must be complete before compinit; -U keeps it free of duplicates
+typeset -U fpath
+fpath+=($HOME/.local/share/zinit/completions ~/autocompleters ~/.zfunc)
+zmodload -i zsh/complist
+
+if [[ "$OSTYPE" == *"darwin"* ]]; then
+  # full audit + dump rebuild at most once a day, otherwise trust the cached dump.
+  # run `rm ~/.zcompdump` to pick up new completions sooner
+  autoload -Uz compinit
+  () {
+    if (( $# )); then
+      compinit && touch ~/.zcompdump
+    else
+      compinit -C
+    fi
+  } ~/.zcompdump(N.mh+24)
+  [[ ~/.zcompdump.zwc -nt ~/.zcompdump ]] || zcompile ~/.zcompdump
+fi
+
 autoload -U +X bashcompinit
 bashcompinit
+[[ -r "/opt/homebrew/etc/profile.d/bash_completion.sh" ]] && . "/opt/homebrew/etc/profile.d/bash_completion.sh"
 
 # zstyle ':completion:*:*:git:*' script /usr/local/etc/bash_completion.d/git-completion.bash
 
@@ -258,12 +272,6 @@ zstyle ':completion:*' matcher-list '' \
   'm:{a-z\-A-Z}={A-Z\_a-z}' \
   'r:[^[:alpha:]]||[[:alpha:]]=** r:|=* m:{a-z\-A-Z}={A-Z\_a-z}' \
   'r:|?=** m:{a-z\-A-Z}={A-Z\_a-z}'
-fpath+=($HOME/.local/share/zinit/completions $fpath)
-fpath+=~/autocompleters
-zmodload -i zsh/complist
-
-# Add autocompletion path
-fpath+=~/.zfunc
 
 if [ -d $HOME/autocompleters ]; then
   for file in $HOME/autocompleters/*sh; do
@@ -272,7 +280,7 @@ if [ -d $HOME/autocompleters ]; then
 fi
 
 #mise
-eval "$(mise activate zsh)"
+_evalcache mise activate zsh
 
 # kubernetes settings
 alias k=kubecolor
@@ -339,18 +347,18 @@ alias tgo='terragrunt output'
 alias tgr='terragrunt refresh'
 alias tff='terragrunt force-unlock -force'
 
-if [ -d "$HOME/.terraform.d/plugin-cache" ]; then
+if [ ! -d "$HOME/.terraform.d/plugin-cache" ]; then
   mkdir $HOME/.terraform.d/plugin-cache
 fi
 
 ################################################################################
 # EXPORT
 ###############################################################################
-export EDITOR=$(which nvim)
+export EDITOR=${commands[nvim]}
 export TERM=screen-256color
 export ANSIBLE_COW_SELECTION='tux'
 export TF_PLUGIN_CACHE_DIR="$HOME/.terraform.d/plugin-cache"
-export MANPAGER='nvim +Man!'.
+export MANPAGER='nvim +Man!'
 export ASDF_GOLANG_MOD_VERSION_ENABLED=true
 # for mise installs of terraform-ls
 export ASDF_HASHICORP_SKIP_VERIFY=true
@@ -380,13 +388,8 @@ export PATH=$PATH:$CARGO_ROOT:$LOCAL_ROOT:$POETRY_ROOT:$KNOT_ROOT:$PSQL_PATH:$HO
 
 typeset -aU path
 
-if [[ -f $(which direnv) ]]; then
-  eval "$(direnv hook zsh)"
-fi
-
-if [[ -f $(which zoxide) ]]; then
-  eval "$(zoxide init zsh --cmd j)"
-fi
+(( $+commands[direnv] )) && _evalcache direnv hook zsh
+(( $+commands[zoxide] )) && _evalcache zoxide init zsh --cmd j
 
 [[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
 
